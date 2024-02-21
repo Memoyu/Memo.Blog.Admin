@@ -1,16 +1,16 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import { PostItem, PostListParams } from './data';
+import { ArticleItem, ArticleListParams } from './data';
 
-/** 获取文章列表 GET /api/post/list */
-export async function post(params: PostListParams, options?: { [key: string]: any }) {
+/** 获取文章列表 GET /api/article/list */
+export async function article(params: ArticleListParams, options?: { [key: string]: any }) {
   return request<{
-    data: PostItem[];
+    data: ArticleItem[];
     /** 列表的内容总数 */
     total?: number;
     success?: boolean;
-  }>('/api/post/list', {
+  }>('/api/article/list', {
     method: 'GET',
     params: {
       ...params,

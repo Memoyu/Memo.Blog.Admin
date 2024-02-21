@@ -1,8 +1,8 @@
-export type PostDetail = {
+export type ArticleDetail = {
   id: number;
   title: string;
   category: Category;
-  tags: PostTag[];
+  tags: ArticleTag[];
   content: string;
   status: number;
   updatedAt: Date;
@@ -14,7 +14,7 @@ export type Category = {
   name: string;
 };
 
-export type PostTag = {
+export type ArticleTag = {
   id: number;
   name: string;
 };

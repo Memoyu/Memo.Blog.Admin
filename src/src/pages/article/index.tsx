@@ -5,10 +5,10 @@ import ProTable from '@ant-design/pro-table';
 import { Button, message, Space, Tag } from 'antd';
 import React, { useRef, useState } from 'react';
 import { history } from 'umi';
-import type { PostItem, PostTag } from './data';
-import { post } from './service';
+import type { ArticleItem, ArticleTag } from './data';
+import { article } from './service';
 
-const handleAdd = async (fields: PostItem) => {
+const handleAdd = async (fields: ArticleItem) => {
   const hide = message.loading('正在添加');
 
   try {
@@ -28,7 +28,7 @@ const handleAdd = async (fields: PostItem) => {
  * @param fields
  */
 
-const handleUpdate = async (fields: FormValueType, currentRow?: PostItem) => {
+const handleUpdate = async (fields: FormValueType, currentRow?: ArticleItem) => {
   const hide = message.loading('正在配置');
 
   try {
@@ -51,7 +51,7 @@ const handleUpdate = async (fields: FormValueType, currentRow?: PostItem) => {
  * @param selectedRows
  */
 
-const handleRemove = async (selectedRows: PostItem[]) => {
+const handleRemove = async (selectedRows: ArticleItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
 
@@ -69,15 +69,15 @@ const handleRemove = async (selectedRows: PostItem[]) => {
   }
 };
 
-const Post: React.FC = () => {
+const Article: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<PostItem>();
-  const [selectedRowsState, setSelectedRows] = useState<PostItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<ArticleItem>();
+  const [selectedRowsState, setSelectedRows] = useState<ArticleItem[]>([]);
 
-  const columns: ProColumns<PostItem>[] = [
+  const columns: ProColumns<ArticleItem>[] = [
     {
       title: '序号',
       dataIndex: 'id',
@@ -94,9 +94,9 @@ const Post: React.FC = () => {
     {
       title: '标签',
       dataIndex: 'tags',
-      render: (_, post) => (
+      render: (_, article) => (
         <Space size={[1, 4]} wrap>
-          {post.tags.map((tag: PostTag) => (
+          {article.tags.map((tag: ArticleTag) => (
             <Tag key={tag.id}>{tag.name}</Tag>
           ))}
         </Space>
@@ -143,7 +143,7 @@ const Post: React.FC = () => {
           key="edit"
           type="link"
           onClick={() => {
-            history.push(`/post/edit/${post.id}`);
+            history.push(`/article/edit/${post.id}`);
           }}
         >
           编辑
@@ -157,7 +157,7 @@ const Post: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<PostItem>
+      <ProTable<ArticleItem>
         headerTitle="文章列表"
         actionRef={actionRef}
         rowKey="id"
@@ -175,7 +175,7 @@ const Post: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={post}
+        request={article}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -216,4 +216,4 @@ const Post: React.FC = () => {
   );
 };
 
-export default Post;
+export default Article;

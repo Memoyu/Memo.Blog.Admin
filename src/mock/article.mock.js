@@ -1,5 +1,5 @@
 module.exports = {
-  'GET /api/post/list': {
+  'GET /api/article/list': {
     data: [
       {
         id: 8213123140,
@@ -64,7 +64,7 @@ module.exports = {
     pageIndex: 1,
   },
 
-  'GET /api/post': {
+  'GET /api/article': {
     data: {
       id: 8213123140,
       title: '这是后端文章的标题1',

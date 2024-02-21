@@ -1,15 +1,20 @@
 export default [
   { name: '数据概览', path: '/dashboard', icon: 'LineChart', component: './dashboard' },
   {
-    path: '/post',
+    path: '/article',
     name: '博客管理',
     icon: 'FileWord',
     routes: [
-      { name: '文章管理', path: '/post/list', component: './post' },
-      { name: '文章编辑', hideInMenu: true, path: '/post/edit/:id', component: './post/edit' },
-      { name: '文章分类', path: '/post/category', component: './post/category' },
-      { name: '文章标签', path: '/post/tag', component: './post/tag' },
-      { name: '评论管理', path: '/post/comment', component: './post/comment' },
+      { name: '文章管理', path: '/article/list', component: './article' },
+      {
+        name: '文章编辑',
+        hideInMenu: true,
+        path: '/article/edit/:id',
+        component: './article/edit',
+      },
+      { name: '文章分类', path: '/article/category', component: './article/category' },
+      { name: '文章标签', path: '/article/tag', component: './article/tag' },
+      { name: '评论管理', path: '/article/comment', component: './article/comment' },
     ],
   },
   {

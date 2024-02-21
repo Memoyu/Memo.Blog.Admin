@@ -11,9 +11,9 @@ import { MdEditor } from 'md-editor-rt';
 import 'md-editor-rt/lib/style.css';
 import React, { useState } from 'react';
 import { useRequest } from 'umi';
-import { PostDetail } from './data';
+import { ArticleDetail } from './data';
 import s from './index.less';
-import { postDetail } from './service';
+import { articleDetail } from './service';
 
 const fieldLabels = {
   title: '标题',
@@ -23,7 +23,7 @@ const fieldLabels = {
   desc: '描述',
 };
 
-export const PostEdit: React.FC = () => {
+export const ArticleEdit: React.FC = () => {
   const [content, setContent] = useState('');
   const [toolbars] = useState([
     'bold',
@@ -56,7 +56,7 @@ export const PostEdit: React.FC = () => {
     'htmlPreview',
     'catalog',
   ]);
-  useRequest<{ data: PostDetail }>(postDetail, {
+  useRequest<{ data: ArticleDetail }>(articleDetail, {
     onSuccess: (data) => {
       setContent(data.content);
     },
@@ -191,4 +191,4 @@ export const PostEdit: React.FC = () => {
   );
 };
 
-export default PostEdit;
+export default ArticleEdit;
