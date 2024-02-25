@@ -1,0 +1,14 @@
+.layout-page {
+    // border: 1px solid var(--semi-color-border);
+    height: 100%;
+    background: var(--semi-color-fill-0);
+
+    .layout-content {
+        background-color: var(--semi-color-bg-0);
+        position: relative;
+        margin: 24px;
+        > :last-child {
+            height: 100%;
+        }
+    }
+}
