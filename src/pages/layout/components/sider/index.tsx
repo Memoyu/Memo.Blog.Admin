@@ -54,10 +54,9 @@ const Index: FC = () => {
         });
     }, [configMenus]);
 
-    const onSelect = (data: any) => {
-        setSelectedKeys([...data.selectedKeys]);
-        console.log(data);
-        navigate(data.selectedItems[0].path as string);
+    const onSelect = (menu: MenuItem) => {
+        setSelectedKeys([menu.itemKey]);
+        navigate(menu.path as string);
     };
     const onCollapseChange = (isCollapsed: boolean) => {
         setIsCollapsed(isCollapsed);
@@ -72,9 +71,11 @@ const Index: FC = () => {
                 itemKey={menu.itemKey}
                 text={menu.text}
                 icon={menu.icon}
+                onClick={() => onSelect(menu)}
             ></Nav.Item>
         );
     }
+
     // setSelectedKeys 和 path 双向绑定
     useEffect(() => {
         const keys: string[] = findMenuByPath(configMenus, pathname, []);
@@ -85,13 +86,12 @@ const Index: FC = () => {
         <Sider>
             <Nav
                 selectedKeys={selectedKeys}
-                onSelect={onSelect}
                 onCollapseChange={onCollapseChange}
                 style={{ maxWidth: 200, height: '100%' }}
             >
                 <Nav.Header
                     logo={<IconSemiLogo style={{ height: '36px', fontSize: 36 }} />}
-                    text={"Memoyu's Blog"}
+                    text={"memoyu's blog"}
                 />
                 {menus.map((sub: MenuItem) => (
                     <div key={sub.itemKey}>
