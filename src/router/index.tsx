@@ -8,9 +8,19 @@ import Empty from '@components/empty';
 
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
 
-const Account = lazy(() => import('@src/pages/system/account'));
-
 const Article = lazy(() => import('@src/pages/article'));
+const ArticleCategory = lazy(() => import('@src/pages/article/category'));
+const ArticleTag = lazy(() => import('@src/pages/article/tag'));
+
+const Friend = lazy(() => import('@src/pages/page/friend'));
+const About = lazy(() => import('@src/pages/page/friend'));
+
+const AccessLog = lazy(() => import('@src/pages/logger/access'));
+const SystemLog = lazy(() => import('@src/pages/logger/system'));
+
+const Account = lazy(() => import('@src/pages/system/account'));
+const Role = lazy(() => import('@src/pages/system/role'));
+const Permission = lazy(() => import('@src/pages/system/permission'));
 
 const routeList: RouteObject[] = [
     {
@@ -22,13 +32,46 @@ const routeList: RouteObject[] = [
                 element: <WrapperRouteComponent element={<Dashboard />} titleId="概览" auth />,
             },
             {
-                path: 'account',
+                path: 'article',
+                element: <WrapperRouteComponent element={<Article />} titleId="文章管理" auth />,
+            },
+            {
+                path: 'article/category',
+                element: (
+                    <WrapperRouteComponent element={<ArticleCategory />} titleId="文章分类" auth />
+                ),
+            },
+            {
+                path: 'article/tag',
+                element: <WrapperRouteComponent element={<ArticleTag />} titleId="文章标签" auth />,
+            },
+            {
+                path: 'page/friend',
+                element: <WrapperRouteComponent element={<Friend />} titleId="友链管理" auth />,
+            },
+            {
+                path: 'page/about',
+                element: <WrapperRouteComponent element={<About />} titleId="关于信息" auth />,
+            },
+            {
+                path: 'logger/system',
+                element: <WrapperRouteComponent element={<SystemLog />} titleId="系统日志" auth />,
+            },
+            {
+                path: 'logger/access',
+                element: <WrapperRouteComponent element={<AccessLog />} titleId="访问日志" auth />,
+            },
+            {
+                path: 'system/account',
                 element: <WrapperRouteComponent element={<Account />} titleId="账户管理" auth />,
             },
-
             {
-                path: 'article/list',
-                element: <WrapperRouteComponent element={<Article />} titleId="博客管理" auth />,
+                path: 'system/role',
+                element: <WrapperRouteComponent element={<Role />} titleId="角色管理" auth />,
+            },
+            {
+                path: 'system/permission',
+                element: <WrapperRouteComponent element={<Permission />} titleId="权限管理" auth />,
             },
         ],
     },

@@ -38,7 +38,7 @@ const Menus: MenuItem[] = [
             {
                 itemKey: '2-1',
                 text: '文章管理',
-                path: '/article/list',
+                path: '/article',
                 icon: IconChangelog,
             },
             {
@@ -62,7 +62,7 @@ const Menus: MenuItem[] = [
             {
                 itemKey: '3-1',
                 text: '友链管理',
-                path: '/page/friends',
+                path: '/page/friend',
                 icon: IconSpin,
             },
             {
