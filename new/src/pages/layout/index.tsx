@@ -11,15 +11,13 @@ const { Content } = Layout;
 const Index: React.FC = () => {
     return (
         <Layout className="layout-page">
-            <Layout>
-                <Sider />
-                <Content className="layout-content">
-                    <Suspense>
-                        <Outlet />
-                    </Suspense>
-                </Content>
-                <Footer />
-            </Layout>
+            <Sider />
+            <Content className="layout-content">
+                <Suspense>
+                    <Outlet />
+                </Suspense>
+            </Content>
+            <Footer />
         </Layout>
     );
 };

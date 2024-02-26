@@ -1,26 +1,31 @@
 import { IconDesktop, IconMoon, IconSun } from '@douyinfe/semi-icons';
 import { Button } from '@douyinfe/semi-ui';
 import { useEffect, useState } from 'react';
+import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
 import './index.scss';
 
 const body = document.body;
 
 const Index = () => {
-    const [mode, setMode] = useState<string>(body.getAttribute('theme-mode') as string);
-    const [mounted, setMounted] = useState(false);
+    const [mode, setMode] = useState<string>(
+        getLocalStorage('theme') as 'light' | 'dark' | 'system'
+    );
+    // const [mounted, setMounted] = useState(false);
 
     const switchMode = (mode: string) => {
         body.setAttribute('theme-mode', mode);
+        setLocalStorage('theme', mode);
         setMode(mode);
     };
     // 避免按钮闪烁的问题
     useEffect(() => {
-        setMounted(true);
+        // setMounted(true);
+        switchMode(mode);
     }, []);
 
-    if (!mounted) {
-        return null;
-    }
+    // if (!mounted) {
+    //     return null;
+    // }
 
     return (
         <div className="footer-btn">
