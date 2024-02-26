@@ -1,5 +1,5 @@
-import { IconDesktop, IconMoon, IconSun } from '@douyinfe/semi-icons';
-import { Button } from '@douyinfe/semi-ui';
+import { IconMoon, IconSun } from '@douyinfe/semi-icons';
+import { Tooltip, Button, Dropdown, Avatar } from '@douyinfe/semi-ui';
 import { useEffect, useState } from 'react';
 import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
 import './index.scss';
@@ -7,52 +7,53 @@ import './index.scss';
 const body = document.body;
 
 const Index = () => {
-    const [mode, setMode] = useState<string>(
-        getLocalStorage('theme') as 'light' | 'dark' | 'system'
-    );
-    // const [mounted, setMounted] = useState(false);
+    const [isLight, setIsLight] = useState<boolean>(false);
+    const [mode, setMode] = useState<string>(getLocalStorage('theme-mode') as string);
 
-    const switchMode = (mode: string) => {
-        body.setAttribute('theme-mode', mode);
-        setLocalStorage('theme', mode);
-        setMode(mode);
+    const switchMode = () => {
+        let theme = mode == 'light' ? 'dark' : 'light';
+        setThemeMode(theme);
     };
-    // 避免按钮闪烁的问题
-    useEffect(() => {
-        // setMounted(true);
-        switchMode(mode);
-    }, []);
 
-    // if (!mounted) {
-    //     return null;
-    // }
+    const setThemeMode = (mode: string) => {
+        if (mode == 'light') {
+            body.removeAttribute('theme-mode');
+        } else {
+            body.setAttribute('theme-mode', mode);
+        }
+
+        setIsLight(mode == 'light');
+        setMode(mode);
+        setLocalStorage('theme-mode', mode);
+    };
+
+    useEffect(() => {
+        setThemeMode(mode);
+    }, []);
 
     return (
         <div className="footer-btn">
-            <Button
-                style={{ borderRadius: '50%' }}
-                icon={<IconSun />}
-                type={'tertiary'}
-                theme={mode === 'light' ? 'solid' : 'borderless'}
-                aria-label="浅色模式"
-                onClick={() => switchMode('light')}
-            ></Button>
-            <Button
-                type={'tertiary'}
-                style={{ borderRadius: '50%' }}
-                icon={<IconMoon />}
-                theme={mode === 'dark' ? 'solid' : 'borderless'}
-                aria-label="深色模式"
-                onClick={() => switchMode('dark')}
-            ></Button>
-            <Button
-                type={'tertiary'}
-                style={{ borderRadius: '50%' }}
-                icon={<IconDesktop />}
-                theme={mode === 'system' ? 'solid' : 'borderless'}
-                aria-label="系统设置"
-                onClick={() => switchMode('system')}
-            ></Button>
+            <Tooltip content={`${isLight ? '暗色' : '亮色'}`}>
+                <Button
+                    type={'tertiary'}
+                    style={{ borderRadius: '50%' }}
+                    theme={isLight ? 'solid' : 'light'}
+                    icon={isLight ? <IconMoon /> : <IconSun />}
+                    onClick={switchMode}
+                />
+            </Tooltip>
+            <Dropdown
+                position={'top'}
+                render={
+                    <Dropdown.Menu>
+                        <Dropdown.Item>退出登录</Dropdown.Item>
+                    </Dropdown.Menu>
+                }
+            >
+                <Avatar className="avatar" color="orange" size="small">
+                    semi
+                </Avatar>
+            </Dropdown>
         </div>
     );
 };
