@@ -8,7 +8,7 @@ const body = document.body;
 
 const Index = () => {
     const [isLight, setIsLight] = useState<boolean>(false);
-    const [mode, setMode] = useState<string>(getLocalStorage('theme-mode') as string);
+    const [mode, setMode] = useState<string>(getLocalStorage('theme-mode') || 'light');
 
     const switchMode = () => {
         let theme = mode == 'light' ? 'dark' : 'light';

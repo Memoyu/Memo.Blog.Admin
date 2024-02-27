@@ -18,12 +18,10 @@ const Index: React.FC = () => {
     const navigate = useNavigate();
 
     const submit = async (values: any) => {
-        const { data } = await loginApi(values.username, values.password);
-        console.log('login', data, data.data);
-        var { isSuccess, result } = data;
-        if (data && data.isSuccess) {
-            setLocalStorage(TOKEN, data.data?.accessToken);
-            setLocalStorage(USER, result.username);
+        const { isSuccess, data } = await loginApi(values.username, values.password);
+        if (isSuccess && data) {
+            setLocalStorage(TOKEN, data.accessToken);
+            setLocalStorage(USER, data.username);
             navigate(`/dashboard`, { replace: true });
         }
     };
