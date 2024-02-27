@@ -21,11 +21,11 @@ const Index: React.FC = () => {
             title: '名称',
             align: 'center',
             dataIndex: 'name',
-            width: '15%',
         },
         {
             title: '操作',
             align: 'center',
+            width: '15%',
             render: () => {
                 return (
                     <Space>

@@ -8,9 +8,11 @@ interface HeaderProps {
 
 const Index: FC<HeaderProps> = ({ title }) => {
     return (
-        <Title heading={2} style={{ marginBottom: '10px' }}>
-            {title}
-        </Title>
+        <div style={{ marginBottom: '25px' }}>
+            <Title heading={2} style={{ marginBottom: '10px' }}>
+                {title}
+            </Title>
+        </div>
     );
 };
 
