@@ -33,6 +33,21 @@ const Index = () => {
 
     return (
         <div className="footer-btn">
+            <Dropdown
+                position={'top'}
+                render={
+                    <Dropdown.Menu>
+                        <Dropdown.Title>{'这是用户昵称'}</Dropdown.Title>
+                        <Dropdown.Divider />
+                        <Dropdown.Item>退出登录</Dropdown.Item>
+                    </Dropdown.Menu>
+                }
+            >
+                <Avatar className="avatar" color="orange" size="small">
+                    semi
+                </Avatar>
+            </Dropdown>
+
             <Tooltip content={`${isLight ? '暗色' : '亮色'}`}>
                 <Button
                     type={'tertiary'}
@@ -42,18 +57,6 @@ const Index = () => {
                     onClick={switchMode}
                 />
             </Tooltip>
-            <Dropdown
-                position={'top'}
-                render={
-                    <Dropdown.Menu>
-                        <Dropdown.Item>退出登录</Dropdown.Item>
-                    </Dropdown.Menu>
-                }
-            >
-                <Avatar className="avatar" color="orange" size="small">
-                    semi
-                </Avatar>
-            </Dropdown>
         </div>
     );
 };

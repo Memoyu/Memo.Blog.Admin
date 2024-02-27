@@ -13,6 +13,7 @@
     "@douyinfe/semi-icons": "^2.53.0",
     "@douyinfe/semi-icons-lab": "^2.53.0",
     "@douyinfe/semi-ui": "^2.53.0",
+    "@semi-bot/semi-theme-volcano_engine": "^1.0.14",
     "@types/node": "^20.11.20",
     "axios": "^1.6.7",
     "echarts": "^5.5.0",
@@ -35,6 +36,7 @@
     "prettier": "^3.2.5",
     "sass": "^1.71.1",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vite-plugin-semi-theme": "^0.5.0"
   }
 }

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import react from '@vitejs/plugin-react-swc';
+import SemiPlugin from 'vite-plugin-semi-theme';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,7 +17,12 @@ export default defineConfig({
             '@config': resolve(__dirname, './src/config'),
         },
     },
-    plugins: [react()],
+    plugins: [
+        react(),
+        SemiPlugin({
+            theme: '@semi-bot/semi-theme-volcano_engine',
+        }),
+    ],
     server: {
         proxy: {
             '/api': {

@@ -1,5 +1,5 @@
 import Request from './request';
-import { Token } from '@model/token';
+import { Token, Category } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
     return Request.post<Token>('/tokens/generate', {
@@ -7,3 +7,11 @@ export const loginApi = (username: string, password: string) => {
         password: password,
     });
 };
+
+//#region 文章分类
+
+export const articleCategoryList = () => {
+    return Request.get<Array<Category>>('/category/list');
+};
+
+//#endregion

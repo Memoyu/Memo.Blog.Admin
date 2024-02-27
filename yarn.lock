@@ -832,6 +832,11 @@
   resolved "https://registry.npmmirror.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.12.0.tgz#9ffdf9ed133a7464f4ae187eb9e1294413fab235"
   integrity sha512-ZYmr5mS2wd4Dew/JjT0Fqi2NPB/ZhZ2VvPp7SmvPZb4Y1CG/LRcS6tcRo2cYU7zLK5A7cdbhWnnWmUjoI4qapg==
 
+"@semi-bot/semi-theme-volcano_engine@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.npmmirror.com/@semi-bot/semi-theme-volcano_engine/-/semi-theme-volcano_engine-1.0.14.tgz#f79f47e43affb079c244985668eec2e881a46b6f"
+  integrity sha512-QDMiUBjV/mmwZGlWBqLebZpV3gleKyycreqogliiNfdXObVStWii7HRuSWeeEqjfiM/lrawfzWQd6XJOlbnOkg==
+
 "@swc/core-darwin-arm64@1.4.2":
   version "1.4.2"
   resolved "https://registry.npmmirror.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.4.2.tgz#3b5677c5b9c5a7a91d953b96cd603c94064e2835"
@@ -2169,7 +2174,7 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-sass@^1.71.1:
+sass@^1.49.8, sass@^1.71.1:
   version "1.71.1"
   resolved "https://registry.npmmirror.com/sass/-/sass-1.71.1.tgz#dfb09c63ce63f89353777bbd4a88c0a38386ee54"
   integrity sha512-wovtnV2PxzteLlfNzbgm1tFXPLoZILYAMJtvoXXkD7/+1uP41eKkIt1ypWq5/q2uT94qHjXehEYfmjKOvjL9sg==
@@ -2325,6 +2330,13 @@ utility-types@^3.10.0:
   version "3.11.0"
   resolved "https://registry.npmmirror.com/utility-types/-/utility-types-3.11.0.tgz#607c40edb4f258915e901ea7995607fdf319424c"
   integrity sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==
+
+vite-plugin-semi-theme@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/vite-plugin-semi-theme/-/vite-plugin-semi-theme-0.5.0.tgz#974af36353f2d14b7c80a1ea310443095bf8ef25"
+  integrity sha512-OHy0vpNGUFSf/0aO0KT7y6otbijWaFoa5EBXlfs+ldua6/q8R9k2fIG/5ww0nltjIZFqLMvbXZaHb2F1eUEW0A==
+  dependencies:
+    sass "^1.49.8"
 
 vite@^5.1.4:
   version "5.1.4"
