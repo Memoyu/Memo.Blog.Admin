@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react';
-import { Button, Table, Space, Modal, Form } from '@douyinfe/semi-ui';
+import React, { useEffect, useState } from 'react';
+import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import Header from '@components/page-header';
-import { articleCategoryList } from '@src/utils/request';
+import Content from '@src/components/page-content';
+import {
+    articleCategoryList,
+    articleCategoryCreate,
+    articleCategoryDelete,
+    articleCategoryUpdate,
+} from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
+import { Category } from '@src/common/model';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -26,13 +32,23 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: () => {
+            render: (_text, record: Category) => {
                 return (
                     <Space>
-                        <Button theme="borderless" type="primary" size="small">
+                        <Button
+                            theme="borderless"
+                            type="primary"
+                            size="small"
+                            onClick={() => handleEditCategory(record)}
+                        >
                             编辑
                         </Button>
-                        <Button theme="borderless" type="danger" size="small">
+                        <Button
+                            theme="borderless"
+                            type="danger"
+                            size="small"
+                            onClick={() => handleDeleteCategory(record)}
+                        >
                             删除
                         </Button>
                     </Space>
@@ -42,9 +58,11 @@ const Index: React.FC = () => {
     ];
 
     const [data, loading, setData, setLoading] = useTable();
-    const [addKey, setAddKey, addVisible, setAddVisible, setAddModal] = useModal();
+    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
+    const [saveCategoryForm, setSaveCategoryForm] = useState<FormApi>();
+    const [editCategory, setEditCategory] = useState<Category | null>();
 
-    let toGetList = async () => {
+    let getCategoryList = async () => {
         articleCategoryList()
             .then((res) => {
                 if (res.isSuccess) {
@@ -54,63 +72,102 @@ const Index: React.FC = () => {
             .finally(() => setLoading(false));
     };
 
-    let toSaveCategory = async (formData: FormApi<any>) => {};
-
     // 使用 useEffect 来异步获取表格数据
     useEffect(() => {
-        toGetList();
+        getCategoryList();
     }, []);
 
-    const handleAddCategory = () => setAddVisible(true);
+    const handleEditModalOk = () => {
+        saveCategoryForm?.validate().then(async ({ name }) => {
+            var msg = '';
+            var res;
+            if (editCategory) {
+                res = await articleCategoryUpdate(editCategory.categoryId, name);
+                msg = '更新成功';
+            } else {
+                res = await articleCategoryCreate(name);
+                msg = '添加成功';
+            }
 
-    const handleAddModalOk = () => {
-        setAddVisible(false);
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            setEditVisible(false);
+            Toast.success(msg);
+            getCategoryList();
+        });
     };
-    const handleAddModalCancel = () => setAddVisible(false);
+
+    const handleEditCategory = (data: Category) => {
+        setEditCategory(data);
+        setEditVisible(true);
+    };
+
+    const handleDeleteCategory = (data: Category) => {
+        articleCategoryDelete(data.categoryId).then((res) => {
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            Toast.success('删除成功');
+            getCategoryList();
+        });
+    };
 
     return (
-        <div className="category-container">
-            <Header title="🛖 文章分类" />
-            <div className="content">
-                <div className="content-bar">
-                    <Button
-                        icon={<IconPlusCircleStroked size="small" />}
-                        style={{ marginRight: 10 }}
-                        onClick={handleAddCategory}
+        <Content title="🛖 文章分类">
+            <div className="category-container">
+                <div className="category-list">
+                    <div className="category-list-bar">
+                        <Button
+                            icon={<IconPlusCircleStroked size="small" />}
+                            style={{ marginRight: 10 }}
+                            onClick={() => {
+                                setEditVisible(true);
+                                setEditCategory(null);
+                            }}
+                        >
+                            新增
+                        </Button>
+                    </div>
+                    <div className="category-list-table">
+                        <Table
+                            showHeader={true}
+                            loading={loading}
+                            size="small"
+                            columns={columns}
+                            dataSource={data}
+                            pagination={false}
+                        />
+                    </div>
+                </div>
+                <Modal
+                    title="添加分类"
+                    visible={editVisible}
+                    onOk={handleEditModalOk}
+                    onCancel={() => setEditVisible(false)}
+                    centered
+                    bodyStyle={{ height: 120 }}
+                    okText={'保存'}
+                >
+                    <Form
+                        initValues={editCategory}
+                        getFormApi={(formData) => setSaveCategoryForm(formData)}
                     >
-                        新增
-                    </Button>
-                </div>
-                <div className="content-table">
-                    <Table
-                        showHeader={true}
-                        loading={loading}
-                        size="small"
-                        columns={columns}
-                        dataSource={data}
-                        pagination={false}
-                    />
-                </div>
+                        <Form.Input
+                            field="name"
+                            placeholder="分类名称不超5个字符"
+                            label="分类名称"
+                            rules={[
+                                { required: true, message: '分类名称必填' },
+                                { max: 5, message: '长度不能超5个字符' },
+                            ]}
+                        />
+                    </Form>
+                </Modal>
             </div>
-            <Modal
-                title="添加分类"
-                visible={addVisible}
-                onOk={handleAddModalOk}
-                onCancel={handleAddModalCancel}
-                centered
-                bodyStyle={{ height: 120 }}
-                okText={'保存'}
-            >
-                <Form getFormApi={(data) => toSaveCategory(data)}>
-                    <Form.Input
-                        field="name"
-                        placeholder="分类名称不超5个字符"
-                        label="分类名称"
-                        rules={[{ required: true, message: '分类名称必填' }]}
-                    />
-                </Form>
-            </Modal>
-        </div>
+        </Content>
     );
 };
 
