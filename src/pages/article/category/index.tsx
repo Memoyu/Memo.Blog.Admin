@@ -13,7 +13,7 @@ import {
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
-import { Category } from '@src/common/model';
+import { CategoryModel } from '@src/common/model';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -60,7 +60,7 @@ const Index: React.FC = () => {
     const [data, loading, setData, setLoading] = useTable();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [saveCategoryForm, setSaveCategoryForm] = useState<FormApi>();
-    const [editCategory, setEditCategory] = useState<Category | null>();
+    const [editCategory, setEditCategory] = useState<CategoryModel | null>();
 
     let getCategoryList = async () => {
         articleCategoryList()
@@ -99,12 +99,12 @@ const Index: React.FC = () => {
         });
     };
 
-    const handleEditCategory = (data: Category) => {
+    const handleEditCategory = (data: CategoryModel) => {
         setEditCategory(data);
         setEditVisible(true);
     };
 
-    const handleDeleteCategory = (data: Category) => {
+    const handleDeleteCategory = (data: CategoryModel) => {
         articleCategoryDelete(data.categoryId).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);
@@ -157,11 +157,11 @@ const Index: React.FC = () => {
                     >
                         <Form.Input
                             field="name"
-                            placeholder="分类名称不超5个字符"
+                            placeholder="分类名称不超10个字符"
                             label="分类名称"
                             rules={[
                                 { required: true, message: '分类名称必填' },
-                                { max: 5, message: '长度不能超5个字符' },
+                                { max: 10, message: '长度不能超10个字符' },
                             ]}
                         />
                     </Form>
