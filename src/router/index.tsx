@@ -9,6 +9,7 @@ import Empty from '@components/empty';
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
 
 const Article = lazy(() => import('@src/pages/article'));
+const ArticleEdit = lazy(() => import('@src/pages/article/edit'));
 const ArticleCategory = lazy(() => import('@src/pages/article/category'));
 const ArticleTag = lazy(() => import('@src/pages/article/tag'));
 
@@ -34,6 +35,12 @@ const routeList: RouteObject[] = [
             {
                 path: 'article',
                 element: <WrapperRouteComponent element={<Article />} titleId="文章管理" auth />,
+            },
+            {
+                path: 'article/edit/:id',
+                element: (
+                    <WrapperRouteComponent element={<ArticleEdit />} titleId="文章编辑" auth />
+                ),
             },
             {
                 path: 'article/category',
