@@ -1,6 +1,6 @@
 import {
     IconBanner,
-    IconForm,
+    IconBadge,
     IconChangelog,
     IconBadgeStar,
     IconTabs,
@@ -40,6 +40,12 @@ const Menus: MenuItem[] = [
                 text: '文章管理',
                 path: '/article',
                 icon: IconChangelog,
+            },
+            {
+                itemKey: '2-1',
+                text: '文章评论',
+                path: 'article/comment',
+                icon: IconBadge,
             },
             {
                 itemKey: '2-2',

@@ -1,5 +1,13 @@
 import Request from './request';
-import { TokenModel, ArticleModel, CategoryModel, TagModel, FriendModel } from '@common/model';
+import {
+    TokenModel,
+    ArticleModel,
+    CategoryModel,
+    TagModel,
+    FriendModel,
+    AccessLogModel,
+    SystemLogModel,
+} from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
     return Request.post<TokenModel>('/tokens/generate', {
@@ -88,6 +96,20 @@ export const friendUpdate = (friendId: string, name: string) => {
 
 export const friendDelete = (id: string) => {
     return Request.delete('/friend/delete', { params: { friendId: id } });
+};
+
+//#endregion
+
+//#region 日志
+
+// TODO： 待完善模型链接
+export const accessLogList = () => {
+    return Request.get<Array<AccessLogModel>>('/friend/list');
+};
+
+// TODO： 待完善模型链接
+export const systemLogList = () => {
+    return Request.get<Array<SystemLogModel>>('/friend/list');
 };
 
 //#endregion

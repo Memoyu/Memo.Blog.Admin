@@ -32,3 +32,12 @@ export interface FriendModel {
     friendId: string; // 友链Id
     name: string; // 友链名称
 }
+
+export interface AccessLogModel {
+    logId: string; //
+    visitor: string; //
+}
+
+export interface SystemLogModel {
+    logId: string; //
+}

@@ -9,12 +9,13 @@ import Empty from '@components/empty';
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
 
 const Article = lazy(() => import('@src/pages/article'));
+const ArticleComment = lazy(() => import('@src/pages/comment/article'));
 const ArticleEdit = lazy(() => import('@src/pages/article/edit'));
 const ArticleCategory = lazy(() => import('@src/pages/article/category'));
 const ArticleTag = lazy(() => import('@src/pages/article/tag'));
 
 const Friend = lazy(() => import('@src/pages/page/friend'));
-const About = lazy(() => import('@src/pages/page/friend'));
+const About = lazy(() => import('@src/pages/page/about'));
 
 const AccessLog = lazy(() => import('@src/pages/logger/access'));
 const SystemLog = lazy(() => import('@src/pages/logger/system'));
@@ -35,6 +36,12 @@ const routeList: RouteObject[] = [
             {
                 path: 'article',
                 element: <WrapperRouteComponent element={<Article />} titleId="文章管理" auth />,
+            },
+            {
+                path: 'article/comment',
+                element: (
+                    <WrapperRouteComponent element={<ArticleComment />} titleId="文章管理" auth />
+                ),
             },
             {
                 path: 'article/edit/:id',
