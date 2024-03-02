@@ -120,16 +120,24 @@ const Index: React.FC = () => {
             <div className="category-container">
                 <div className="category-list">
                     <div className="category-list-bar">
-                        <Button
-                            icon={<IconPlusCircleStroked size="small" />}
-                            style={{ marginRight: 10 }}
-                            onClick={() => {
-                                setEditVisible(true);
-                                setEditCategory(null);
-                            }}
-                        >
-                            新增
-                        </Button>
+                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
+                            <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
+                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                                <Button type="primary" htmlType="submit">
+                                    查询
+                                </Button>
+
+                                <Button
+                                    icon={<IconPlusCircleStroked size="small" />}
+                                    style={{ marginRight: 10 }}
+                                    onClick={() => {
+                                        setEditVisible(true);
+                                    }}
+                                >
+                                    新增
+                                </Button>
+                            </Space>
+                        </Form>
                     </div>
                     <div className="category-list-table">
                         <Table

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MdEditor } from 'md-editor-rt';
-import { Form, Row, Col, Button } from '@douyinfe/semi-ui';
+import { Form, Row, Col, Button, Space } from '@douyinfe/semi-ui';
 import { IconUpload } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 
@@ -72,7 +72,7 @@ const Index: React.FC = () => {
                             <Col span={12}>
                                 <Input
                                     field="name"
-                                    label="文章标题"
+                                    label="标题"
                                     initValue={'mikeya'}
                                     trigger="blur"
                                 />
@@ -80,7 +80,7 @@ const Index: React.FC = () => {
                             <Col span={12}>
                                 <Form.Upload
                                     field="files"
-                                    label="文章头图"
+                                    label="头图"
                                     action="//semi.design/api/upload"
                                 >
                                     <Button icon={<IconUpload />} theme="light">
@@ -89,17 +89,7 @@ const Index: React.FC = () => {
                                 </Form.Upload>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col span={12}>
-                                <Select field="role" label="文章标签" placeholder="请选文章标签">
-                                    <Select.Option value="operate">运营</Select.Option>
-                                    <Select.Option value="rd">开发</Select.Option>
-                                    <Select.Option value="pm">产品</Select.Option>
-                                    <Select.Option value="ued">设计</Select.Option>
-                                </Select>
-                            </Col>
-                        </Row>
-                        <Row>
+                        <Row gutter={16}>
                             <Col span={12}>
                                 <TagInput
                                     field="product"
@@ -108,13 +98,21 @@ const Index: React.FC = () => {
                                     placeholder="请输入产品"
                                 />
                             </Col>
+                            <Col span={12}>
+                                <Select field="role" label="分类" placeholder="请选文章分类">
+                                    <Select.Option value="operate">运营</Select.Option>
+                                    <Select.Option value="rd">开发</Select.Option>
+                                    <Select.Option value="pm">产品</Select.Option>
+                                    <Select.Option value="ued">设计</Select.Option>
+                                </Select>
+                            </Col>
                         </Row>
                         <Row>
-                            <Col span={12}>
+                            <Col>
                                 <TextArea
                                     style={{ height: 120 }}
                                     field="description"
-                                    label="文章描述"
+                                    label="描述"
                                     placeholder="请填文章描述"
                                 />
                             </Col>
@@ -129,6 +127,16 @@ const Index: React.FC = () => {
                         onChange={setContent}
                     />
                 </Section>
+                <Space style={{ margin: 20, width: '100%', justifyContent: 'center' }}>
+                    <Button
+                        type="primary"
+                        theme="solid"
+                        style={{ width: 120, marginTop: 12, marginRight: 4 }}
+                    >
+                        发布
+                    </Button>
+                    <Button style={{ marginTop: 12 }}>保存到草稿</Button>
+                </Space>
             </div>
         </Content>
     );

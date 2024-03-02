@@ -1,5 +1,5 @@
 import Request from './request';
-import { TokenModel, CategoryModel, TagModel } from '@common/model';
+import { TokenModel, ArticleModel, CategoryModel, TagModel, FriendModel } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
     return Request.post<TokenModel>('/tokens/generate', {
@@ -7,6 +7,30 @@ export const loginApi = (username: string, password: string) => {
         password: password,
     });
 };
+
+//#region 文章管理
+
+export const articleList = () => {
+    return Request.get<Array<ArticleModel>>('/article/list');
+};
+
+export const articleGet = () => {
+    return Request.get<ArticleModel>('/article/get');
+};
+
+export const articleCreate = (name: string) => {
+    return Request.post<ArticleModel>('/article/create', { name });
+};
+
+export const articleUpdate = (articleId: string, name: string) => {
+    return Request.put<ArticleModel>('/article/update', { articleId, name });
+};
+
+export const articleDelete = (id: string) => {
+    return Request.delete('/article/delete', { params: { articleId: id } });
+};
+
+//#endregion
 
 //#region 文章分类
 
@@ -23,7 +47,7 @@ export const articleCategoryUpdate = (categoryId: string, name: string) => {
 };
 
 export const articleCategoryDelete = (id: string) => {
-    return Request.delete<CategoryModel>('/category/delete', { params: { categoryId: id } });
+    return Request.delete('/category/delete', { params: { categoryId: id } });
 };
 
 //#endregion
@@ -43,7 +67,27 @@ export const articleTagUpdate = (tagId: string, name: string) => {
 };
 
 export const articleTagDelete = (id: string) => {
-    return Request.delete<TagModel>('/tag/delete', { params: { tagId: id } });
+    return Request.delete('/tag/delete', { params: { tagId: id } });
+};
+
+//#endregion
+
+//#region 友链管理
+
+export const friendList = () => {
+    return Request.get<Array<FriendModel>>('/friend/list');
+};
+
+export const friendCreate = (name: string) => {
+    return Request.post<FriendModel>('/friend/create', { name });
+};
+
+export const friendUpdate = (friendId: string, name: string) => {
+    return Request.put<FriendModel>('/friend/update', { friendId, name });
+};
+
+export const friendDelete = (id: string) => {
+    return Request.delete('/friend/delete', { params: { friendId: id } });
 };
 
 //#endregion
