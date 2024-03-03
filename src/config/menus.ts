@@ -42,19 +42,19 @@ const Menus: MenuItem[] = [
                 icon: IconChangelog,
             },
             {
-                itemKey: '2-1',
+                itemKey: '2-2',
                 text: '文章评论',
-                path: 'article/comment',
+                path: '/article/comment',
                 icon: IconBadge,
             },
             {
-                itemKey: '2-2',
+                itemKey: '2-3',
                 text: '文章分类',
                 path: '/article/category',
                 icon: IconTabs,
             },
             {
-                itemKey: '2-3',
+                itemKey: '2-4',
                 text: '文章标签',
                 path: '/article/tag',
                 icon: IconTag,

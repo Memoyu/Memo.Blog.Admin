@@ -32,7 +32,7 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: (_text, record: Category) => {
+            render: (_text, record: CategoryModel) => {
                 return (
                     <Space>
                         <Button

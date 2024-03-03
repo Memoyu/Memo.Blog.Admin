@@ -7,6 +7,10 @@ import {
     FriendModel,
     AccessLogModel,
     SystemLogModel,
+    UserModel,
+    RoleModel,
+    PermissionModel,
+    ArticleCommentModel,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -36,6 +40,26 @@ export const articleUpdate = (articleId: string, name: string) => {
 
 export const articleDelete = (id: string) => {
     return Request.delete('/article/delete', { params: { articleId: id } });
+};
+
+//#endregion
+
+//#region 文章评论
+
+export const articleCommentList = () => {
+    return Request.get<Array<ArticleCommentModel>>('/comment/list');
+};
+
+export const articleCommentCreate = (name: string) => {
+    return Request.post<ArticleCommentModel>('/comment/create', { name });
+};
+
+export const articleCommentUpdate = (commentId: string, name: string) => {
+    return Request.put<ArticleCommentModel>('/comment/update', { commentId, name });
+};
+
+export const articleCommentDelete = (id: string) => {
+    return Request.delete('/comment/delete', { params: { commentId: id } });
 };
 
 //#endregion
@@ -110,6 +134,66 @@ export const accessLogList = () => {
 // TODO： 待完善模型链接
 export const systemLogList = () => {
     return Request.get<Array<SystemLogModel>>('/friend/list');
+};
+
+//#endregion
+
+//#region 用户
+
+export const userList = () => {
+    return Request.get<Array<UserModel>>('/user/list');
+};
+
+export const userCreate = (name: string) => {
+    return Request.post<UserModel>('/user/create', { name });
+};
+
+export const userUpdate = (userId: string, name: string) => {
+    return Request.put<UserModel>('/user/update', { userId, name });
+};
+
+export const userDelete = (id: string) => {
+    return Request.delete('/user/delete', { params: { userId: id } });
+};
+
+//#endregion
+
+//#region 用户角色
+
+export const roleList = () => {
+    return Request.get<Array<RoleModel>>('/role/list');
+};
+
+export const roleCreate = (name: string) => {
+    return Request.post<RoleModel>('/role/create', { name });
+};
+
+export const roleUpdate = (roleId: string, name: string) => {
+    return Request.put<RoleModel>('/role/update', { roleId, name });
+};
+
+export const roleDelete = (id: string) => {
+    return Request.delete('/role/delete', { params: { roleId: id } });
+};
+
+//#endregion
+
+//#region 用户权限
+
+export const permissionList = () => {
+    return Request.get<Array<PermissionModel>>('/permission/list');
+};
+
+export const permissionCreate = (name: string) => {
+    return Request.post<PermissionModel>('/permission/create', { name });
+};
+
+export const permissionUpdate = (permissionId: string, name: string) => {
+    return Request.put<PermissionModel>('/permission/update', { permissionId, name });
+};
+
+export const permissionDelete = (id: string) => {
+    return Request.delete('/permission/delete', { params: { permissionId: id } });
 };
 
 //#endregion

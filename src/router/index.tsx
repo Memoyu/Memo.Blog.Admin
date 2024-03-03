@@ -40,7 +40,7 @@ const routeList: RouteObject[] = [
             {
                 path: 'article/comment',
                 element: (
-                    <WrapperRouteComponent element={<ArticleComment />} titleId="文章管理" auth />
+                    <WrapperRouteComponent element={<ArticleComment />} titleId="文章评论" auth />
                 ),
             },
             {

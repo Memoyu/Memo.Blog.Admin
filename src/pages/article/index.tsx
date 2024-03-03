@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Space, Modal, Form, Toast, Tag } from '@douyinfe/semi-ui';
+import { Button, Table, Space, Modal, Form, Toast, Tag, Row, Col } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
+import SummaryCard from './components/summary-card';
 import { articleList, articleDelete } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
@@ -117,6 +118,36 @@ const Index: React.FC = () => {
         <Content title="🏷️ 文章管理">
             <div className="article-container">
                 <div className="article-list">
+                    <div className="article-list-summary">
+                        <Row gutter={8}>
+                            <Col span={8}>
+                                <SummaryCard
+                                    type={'空调'}
+                                    status={true}
+                                    value={'离线中'}
+                                    img={'src/assets/air.png'}
+                                />
+                            </Col>
+
+                            <Col span={8}>
+                                <SummaryCard
+                                    type={'空调'}
+                                    status={true}
+                                    value={'离线中'}
+                                    img={'src/assets/air.png'}
+                                />
+                            </Col>
+
+                            <Col span={8}>
+                                <SummaryCard
+                                    type={'空调'}
+                                    status={true}
+                                    value={'离线中'}
+                                    img={'src/assets/air.png'}
+                                />
+                            </Col>
+                        </Row>
+                    </div>
                     <div className="article-list-bar">
                         <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
                             <Form.Select

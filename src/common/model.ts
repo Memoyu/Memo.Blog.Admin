@@ -11,6 +11,11 @@ export interface ArticleCreateReq {
     title: string;
 }
 
+export interface ArticleCommentModel {
+    commentId: string; // 评论Id
+    content: string;
+}
+
 export interface ArticleModel {
     articleId: string; // 文章Id
     category: CategoryModel; // 分类
@@ -40,4 +45,16 @@ export interface AccessLogModel {
 
 export interface SystemLogModel {
     logId: string; //
+}
+
+export interface UserModel {
+    userId: string; // 用户Id
+}
+
+export interface RoleModel {
+    roleId: string; // 角色Id
+}
+
+export interface PermissionModel {
+    permissionId: string; // 权限Id
 }
