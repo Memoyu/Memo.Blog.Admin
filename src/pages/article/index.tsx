@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, Space, Modal, Form, Toast, Tag, Row, Col } from '@douyinfe/semi-ui';
+import { Button, Table, Space, Form, Popconfirm, Toast, Tag, Row, Col } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
-import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 import SummaryCard from './components/summary-card';
 import { articleList, articleDelete } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
-import { useModal } from '@src/hooks/useModal';
+import { useNavigate } from 'react-router';
 import './index.scss';
 import { ArticleModel } from '@src/common/model';
 
@@ -70,21 +69,23 @@ const Index: React.FC = () => {
                     >
                         编辑
                     </Button>
-                    <Button
-                        theme="borderless"
-                        type="danger"
-                        size="small"
-                        onClick={() => handleDeleteArticle(record)}
+                    <Popconfirm
+                        title="确定是否要保存此修改？"
+                        content="此修改将不可逆"
+                        onConfirm={() => handleDeleteArticle(record)}
                     >
-                        删除
-                    </Button>
+                        <Button theme="borderless" type="danger" size="small">
+                            删除
+                        </Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
     ];
 
+    const navigate = useNavigate();
+
     const [data, loading, setData, setLoading] = useTable();
-    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
 
     let getArticleList = async () => {
         articleList()
@@ -101,7 +102,13 @@ const Index: React.FC = () => {
         getArticleList();
     }, []);
 
-    const handleEditArticle = (data: ArticleModel) => {};
+    const handleAddArticle = () => {
+        navigate('/article/edit/0');
+    };
+
+    const handleEditArticle = (data: ArticleModel) => {
+        navigate(`/article/edit/${data.articleId}}`);
+    };
 
     const handleDeleteArticle = (data: ArticleModel) => {
         articleDelete(data.articleId).then((res) => {
@@ -122,27 +129,24 @@ const Index: React.FC = () => {
                         <Row gutter={8}>
                             <Col span={8}>
                                 <SummaryCard
-                                    type={'空调'}
-                                    status={true}
-                                    value={'离线中'}
+                                    type={'文章总数'}
+                                    value={'123'}
                                     img={'src/assets/air.png'}
                                 />
                             </Col>
 
                             <Col span={8}>
                                 <SummaryCard
-                                    type={'空调'}
-                                    status={true}
-                                    value={'离线中'}
+                                    type={'评论总数'}
+                                    value={'23'}
                                     img={'src/assets/air.png'}
                                 />
                             </Col>
 
                             <Col span={8}>
                                 <SummaryCard
-                                    type={'空调'}
-                                    status={true}
-                                    value={'离线中'}
+                                    type={'阅读量'}
+                                    value={'13'}
                                     img={'src/assets/air.png'}
                                 />
                             </Col>
@@ -150,6 +154,7 @@ const Index: React.FC = () => {
                     </div>
                     <div className="article-list-bar">
                         <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
+                            <Form.Input field="UserName" label="标题" style={{ width: 190 }} />
                             <Form.Select
                                 field="Role"
                                 label={{ text: '分类' }}
@@ -160,8 +165,6 @@ const Index: React.FC = () => {
                                 label={{ text: '标签' }}
                                 style={{ width: 176 }}
                             ></Form.Select>
-                            <Form.Input field="UserName" label="标题" style={{ width: 190 }} />
-
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
                                 <Button type="primary" htmlType="submit">
                                     查询
@@ -171,9 +174,7 @@ const Index: React.FC = () => {
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
-                                    onClick={() => {
-                                        setEditVisible(true);
-                                    }}
+                                    onClick={handleAddArticle}
                                 >
                                     新增
                                 </Button>

@@ -6,20 +6,19 @@ const { Title } = Typography;
 
 interface SummaryCardProps {
     type: string;
-    status: boolean;
     value: string;
     img: string;
 }
 
-const Index: FC<SummaryCardProps> = ({ type, status, value, img }: SummaryCardProps) => {
+const Index: FC<SummaryCardProps> = ({ type, value, img }: SummaryCardProps) => {
     return (
         <Card
             style={{
                 flex: 1,
-                minWidth: '230px',
-                margin: '10px',
+                minWidth: '100px',
+                //margin: '10px',
                 borderRadius: '20px',
-                background: status ? 'rgba(var(--semi-green-0), 1)' : '',
+                background: 'rgba(var(--semi-green-0), 1)',
             }}
         >
             <div
@@ -43,17 +42,6 @@ const Index: FC<SummaryCardProps> = ({ type, status, value, img }: SummaryCardPr
                         }}
                     >
                         {type}
-                        <Tag
-                            style={{
-                                marginLeft: '5px',
-                            }}
-                            size="small"
-                            shape="circle"
-                            color={status ? 'green' : 'amber'}
-                        >
-                            {' '}
-                            {status ? '运行中' : '已关闭'}{' '}
-                        </Tag>
                     </Title>
                     <br />
                     <div
@@ -64,7 +52,7 @@ const Index: FC<SummaryCardProps> = ({ type, status, value, img }: SummaryCardPr
                         }}
                     >
                         <Title
-                            heading={4}
+                            heading={2}
                             style={{
                                 color: 'rgba(var(--semi-grey-9), 1)',
                             }}

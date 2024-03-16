@@ -29,7 +29,7 @@ const Menus: MenuItem[] = [
         itemKey: '1',
         text: '概览',
         icon: IconBanner,
-        path: '/dashboard/',
+        path: '/dashboard',
     },
     {
         itemKey: '2',
