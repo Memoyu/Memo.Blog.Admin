@@ -23,11 +23,11 @@ export const loginApi = (username: string, password: string) => {
 //#region 文章管理
 
 export const articleList = () => {
-    return Request.get<Array<ArticleModel>>('/article/list');
+    return Request.get<Array<ArticleModel>>('/article/page');
 };
 
-export const articleGet = () => {
-    return Request.get<ArticleModel>('/article/get');
+export const articleGet = (id: string) => {
+    return Request.get<ArticleModel>('/article/get', { params: { articleId: id } });
 };
 
 export const articleCreate = (name: string) => {

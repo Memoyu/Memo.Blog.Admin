@@ -20,6 +20,10 @@ export interface ArticleModel {
     articleId: string; // 文章Id
     category: CategoryModel; // 分类
     title: string;
+    description: string;
+    tags: Array<TagModel>;
+    content: string;
+    banner: string;
 }
 
 export interface CategoryModel {

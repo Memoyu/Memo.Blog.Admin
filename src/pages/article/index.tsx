@@ -21,39 +21,41 @@ const Index: React.FC = () => {
         {
             title: '标题',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'title',
         },
         {
             title: '描述',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'description',
             width: '10%',
         },
         {
             title: '分类',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'category.name',
         },
         {
             title: '标签',
             align: 'center',
-            dataIndex: 'name',
             width: '10%',
             render: (text, record: ArticleModel) => (
-                <Tag
-                    style={{}}
-                    type="ghost"
-                    // shape="circle"
-                    size="large"
-                >
-                    {text}
-                </Tag>
+                <Space>
+                    {record.tags.map((t, i) => (
+                        <Tag
+                            key={i}
+                            type="ghost"
+                            // shape="circle"
+                            size="large"
+                        >
+                            {t.name}
+                        </Tag>
+                    ))}
+                </Space>
             ),
         },
         {
             title: '状态',
             align: 'center',
-            dataIndex: 'name',
         },
         {
             title: '操作',
@@ -84,7 +86,6 @@ const Index: React.FC = () => {
     ];
 
     const navigate = useNavigate();
-
     const [data, loading, setData, setLoading] = useTable();
 
     let getArticleList = async () => {
@@ -97,7 +98,6 @@ const Index: React.FC = () => {
             .finally(() => setLoading(false));
     };
 
-    // 使用 useEffect 来异步获取表格数据
     useEffect(() => {
         getArticleList();
     }, []);
@@ -107,7 +107,7 @@ const Index: React.FC = () => {
     };
 
     const handleEditArticle = (data: ArticleModel) => {
-        navigate(`/article/edit/${data.articleId}}`);
+        navigate(`/article/edit/${data.articleId}`);
     };
 
     const handleDeleteArticle = (data: ArticleModel) => {
@@ -156,12 +156,12 @@ const Index: React.FC = () => {
                         <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
                             <Form.Input field="UserName" label="标题" style={{ width: 190 }} />
                             <Form.Select
-                                field="Role"
+                                field="Title"
                                 label={{ text: '分类' }}
                                 style={{ width: 176 }}
                             ></Form.Select>
                             <Form.Select
-                                field="Role"
+                                field="Tags"
                                 label={{ text: '标签' }}
                                 style={{ width: 176 }}
                             ></Form.Select>
