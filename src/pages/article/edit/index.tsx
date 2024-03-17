@@ -61,9 +61,13 @@ const Index: React.FC = () => {
                     setArticle(res.data);
                     console.log(formRef);
                     let formApi = formRef.current?.formApi;
-                    formApi?.setValue('title', res.data?.title);
-                    formApi?.setValue('description', res.data?.description);
-                    setContent(res.data?.content as string);
+                    const article = res.data;
+                    article &&
+                        formApi?.setValues({
+                            ...article,
+                            tagNames: article.tags.map((t) => t.name),
+                        });
+                    setContent(article?.content as string);
                 }
             })
             .finally();
@@ -91,7 +95,7 @@ const Index: React.FC = () => {
                             </Col>
                             <Col span={12}>
                                 <Form.Upload
-                                    field="banner"
+                                    // field="banner"
                                     label="头图"
                                     action="//semi.design/api/upload"
                                 >
@@ -103,12 +107,7 @@ const Index: React.FC = () => {
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <TagInput
-                                    field="product"
-                                    label="标签"
-                                    initValue={['abc', 'ulikeCam']}
-                                    placeholder="请输入产品"
-                                />
+                                <TagInput field="tagNames" label="标签" placeholder="请输入产品" />
                             </Col>
                             <Col span={12}>
                                 <Select field="role" label="分类" placeholder="请选文章分类">
