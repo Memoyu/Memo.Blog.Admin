@@ -44,7 +44,7 @@ const routeList: RouteObject[] = [
                 ),
             },
             {
-                path: 'article/edit/:id',
+                path: 'article/edit/:id?',
                 element: (
                     <WrapperRouteComponent element={<ArticleEdit />} titleId="文章编辑" auth />
                 ),

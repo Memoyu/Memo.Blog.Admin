@@ -30,12 +30,12 @@ export const articleGet = (id: string) => {
     return Request.get<ArticleModel>('/article/get', { params: { articleId: id } });
 };
 
-export const articleCreate = (name: string) => {
-    return Request.post<ArticleModel>('/article/create', { name });
+export const articleCreate = (article: ArticleModel) => {
+    return Request.post<ArticleModel>('/article/create', article);
 };
 
-export const articleUpdate = (articleId: string, name: string) => {
-    return Request.put<ArticleModel>('/article/update', { articleId, name });
+export const articleUpdate = (article: ArticleModel) => {
+    return Request.put<ArticleModel>('/article/update', article);
 };
 
 export const articleDelete = (id: string) => {

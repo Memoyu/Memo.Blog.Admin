@@ -1,14 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MdEditor } from 'md-editor-rt';
-import { Form, Row, Col, Button, Space } from '@douyinfe/semi-ui';
+import { Form, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
 import { IconUpload } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 import { useParams } from 'react-router-dom';
-import { articleGet } from '@src/utils/request';
+import {
+    articleGet,
+    articleCreate,
+    articleUpdate,
+    articleCategoryList,
+    articleTagList,
+} from '@src/utils/request';
 
 import './index.scss';
 import 'md-editor-rt/lib/style.css';
 import { ArticleModel } from '@src/common/model';
+import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 
 const { Section, Input, Select, TextArea, TagInput } = Form;
 
@@ -48,53 +55,121 @@ const Index: React.FC = () => {
     const formRef = useRef<Form>(null);
     const params = useParams();
 
+    const [saveBtnText, setSaveBtnText] = useState<string>('发布');
+    const [articleId, setArticleId] = useState<string>();
     const [article, setArticle] = useState<ArticleModel>();
-    const [content, setContent] = useState<string>('');
+    const [articleContent, setArticleContent] = useState<string>('');
+    const [categories, setCategories] = useState<Array<OptionProps>>();
+    const [tags, setTags] = useState<Array<OptionProps>>();
     // const [content, setContent] = useState(
     //     '本文叙述的问题的根源在于对C#基础知识掌握不牢固，从而在遇到难以理解的问题时浪费了大量时间；\n在此也警示自己，该啃啃基础书籍了！\n话不多说，先上代码：\n## 先看问题\n```csharp\nservices.AddEasyCaching(option =>\n{\n    option.UseHybrid(config =>\n    {\n        .....\n    })\n    .WithZookeeeperBus(busConf =>\n    {\n        // 方式1\n        busConf.ConnectionString = "192.168.3.86:2181";\n        // 方式2\n        busConf = new ZkBusOptions\n        {\n            ConnectionString = "192.168.3.86:2181",\n        };\n    });\n});\n```\n这是我在使用`EasyCaching`时的一段注册代码，在配置`Zookeeeper Bus`时调用了`WithZookeeeperBus(Action<ZkBusOptions>)`拓展方法，并采用了如上两种赋值方式，看似都能正常配置，但实际不尽人意：\n**方式1：**配置正常；\n**方式2：**配置无效，最终`ConnectionString=null`；\n\nwhat？肯定是编译器问题！( 确信\n此时我的心情极其复杂，这两种赋值不是一样的？\n![](https://img2023.cnblogs.com/blog/1667295/202302/1667295-20230217174726473-916435626.jpg)\n\n## 问题在哪？\n一开始，我甚至怀疑是自己对`Action<T>`的理解不到位，存在某种机制导致的问题，但事实证明，饭可以乱吃，锅不能乱甩；\n每每想起这，不由得老脸一红！\n### 问题在这\n实则问题是在最基础的**方法传参**问题；\n咱们可以先理解一下方法传参存在哪几种情况，以及情况对应传参方式；\n**在C#参数传递分为如下四种：**\n> - 值类型的值传递（将值类型的副本传递给方法）\n> - 值类型的引用传递（将值类型本身传递给方法，例如：使用了`ref int a`）\n> - 引用类型的值传递（将引用的副本传递给方法 ）   \n> - 引用类型的引用传递（将引用本身传递给方法，例如：使用了`ref object o`）\n\n**此时，如果你已经悟了，那文章到此结束，还一知半解的，请继续往下看；**\n### 再细一点\n先看看如下代码：\n```csharp\nvoid Main()\n{\n\tvar p = new Person { Name = "jason", Age = 19 };\n    // 赋值方法 1\n\tAssignmentPerson_1(p);\n    Console.WriteLine($"Name: {p.Name}; Age: {p.Age}");\n\n    // 赋值方法 2\n    AssignmentPerson_2(p);\n\tConsole.WriteLine($"Name: {p.Name}; Age: {p.Age}");\n}\n\npublic void AssignmentPerson_1(Person t)\n{\n\tvar np = new Person { Name = "jack", Age = 18 };\n\tt = np;\n}\n\npublic void AssignmentPerson_2(Person t)\n{\n\tvar np = new Person { Name = "jack", Age = 18 };\n\tt.Name = np.Name;\n\tt.Age = np.Age;\n}\n\npublic class Person\n{\t\n\tpublic string Name { get; set; }\n\t\n\tpublic int Age { get; set; }\n}\n```\n很显然，在本文起始的教训下，答案是明显，会输出如下：\n`Name = "jason"; Age = 19`\n`Name = "jack"; Age = 18`\n\n首先，在main中创建了`p`，假设`p`在栈中的地址为`0x0001`，栈值为指向堆中实例的地址`0x00D1`；\n![](https://img2023.cnblogs.com/blog/1667295/202302/1667295-20230217174754634-102901266.png)\n\n#### 赋值方法-1\n然后，开始调用`AssignmentPerson_1(Person t)`，并传入`p`；\n**此时，不是直接将 `p`(栈地址:`0x0001`)传入方法，而是拷贝了一份`p`(栈地址:`0x0005`)，并且同时将栈值赋为`0x00D1`，传入方法中；**\n所以，`AssignmentPerson_1(Person t)`中`t`的地址为`0x0005`；\n![](https://img2023.cnblogs.com/blog/1667295/202302/1667295-20230217174817337-987292454.png)\n\n最后，新建`np`，栈地址为`0x000A`，栈值为指向堆中实例的地址`0x00D5`；\n并将`t = np`，`t`的栈值被替换了`0x00D1` -> `0x00D5`；\n![](https://img2023.cnblogs.com/blog/1667295/202302/1667295-20230217174858594-1617327277.png)\n\n**最终，`p`的栈值还是`0x00D1`，并且`0x00D1`中的堆值也并未发生变化，所以赋值无效；**\n#### 赋值方法-2\n同理，当调用`AssignmentPerson_2(Person t)`时，同样传入`p`，同样新建`np`；\n但是，并没有替换`t`的栈值，它仍旧与`p`指向的堆地址相同，为`0x00D1`;\n此时赋值操作只是替换了堆值中实例的属性值：`t.Name = np.Name`，`t.Age = np.Age`；\n![](https://img2023.cnblogs.com/blog/1667295/202302/1667295-20230217174920272-1659194228.png)\n\n**所以，`t`指向的堆值发生了变化， `t`与`p`又指向地址相同，`p`的实例属性值也就发生了变化；**\n## 总结\n该读一本《CLR via》了！\n\n## 参考\n[1-关于C#函数对象参数传递的问题](https://www.cnblogs.com/qguohog/archive/2009/12/26/1632967.html)\n[2-彻底澄清：C#方法参数](https://www.cnblogs.com/freeflying/archive/2009/12/27/1633101.html)\n'
     // );
 
+    // 获取文章详情
     let getArticleDetail = async (id: string) => {
         articleGet(id)
             .then((res) => {
                 if (res.isSuccess) {
                     setArticle(res.data);
-                    console.log(formRef);
                     let formApi = formRef.current?.formApi;
                     const article = res.data;
                     article &&
                         formApi?.setValues({
                             ...article,
-                            tagNames: article.tags.map((t) => t.name),
+                            categoryId: article.category.categoryId,
+                            tags: article.tags.map((t) => t.tagId),
                         });
-                    setContent(article?.content as string);
+                    setArticleContent(article?.content as string);
                 }
             })
             .finally();
     };
 
+    // 获取分类列表
+    let getCategories = async () => {
+        articleCategoryList().then((res) => {
+            return setCategories(
+                res.data?.map((c) => {
+                    return { value: c.categoryId, label: c.name };
+                })
+            );
+        });
+    };
+
+    // 获取标签列表
+    let getTags = async () => {
+        articleTagList().then((res) => {
+            return setTags(
+                res.data?.map((c) => {
+                    return { value: c.tagId, label: c.name };
+                })
+            );
+        });
+    };
+
+    // 点击保存/发布
+    let handleSaveArticle = () => {
+        let formApi = formRef.current?.formApi;
+        formApi?.validate().then(async (formData) => {
+            let article = formData as ArticleModel;
+            article.content = articleContent;
+            article.banner = '3333';
+            console.log(article);
+
+            if (articleId) {
+                // 更新
+                article.articleId = articleId;
+                articleUpdate(article).then((res) => {
+                    if (!res.isSuccess) {
+                        Toast.error(res.message);
+                        return;
+                    }
+                    Toast.success(saveBtnText + '文章成功');
+                });
+            } else {
+                // 新增
+                articleCreate(article).then((res) => {
+                    if (!res.isSuccess) {
+                        Toast.error(res.message);
+                        return;
+                    }
+                    Toast.success(saveBtnText + '文章成功');
+                });
+            }
+        });
+    };
+
     useEffect(() => {
-        if (params.id) {
-            getArticleDetail(params.id);
+        getCategories();
+        getTags();
+
+        var articleId = params.id;
+        if (articleId) {
+            setArticleId(articleId);
+            getArticleDetail(articleId);
+            setSaveBtnText('保存');
         }
     }, []);
 
     return (
         <Content title="📋 文章编辑">
             <div className="edit-container">
-                <Form
-                    ref={formRef}
-                    initValues={article}
-                    style={{ padding: 10, width: '100%' }}
-                    onValueChange={(v) => console.log(v)}
-                >
+                <Form ref={formRef} initValues={article}>
                     <Section text={'基本信息'}>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Input field="title" label="标题" trigger="blur" />
+                                <Input
+                                    field="title"
+                                    label="标题"
+                                    trigger="blur"
+                                    rules={[
+                                        { required: true, message: '文章描述必填' },
+                                        { max: 50, message: '长度不能超50个字符' },
+                                    ]}
+                                />
                             </Col>
                             <Col span={12}>
-                                <Form.Upload
+                                {/* <Form.Upload
                                     // field="banner"
                                     label="头图"
                                     action="//semi.design/api/upload"
@@ -102,20 +177,29 @@ const Index: React.FC = () => {
                                     <Button icon={<IconUpload />} theme="light">
                                         文章头图
                                     </Button>
-                                </Form.Upload>
+                                </Form.Upload> */}
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <TagInput field="tagNames" label="标签" placeholder="请输入产品" />
+                                <Select
+                                    style={{ width: '100%' }}
+                                    multiple
+                                    field="tags"
+                                    label="标签"
+                                    placeholder="请选文章标签"
+                                    optionList={tags}
+                                    rules={[{ required: true, message: '文章分类必填' }]}
+                                />
                             </Col>
                             <Col span={12}>
-                                <Select field="role" label="分类" placeholder="请选文章分类">
-                                    <Select.Option value="operate">运营</Select.Option>
-                                    <Select.Option value="rd">开发</Select.Option>
-                                    <Select.Option value="pm">产品</Select.Option>
-                                    <Select.Option value="ued">设计</Select.Option>
-                                </Select>
+                                <Select
+                                    field="categoryId"
+                                    label="分类"
+                                    placeholder="请选文章分类"
+                                    optionList={categories}
+                                    rules={[{ required: true, message: '文章分类必填' }]}
+                                />
                             </Col>
                         </Row>
                         <Row>
@@ -125,6 +209,10 @@ const Index: React.FC = () => {
                                     field="description"
                                     label="描述"
                                     placeholder="请填文章描述"
+                                    rules={[
+                                        { required: true, message: '文章描述必填' },
+                                        { max: 100, message: '长度不能超100个字符' },
+                                    ]}
                                 />
                             </Col>
                         </Row>
@@ -133,9 +221,9 @@ const Index: React.FC = () => {
                 <Section className="content-editer" text={'文章内容'}>
                     <MdEditor
                         style={{ height: 800 }}
-                        modelValue={content}
+                        modelValue={articleContent}
                         toolbars={toolbars}
-                        onChange={setContent}
+                        onChange={setArticleContent}
                     />
                 </Section>
                 <Space style={{ margin: 20, width: '100%', justifyContent: 'center' }}>
@@ -143,8 +231,9 @@ const Index: React.FC = () => {
                         type="primary"
                         theme="solid"
                         style={{ width: 120, marginTop: 12, marginRight: 4 }}
+                        onClick={handleSaveArticle}
                     >
-                        发布
+                        {saveBtnText}
                     </Button>
                     <Button style={{ marginTop: 12 }}>保存到草稿</Button>
                 </Space>

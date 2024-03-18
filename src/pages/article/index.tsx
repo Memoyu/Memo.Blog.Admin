@@ -103,7 +103,7 @@ const Index: React.FC = () => {
     }, []);
 
     const handleAddArticle = () => {
-        navigate('/article/edit/0');
+        navigate('/article/edit');
     };
 
     const handleEditArticle = (data: ArticleModel) => {

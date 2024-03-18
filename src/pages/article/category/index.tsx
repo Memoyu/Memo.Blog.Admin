@@ -120,7 +120,7 @@ const Index: React.FC = () => {
             <div className="category-container">
                 <div className="category-list">
                     <div className="category-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
+                        <Form layout="horizontal">
                             <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
                                 <Button type="primary" htmlType="submit">
