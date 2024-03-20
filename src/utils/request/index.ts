@@ -11,6 +11,9 @@ import {
     RoleModel,
     PermissionModel,
     ArticleCommentModel,
+    PaginationResult,
+    ArticlePageModel,
+    ArticlePageRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -22,8 +25,8 @@ export const loginApi = (username: string, password: string) => {
 
 //#region 文章管理
 
-export const articleList = () => {
-    return Request.get<Array<ArticleModel>>('/article/page');
+export const articleList = (request: ArticlePageRequest) => {
+    return Request.get<PaginationResult<ArticlePageModel>>('/article/page', { params: request });
 };
 
 export const articleGet = (id: string) => {

@@ -1,3 +1,14 @@
+export interface PaginationRequest {
+    size: number;
+    page: number;
+    sort?: string;
+}
+
+export interface PaginationResult<T> {
+    items: Array<T>;
+    total: number;
+}
+
 export interface TokenModel {
     accessToken: string; // 访问token
     refreshToken: string; // 刷新token
@@ -16,6 +27,24 @@ export interface ArticleCommentModel {
     content: string;
 }
 
+export interface ArticlePageRequest extends PaginationRequest {
+    title?: string;
+    categoryId?: string;
+    tagIds?: Array<string>;
+}
+
+export interface ArticlePageModel {
+    articleId: string; // 文章Id
+    category: CategoryModel; // 分类
+    title: string;
+    description: string;
+    tags: Array<TagModel>;
+    status: ArticleStatus;
+    isTop: boolean;
+    commentable: boolean;
+    publicable: boolean;
+}
+
 export interface ArticleModel {
     articleId: string; // 文章Id
     category: CategoryModel; // 分类
@@ -24,6 +53,16 @@ export interface ArticleModel {
     tags: Array<TagModel>;
     content: string;
     banner: string;
+    status: ArticleStatus;
+    isTop: boolean;
+    commentable: boolean;
+    publicable: boolean;
+}
+
+export enum ArticleStatus {
+    Draft = 0,
+    Published = 1,
+    Offline = 2,
 }
 
 export interface CategoryModel {
