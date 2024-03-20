@@ -27,10 +27,17 @@ export interface ArticleCommentModel {
     content: string;
 }
 
+export interface ArticlePageSummaryModel {
+    articleTotal: number;
+    commentTotal: number;
+    viewTotal: number;
+}
+
 export interface ArticlePageRequest extends PaginationRequest {
     title?: string;
     categoryId?: string;
     tagIds?: Array<string>;
+    status?: ArticleStatus;
 }
 
 export interface ArticlePageModel {

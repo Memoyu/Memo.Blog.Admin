@@ -353,33 +353,33 @@
   dependencies:
     tslib "^2.0.0"
 
-"@douyinfe/semi-animation-react@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-react/-/semi-animation-react-2.53.0.tgz#c31c0a92c3faa9946141fdae95fae99cd44c3060"
-  integrity sha512-2IXMlmiK2uAUEloqe667N3npXNCJHTb/2eXIJ+Qpcp4kn4GAolwRNnUcbHT/lvd91LliYYopEFhCrCK+ocE6DA==
+"@douyinfe/semi-animation-react@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-react/-/semi-animation-react-2.54.1.tgz#0bd3b3d980eeb5c958d98180a10908c02fe0e1f7"
+  integrity sha512-xLVK8Tu75p90oduD16Nhftk77REgo+Z608irWOumuYdfsAiSNjLq5xn/OqHGfmtn4iFYCkJglQDorH6cyckJBQ==
   dependencies:
-    "@douyinfe/semi-animation" "2.53.0"
-    "@douyinfe/semi-animation-styled" "2.53.0"
+    "@douyinfe/semi-animation" "2.54.1"
+    "@douyinfe/semi-animation-styled" "2.54.1"
     classnames "^2.2.6"
 
-"@douyinfe/semi-animation-styled@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-styled/-/semi-animation-styled-2.53.0.tgz#bb96ea0da48d7572384d7c6034a078ec3622198b"
-  integrity sha512-zC2b8/36NWmwT35XFPVsiXRgjf8zK9L+OEbYVQSUCBFWu5cL+t0etNcAok0cX1Q92yA3DGSmEhgAChVnEQZY4g==
+"@douyinfe/semi-animation-styled@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-styled/-/semi-animation-styled-2.54.1.tgz#b491fa6356e7ee97e875d779bb80ba34a9dcdd2e"
+  integrity sha512-Y/DCtb6UyCenNY6aG8oQGE/Sy2s6+D6ghrjJ0HdcXutoLGuWmk7xMw6RDx+aZUxthQE3dqfc7EbuZ8rYqQRpYg==
 
-"@douyinfe/semi-animation@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation/-/semi-animation-2.53.0.tgz#e0ab13bbc5cd38c1afe95ca18cd0cbadb646df6e"
-  integrity sha512-C9GRLSvstVv27OlyyoudAbQenmcwGemiP5THzMTyt7J2DJTDoEhPWmRdk+SAJ0pAUiIAaKWBNeY2sDXLTn1EBA==
+"@douyinfe/semi-animation@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation/-/semi-animation-2.54.1.tgz#1d5334a5c89291c8dfac9408ca8017eea0f048ca"
+  integrity sha512-Bj/RUTIeSXi5IZqK02UC4bTMD1O9JCzaomtQ7v8dyp9SF3MIpeKNppNw7/wa3vHv5iW+QbJdF2wsxTGgJtCnrQ==
   dependencies:
     bezier-easing "^2.1.0"
 
-"@douyinfe/semi-foundation@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-foundation/-/semi-foundation-2.53.0.tgz#a254277ecb10102b0d1e03302e565d74b57a15f3"
-  integrity sha512-cgDnXrdSjXzTdefn4cxjpToXIw+F8UL/Se8Tyz02DQw12whrBXpEG28IoGaeYDXUpG5nvH/TemeYR7dRzOYxXQ==
+"@douyinfe/semi-foundation@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-foundation/-/semi-foundation-2.54.1.tgz#d46dca2749fe3c6dd506e41ed2c18dbfbb0e0b67"
+  integrity sha512-RaeTfCb/0AsqJrDWRI6zRsQcie0IogddkVuYFiQfuMhHFrjUG8O5IPNvv6d5+8O0L9zkdIxQ95LE6BcEhZe+dg==
   dependencies:
-    "@douyinfe/semi-animation" "2.53.0"
+    "@douyinfe/semi-animation" "2.54.1"
     async-validator "^3.5.0"
     classnames "^2.2.6"
     date-fns "^2.29.3"
@@ -389,44 +389,44 @@
     memoize-one "^5.2.1"
     scroll-into-view-if-needed "^2.2.24"
 
-"@douyinfe/semi-icons-lab@^2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons-lab/-/semi-icons-lab-2.53.0.tgz#b72985672e037a33895340d2af3c71d28714dc72"
-  integrity sha512-PtL3/ll/SL2b+i7LpvNl6vJybVZXECWU3PNq5lPfZP8Ew7JGDqKFAbobBz/hcciR4hfbhBC03TOOTv6CcCgCjA==
+"@douyinfe/semi-icons-lab@^2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons-lab/-/semi-icons-lab-2.54.1.tgz#726e9452879e0e954e3c064a04868354f7daecb2"
+  integrity sha512-dcwiabfm5QQ6NKncf//vTydH6Kb2tUoFWBBWyD+f9Aik2ZPEUqLQKDjMo8BD9HY/5hTZVeg6OSKY6x9y53lodA==
 
-"@douyinfe/semi-icons@2.53.0", "@douyinfe/semi-icons@^2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons/-/semi-icons-2.53.0.tgz#6ade6017f08a30589a63ce1c6af6d6b1509157c1"
-  integrity sha512-Nt4WpKdFkY/xy8dsGDBP7yCZG15TvXC9qKEfqOf9eBwnTKd9Z1lbT1ls1mOO2/CEh8EzjHfTEbKw95s/IGMFUQ==
+"@douyinfe/semi-icons@2.54.1", "@douyinfe/semi-icons@^2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons/-/semi-icons-2.54.1.tgz#ff3ea6601eabae741dc85de0b8e496b311696352"
+  integrity sha512-cykK857iXU4nkGqk8sm/ZgFD8A48NVk9yr1ThLS0E6PzYwBU/KpavYWGHciNdeFOpFMsiUvMPYVH96jRglpkJw==
   dependencies:
     classnames "^2.2.6"
 
-"@douyinfe/semi-illustrations@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-illustrations/-/semi-illustrations-2.53.0.tgz#6712edf96b2f878e5f1ecb4105ac39a6b80eaae2"
-  integrity sha512-IBB2R+ffYvVQluublXOzRm3v9LzhzRD6jAkl4xyLZXWRQRbaka2HTcEJl3q8dHwLhOHmuIw48YW3ayU4Pf9cgA==
+"@douyinfe/semi-illustrations@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-illustrations/-/semi-illustrations-2.54.1.tgz#006d79568856942442ad7e8da9d5b841397bcf7b"
+  integrity sha512-8Vg0Ty6OdQRHVpu5OBFpw5b92Z4eRx1ArQtygsOfYnVeKVOc7IytrS5eQZxijMx1ScFshrlk3qISe40D3HVS6g==
 
-"@douyinfe/semi-theme-default@2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-theme-default/-/semi-theme-default-2.53.0.tgz#f01194595395ac9486a880ac159c3e426908311e"
-  integrity sha512-YKaER7y4MmO8Af2UqylkcrwtikVw5K2zw6R3Q9JyHYfIWcEtRwwMKgXpQWZUtdDYMfgATeShkOCu2lYGTNIdPw==
+"@douyinfe/semi-theme-default@2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-theme-default/-/semi-theme-default-2.54.1.tgz#86e403a1ebb4f25ae44242701a0c5616406ea7ca"
+  integrity sha512-LispAQ9H0MjgO3WcoM2lLFvtMUMAyqontOrdoIq37s2iaC8ZP7nHH50wvlOprzWmz7zH7F7ls6DiWLw0Nd6/UA==
   dependencies:
     glob "^7.1.6"
 
-"@douyinfe/semi-ui@^2.53.0":
-  version "2.53.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-ui/-/semi-ui-2.53.0.tgz#55651b48f3599c3079f0de3e11f22d9d8726d2d3"
-  integrity sha512-HKQPa7S/sjRRtA2US/WdiGz2Q4XeVg2hhGPScUHOrK1c1J2qxmFFlJW98Xu72Z9zK3Jr2A3FOPJkK3BOw8MY7A==
+"@douyinfe/semi-ui@^2.54.1":
+  version "2.54.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-ui/-/semi-ui-2.54.1.tgz#ccba9779daee6584a80382f82aa595b1ceda89c3"
+  integrity sha512-rgABgQO038Q/pdsuz1kUTpaliZmhIj64yOmuoNBG3zVEhRJ+WpkWuwn1kGXHR+sCKDZ+4EydEFhwpLaRV96+sQ==
   dependencies:
     "@dnd-kit/core" "^6.0.8"
     "@dnd-kit/sortable" "^7.0.2"
     "@dnd-kit/utilities" "^3.2.1"
-    "@douyinfe/semi-animation" "2.53.0"
-    "@douyinfe/semi-animation-react" "2.53.0"
-    "@douyinfe/semi-foundation" "2.53.0"
-    "@douyinfe/semi-icons" "2.53.0"
-    "@douyinfe/semi-illustrations" "2.53.0"
-    "@douyinfe/semi-theme-default" "2.53.0"
+    "@douyinfe/semi-animation" "2.54.1"
+    "@douyinfe/semi-animation-react" "2.54.1"
+    "@douyinfe/semi-foundation" "2.54.1"
+    "@douyinfe/semi-icons" "2.54.1"
+    "@douyinfe/semi-illustrations" "2.54.1"
+    "@douyinfe/semi-theme-default" "2.54.1"
     async-validator "^3.5.0"
     classnames "^2.2.6"
     copy-text-to-clipboard "^2.1.1"

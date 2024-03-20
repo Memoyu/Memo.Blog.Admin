@@ -93,24 +93,22 @@ const Index: React.FC = () => {
 
     // 获取分类列表
     let getCategories = async () => {
-        articleCategoryList().then((res) => {
-            return setCategories(
-                res.data?.map((c) => {
-                    return { value: c.categoryId, label: c.name };
-                })
-            );
-        });
+        let res = await articleCategoryList();
+        setCategories(
+            res.data?.map((c) => {
+                return { value: c.categoryId, label: c.name };
+            })
+        );
     };
 
     // 获取标签列表
     let getTags = async () => {
-        articleTagList().then((res) => {
-            return setTags(
-                res.data?.map((c) => {
-                    return { value: c.tagId, label: c.name };
-                })
-            );
-        });
+        let res = await articleTagList();
+        setTags(
+            res.data?.map((c) => {
+                return { value: c.tagId, label: c.name };
+            })
+        );
     };
 
     // 点击保存/发布

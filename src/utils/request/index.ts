@@ -14,6 +14,7 @@ import {
     PaginationResult,
     ArticlePageModel,
     ArticlePageRequest,
+    ArticlePageSummaryModel,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -25,8 +26,12 @@ export const loginApi = (username: string, password: string) => {
 
 //#region 文章管理
 
-export const articleList = (request: ArticlePageRequest) => {
+export const articlePage = (request: ArticlePageRequest) => {
     return Request.get<PaginationResult<ArticlePageModel>>('/article/page', { params: request });
+};
+
+export const articlePageSummary = (request: ArticlePageRequest) => {
+    return Request.get<ArticlePageSummaryModel>('/article/page/summary', { params: request });
 };
 
 export const articleGet = (id: string) => {

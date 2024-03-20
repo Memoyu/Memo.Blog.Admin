@@ -1,22 +1,22 @@
 import { FC } from 'react';
-import { Card, Tag, Image, Typography } from '@douyinfe/semi-ui';
+import { Card, Badge, Image, Typography, Tooltip } from '@douyinfe/semi-ui';
 import './index.scss';
 
 const { Title } = Typography;
 
 interface SummaryCardProps {
     type: string;
-    value: string;
+    value: number | string;
     img: string;
+    tip?: string;
 }
 
-const Index: FC<SummaryCardProps> = ({ type, value, img }: SummaryCardProps) => {
+const Index: FC<SummaryCardProps> = ({ type, value, img, tip }: SummaryCardProps) => {
     return (
         <Card
             style={{
                 flex: 1,
                 minWidth: '100px',
-                //margin: '10px',
                 borderRadius: '20px',
                 background: 'rgba(var(--semi-green-0), 1)',
             }}
@@ -35,14 +35,28 @@ const Index: FC<SummaryCardProps> = ({ type, value, img }: SummaryCardProps) => 
                         justifyContent: 'start',
                     }}
                 >
-                    <Title
-                        heading={6}
+                    <div
                         style={{
-                            color: 'rgba(var(--semi-grey-9), 1)',
+                            display: 'flex',
                         }}
                     >
-                        {type}
-                    </Title>
+                        <Title
+                            heading={6}
+                            style={{
+                                color: 'rgba(var(--semi-grey-9), 1)',
+                                marginRight: 10,
+                            }}
+                        >
+                            {type}
+                        </Title>
+                        {tip && tip.length > 0 ? (
+                            <Tooltip content={tip} arrowPointAtCenter={false} position="right">
+                                <Badge count={'?'} />
+                            </Tooltip>
+                        ) : (
+                            <></>
+                        )}
+                    </div>
                     <br />
                     <div
                         style={{

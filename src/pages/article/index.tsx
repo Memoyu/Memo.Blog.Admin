@@ -6,22 +6,37 @@ import {
     Form,
     Popconfirm,
     Typography,
+    Badge,
     Toast,
     Tag,
     Row,
     Col,
 } from '@douyinfe/semi-ui';
+import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 import SummaryCard from './components/summary-card';
-import { articleList, articleDelete } from '@src/utils/request';
+import {
+    articlePage,
+    articleDelete,
+    articleCategoryList,
+    articleTagList,
+    articlePageSummary,
+} from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useNavigate } from 'react-router';
 import './index.scss';
-import { ArticleModel, ArticleStatus } from '@src/common/model';
+import {
+    ArticleModel,
+    ArticlePageRequest,
+    ArticlePageSummaryModel,
+    ArticleStatus,
+} from '@src/common/model';
 
 const { Text } = Typography;
+const { Section, Input, Select, TextArea } = Form;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -149,28 +164,76 @@ const Index: React.FC = () => {
 
     const navigate = useNavigate();
     const [data, loading, setData, setLoading] = useTable();
+    const [articleSummary, setArticleSummary] = useState<ArticlePageSummaryModel>({
+        articleTotal: 0,
+        commentTotal: 0,
+        viewTotal: 0,
+    });
     const [currentPage, setCurrentPage] = useState(1);
     const [articleTotal, setArticleTotal] = useState(1);
+    const [searchForm, setSearchForm] = useState<FormApi>();
+    const [categories, setCategories] = useState<Array<OptionProps>>();
+    const [tags, setTags] = useState<Array<OptionProps>>();
 
     // 获取文章列表
-    let getArticleList = async (page: number = 1) => {
+    let getArticlePage = async (page: number = 1) => {
         setCurrentPage(page);
 
-        let res = await articleList({ page: page, size: pageSize });
-        if (res.isSuccess) {
-            setData(res.data?.items as any[]);
-            setArticleTotal(res.data?.total || 0);
+        let search = searchForm?.getValues();
+        let request = {
+            title: search?.title,
+            categoryId: search?.category,
+            tagIds: search?.tags,
+            status: search?.status,
+            page: page,
+            size: pageSize,
+        } as ArticlePageRequest;
+
+        // 汇总
+        let summaryRes = await articlePageSummary(request);
+        if (summaryRes.isSuccess) {
+            setArticleSummary(summaryRes.data as ArticlePageSummaryModel);
+        }
+
+        // 分页
+        let pageRes = await articlePage(request);
+        if (pageRes.isSuccess) {
+            setData(pageRes.data?.items as any[]);
+            setArticleTotal(pageRes.data?.total || 0);
         }
 
         setLoading(false);
     };
 
+    // 获取分类列表
+    let getCategories = async () => {
+        let res = await articleCategoryList();
+        var opts = res.data?.map((c) => {
+            return { value: c.categoryId, label: c.name };
+        });
+        (opts || []).unshift({ value: '0', label: '全部' });
+        setCategories(opts);
+    };
+
+    // 获取标签列表
+    let getTags = async () => {
+        let res = await articleTagList();
+        setTags(
+            res.data?.map((c) => {
+                return { value: c.tagId, label: c.name };
+            })
+        );
+    };
+
     useEffect(() => {
-        getArticleList();
+        getArticlePage();
+        getCategories();
+        getTags();
     }, []);
 
+    // bool 转 Badge元素
     const getBoolTag = (value: boolean) => {
-        return value ? <Text color="purple">🟢</Text> : <Text color="lime">🔴</Text>;
+        return value ? <Badge dot type="success" /> : <Badge dot type="danger" />;
     };
 
     // 添加文章
@@ -191,12 +254,12 @@ const Index: React.FC = () => {
             return;
         }
         Toast.success('删除成功');
-        getArticleList();
+        getArticlePage();
     };
 
     // 页数变更
     const handlePageChange = (page: number) => {
-        getArticleList(page);
+        getArticlePage(page);
     };
 
     return (
@@ -208,43 +271,71 @@ const Index: React.FC = () => {
                             <Col span={8}>
                                 <SummaryCard
                                     type={'文章总数'}
-                                    value={'123'}
+                                    value={articleSummary.articleTotal}
                                     img={'src/assets/air.png'}
+                                    tip="所有状态文章总数，随查询条件汇总"
                                 />
                             </Col>
 
                             <Col span={8}>
                                 <SummaryCard
                                     type={'评论总数'}
-                                    value={'23'}
+                                    value={articleSummary.commentTotal}
                                     img={'src/assets/air.png'}
+                                    tip="所有文章评论总数，随查询条件汇总"
                                 />
                             </Col>
 
                             <Col span={8}>
                                 <SummaryCard
                                     type={'阅读量'}
-                                    value={'13'}
+                                    value={articleSummary.viewTotal}
                                     img={'src/assets/air.png'}
+                                    tip="所有文章阅读总数，随查询条件汇总"
                                 />
                             </Col>
                         </Row>
                     </div>
                     <div className="article-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="标题" style={{ width: 190 }} />
-                            <Form.Select
-                                field="Title"
+                        <Form
+                            layout="horizontal"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Input field="title" label="标题" style={{ width: 190 }} />
+                            <Select
+                                initValue={'0'}
+                                field="category"
                                 label={{ text: '分类' }}
                                 style={{ width: 176 }}
-                            ></Form.Select>
-                            <Form.Select
-                                field="Tags"
+                                optionList={categories}
+                            ></Select>
+                            <Select
+                                multiple
+                                field="tags"
                                 label={{ text: '标签' }}
+                                style={{ width: 290 }}
+                                optionList={tags}
+                                showClear={true}
+                            ></Select>
+                            <Select
+                                initValue={undefined}
+                                field="status"
+                                label={{ text: '状态' }}
                                 style={{ width: 176 }}
-                            ></Form.Select>
+                            >
+                                <Select.Option value={undefined}>全部</Select.Option>
+                                <Select.Option value={ArticleStatus.Draft}>草稿</Select.Option>
+                                <Select.Option value={ArticleStatus.Published}>
+                                    已发布
+                                </Select.Option>
+                                <Select.Option value={ArticleStatus.Offline}>下线</Select.Option>
+                            </Select>
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit" onClick={getArticleList}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getArticlePage(1)}
+                                >
                                     查询
                                 </Button>
                                 <Button htmlType="reset">重置</Button>

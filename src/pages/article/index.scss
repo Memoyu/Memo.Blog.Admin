@@ -1,10 +1,13 @@
 .article-container {
     .article-list {
         &-summary {
+            margin-bottom: 25px;
         }
+
         &-bar {
             margin-top: 10px;
         }
+
         &-table {
             margin-top: 10px;
         }
