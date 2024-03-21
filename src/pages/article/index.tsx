@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import {
     Button,
     Table,
@@ -9,12 +9,14 @@ import {
     Badge,
     Toast,
     Tag,
+    TagGroup,
     Row,
     Col,
 } from '@douyinfe/semi-ui';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
+import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 import SummaryCard from './components/summary-card';
@@ -29,45 +31,42 @@ import { useTable } from '@src/hooks/useTable';
 import { useNavigate } from 'react-router';
 import './index.scss';
 import {
-    ArticleModel,
+    ArticlePageModel,
     ArticlePageRequest,
     ArticlePageSummaryModel,
     ArticleStatus,
 } from '@src/common/model';
+import { format } from 'date-fns';
 
 const { Text } = Typography;
-const { Section, Input, Select, TextArea } = Form;
+const { Input, Select } = Form;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
-            title: '序号',
+            title: 'ID',
             align: 'center',
             dataIndex: 'articleId',
-            width: 120,
+            width: 160,
         },
         {
             title: '标题',
             align: 'center',
             dataIndex: 'title',
+            width: 170,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '描述',
             align: 'center',
             dataIndex: 'description',
-            width: 300,
+            width: 200,
+            ellipsis: { showTitle: false },
             render: (text) => {
-                return (
-                    <span style={{ display: 'flex', alignItems: 'center' }}>
-                        {/* 宽度计算方式为单元格设置宽度 - 非文本内容宽度 */}
-                        <Text
-                            ellipsis={{ showTooltip: true }}
-                            style={{ width: 'calc(300px - 76px)' }}
-                        >
-                            {text}
-                        </Text>
-                    </span>
-                );
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
             },
         },
         {
@@ -79,25 +78,27 @@ const Index: React.FC = () => {
             title: '标签',
             align: 'center',
             width: '10%',
-            render: (_, record: ArticleModel) => (
-                <Space>
-                    {record.tags.map((t, i) => (
-                        <Tag
-                            key={i}
-                            type="ghost"
-                            // shape="circle"
-                            size="large"
-                        >
-                            {t.name}
-                        </Tag>
-                    ))}
-                </Space>
+            render: (_, article: ArticlePageModel) => (
+                <TagGroup
+                    maxTagCount={2}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 350,
+                    }}
+                    tagList={article.tags.map((t) => {
+                        return { color: 'purple', children: t.name } as TagProps;
+                    })}
+                    size="large"
+                    avatarShape="circle"
+                    showPopover
+                />
             ),
         },
         {
             title: '状态',
             align: 'center',
-            render: (_, article: ArticleModel) => (
+            render: (_, article: ArticlePageModel) => (
                 <Space>
                     {article.status == ArticleStatus.Draft ? (
                         <Tag style={{ padding: '11px 12px' }} shape="circle" color="amber">
@@ -116,41 +117,50 @@ const Index: React.FC = () => {
             ),
         },
         {
+            title: '创建时间',
+            align: 'center',
+            width: 150,
+            render: (_, article: ArticlePageModel) => (
+                <Text>{format(article.createTime, 'yyyy-MM-dd HH:mm')}</Text>
+            ),
+        },
+        {
             title: '置顶',
             align: 'center',
             width: 60,
-            render: (_, article: ArticleModel) => getBoolTag(article.isTop),
+            render: (_, article: ArticlePageModel) => getBoolTag(article.isTop),
         },
         {
-            title: '允许评论',
+            title: '评论',
             align: 'center',
-            width: 90,
-            render: (_, article: ArticleModel) => getBoolTag(article.commentable),
+            width: 60,
+            render: (_, article: ArticlePageModel) => getBoolTag(article.commentable),
         },
         {
-            title: '是否公开',
+            title: '公开',
             align: 'center',
-            width: 90,
-            render: (_, article: ArticleModel) => getBoolTag(article.publicable),
+            width: 60,
+            render: (_, article: ArticlePageModel) => getBoolTag(article.publicable),
         },
         {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: (_text, record: ArticleModel) => (
+            render: (_text, article: ArticlePageModel) => (
                 <Space>
                     <Button
                         theme="borderless"
                         type="primary"
                         size="small"
-                        onClick={() => handleEditArticle(record)}
+                        onClick={() => handleEditArticle(article)}
                     >
                         编辑
                     </Button>
                     <Popconfirm
+                        position="left"
                         title="确定是否要保存此修改？"
                         content="此修改将不可逆"
-                        onConfirm={() => handleDeleteArticle(record)}
+                        onConfirm={() => handleDeleteArticle(article)}
                     >
                         <Button theme="borderless" type="danger" size="small">
                             删除
@@ -160,7 +170,6 @@ const Index: React.FC = () => {
             ),
         },
     ];
-    const pageSize = 15;
 
     const navigate = useNavigate();
     const [data, loading, setData, setLoading] = useTable();
@@ -169,6 +178,8 @@ const Index: React.FC = () => {
         commentTotal: 0,
         viewTotal: 0,
     });
+
+    const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
     const [articleTotal, setArticleTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
@@ -177,6 +188,7 @@ const Index: React.FC = () => {
 
     // 获取文章列表
     let getArticlePage = async (page: number = 1) => {
+        setLoading(true);
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
@@ -242,12 +254,12 @@ const Index: React.FC = () => {
     };
 
     // 编辑文章
-    const handleEditArticle = (data: ArticleModel) => {
+    const handleEditArticle = (data: ArticlePageModel) => {
         navigate(`/article/edit/${data.articleId}`);
     };
 
     // 删除文章
-    const handleDeleteArticle = async (data: ArticleModel) => {
+    const handleDeleteArticle = async (data: ArticlePageModel) => {
         let res = await articleDelete(data.articleId);
         if (!res.isSuccess) {
             Toast.error(res.message);
@@ -263,7 +275,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🏷️ 文章管理">
+        <Content title="📄 文章管理">
             <div className="article-container">
                 <div className="article-list">
                     <div className="article-list-summary">

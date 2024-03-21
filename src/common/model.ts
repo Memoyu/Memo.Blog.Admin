@@ -16,6 +16,8 @@ export interface TokenModel {
     username: string; // 用户名
 }
 
+//#region 文章
+
 export interface ArticleCreateReq {
     articleId: string; // 文章Id
     category: CategoryModel; // 分类
@@ -47,6 +49,7 @@ export interface ArticlePageModel {
     description: string;
     tags: Array<TagModel>;
     status: ArticleStatus;
+    createTime: Date;
     isTop: boolean;
     commentable: boolean;
     publicable: boolean;
@@ -71,6 +74,64 @@ export enum ArticleStatus {
     Published = 1,
     Offline = 2,
 }
+
+//#endregion
+
+//#region 评论
+
+export enum CommentType {
+    Article = 0,
+    Moment = 1,
+    About = 2,
+}
+
+export interface CommentPageRequest extends PaginationRequest {
+    commentType: CommentType;
+    nickname?: string;
+    ip?: string;
+    commentTimeBegin?: Date;
+    commentTimeEnd?: Date;
+}
+
+export interface CommentPageModel {
+    commentId: string;
+    belong: CommentBelongModel;
+    commentType: number;
+    nickname: string;
+    email: string;
+    content: string;
+    avatar: string;
+    avatarOriginType: number;
+    avatarOrigin: string;
+    ip: string;
+    ipBelong: string;
+    showable: boolean;
+    createTime: Date;
+}
+
+export interface CommentModel {
+    commentId: string;
+    belong: CommentBelongModel;
+    commentType: number;
+    nickname: string;
+    email: string;
+    content: string;
+    avatar: string;
+    avatarOriginType: number;
+    avatarOrigin: string;
+    ip: string;
+    ipBelong: string;
+    showable: boolean;
+    createTime: Date;
+}
+
+export interface CommentBelongModel {
+    belongId: string;
+    title: string;
+    link: string;
+}
+
+//#endregion
 
 export interface CategoryModel {
     categoryId: string; // 分类Id

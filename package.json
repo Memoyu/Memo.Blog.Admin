@@ -16,6 +16,7 @@
         "@semi-bot/semi-theme-volcano_engine": "^1.0.14",
         "@types/node": "^20.11.20",
         "axios": "^1.6.7",
+        "date-fns": "^3.6.0",
         "echarts": "^5.5.0",
         "echarts-for-react": "^3.0.2",
         "md-editor-rt": "^4.11.3",

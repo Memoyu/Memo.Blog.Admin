@@ -15,6 +15,8 @@ import {
     ArticlePageModel,
     ArticlePageRequest,
     ArticlePageSummaryModel,
+    CommentPageModel,
+    CommentPageRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -52,21 +54,21 @@ export const articleDelete = (id: string) => {
 
 //#endregion
 
-//#region 文章评论
+//#region 评论
 
-export const articleCommentList = () => {
-    return Request.get<Array<ArticleCommentModel>>('/comment/list');
+export const commentPage = (request: CommentPageRequest) => {
+    return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
 };
 
-export const articleCommentCreate = (name: string) => {
+export const commentCreate = (name: string) => {
     return Request.post<ArticleCommentModel>('/comment/create', { name });
 };
 
-export const articleCommentUpdate = (commentId: string, name: string) => {
+export const commentUpdate = (commentId: string, name: string) => {
     return Request.put<ArticleCommentModel>('/comment/update', { commentId, name });
 };
 
-export const articleCommentDelete = (id: string) => {
+export const commentDelete = (id: string) => {
     return Request.delete('/comment/delete', { params: { commentId: id } });
 };
 

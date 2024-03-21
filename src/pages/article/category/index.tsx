@@ -62,14 +62,15 @@ const Index: React.FC = () => {
     const [saveCategoryForm, setSaveCategoryForm] = useState<FormApi>();
     const [editCategory, setEditCategory] = useState<CategoryModel | null>();
 
+    // 获取分类列表
     let getCategoryList = async () => {
-        articleCategoryList()
-            .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
-                }
-            })
-            .finally(() => setLoading(false));
+        setLoading(true);
+
+        let res = await articleCategoryList();
+        if (res.isSuccess) {
+            setData(res.data as any[]);
+        }
+        setLoading(false);
     };
 
     // 使用 useEffect 来异步获取表格数据
