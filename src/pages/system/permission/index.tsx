@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconButton } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Form } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import Content from '@src/components/page-content';
@@ -138,7 +139,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🏷️ 权限管理">
+        <Content title="权限管理" icon={<IconButton />}>
             <div className="permission-container">
                 <div className="permission-list">
                     <div className="permission-list-bar">

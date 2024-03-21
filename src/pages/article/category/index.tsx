@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconTabs } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -117,7 +118,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🛖 文章分类">
+        <Content title="文章分类" icon={<IconTabs />}>
             <div className="category-container">
                 <div className="category-list">
                     <div className="category-list-bar">

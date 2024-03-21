@@ -15,10 +15,14 @@ import {
     IconRadio,
 } from '@douyinfe/semi-icons-lab';
 
+import { IconProps } from '@douyinfe/semi-ui/lib/es/icons';
+
 export interface MenuItem {
     itemKey: string;
     text: string;
-    icon?: React.ReactNode;
+    icon?: React.ForwardRefExoticComponent<
+        Omit<IconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
+    >;
     path?: string;
     items?: MenuItem[];
     component?: React.ComponentType<any>;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconBadge } from '@douyinfe/semi-icons-lab';
 import {
     Button,
     Typography,
@@ -196,7 +197,7 @@ const Index: React.FC = () => {
     const handleEditModalOk = () => {};
 
     return (
-        <Content title="💬 文章评论">
+        <Content title="文章评论" icon={<IconBadge />}>
             <div className="comment-container">
                 <div className="comment-list">
                     <div className="comment-list-bar">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconProgress } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Form } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import Content from '@src/components/page-content';
@@ -74,7 +75,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🏷️ 访问日志">
+        <Content title="访问日志" icon={<IconProgress />}>
             <div className="access-log-container">
                 <div className="access-log-list">
                     <div className="access-log-list-bar">

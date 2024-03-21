@@ -1,4 +1,5 @@
-import React, { Children, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import {
     Button,
     Table,
@@ -275,7 +276,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="📄 文章管理">
+        <Content title="文章管理" icon={<IconChangelog />}>
             <div className="article-container">
                 <div className="article-list">
                     <div className="article-list-summary">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconSpin } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -132,7 +133,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🛖 友链管理">
+        <Content title="友链管理" icon={<IconSpin />}>
             <div className="friend-container">
                 <div className="friend-list">
                     <div className="friend-list-bar">

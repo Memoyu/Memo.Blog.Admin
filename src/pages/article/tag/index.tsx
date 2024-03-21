@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconTag } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Modal, Form, Toast, Tag } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -124,7 +125,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🏷️ 文章标签">
+        <Content title="文章标签" icon={<IconTag />}>
             <div className="tag-container">
                 <div className="tag-list">
                     <div className="tag-list-bar">

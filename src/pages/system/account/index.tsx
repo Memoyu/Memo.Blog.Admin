@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconAvatar } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -134,7 +135,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🛖 用户管理">
+        <Content title="用户管理" icon={<IconAvatar />}>
             <div className="user-container">
                 <div className="user-list">
                     <div className="user-list-bar">

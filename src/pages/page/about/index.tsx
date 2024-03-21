@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { MdEditor } from 'md-editor-rt';
+import { IconRating } from '@douyinfe/semi-icons-lab';
 import { Form, Row, Col, Button, Space } from '@douyinfe/semi-ui';
 import { IconUpload } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 
 import './index.scss';
-import 'md-aboutor-rt/lib/style.css';
+import 'md-editor-rt/lib/style.css';
 
 const { Section, Input, TagInput } = Form;
 
@@ -45,7 +46,7 @@ const Index: React.FC = () => {
         'catalog',
     ]);
     return (
-        <Content title="📋 文章编辑">
+        <Content title="关于信息" icon={<IconRating />}>
             <div className="about-container">
                 <Form style={{ padding: 10, width: '100%' }} onValueChange={(v) => console.log(v)}>
                     <Section text={'基本信息'}>

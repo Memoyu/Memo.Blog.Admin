@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { IconToast } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -114,7 +115,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="🛖 角色管理">
+        <Content title="角色管理" icon={<IconToast />}>
             <div className="role-container">
                 <div className="role-list">
                     <div className="role-list-bar">
