@@ -159,8 +159,7 @@ const Index: React.FC = () => {
                     </Button>
                     <Popconfirm
                         position="left"
-                        title="确定是否要保存此修改？"
-                        content="此修改将不可逆"
+                        title="确定是否要删除此文章？"
                         onConfirm={() => handleDeleteArticle(article)}
                     >
                         <Button theme="borderless" type="danger" size="small">
@@ -312,9 +311,10 @@ const Index: React.FC = () => {
                     <div className="article-list-bar">
                         <Form
                             layout="horizontal"
+                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Input field="title" label="标题" style={{ width: 190 }} />
+                            <Input field="title" showClear label="标题" style={{ width: 190 }} />
                             <Select
                                 initValue={'0'}
                                 field="category"

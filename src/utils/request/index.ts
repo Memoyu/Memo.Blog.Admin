@@ -10,13 +10,13 @@ import {
     UserModel,
     RoleModel,
     PermissionModel,
-    ArticleCommentModel,
     PaginationResult,
     ArticlePageModel,
     ArticlePageRequest,
     ArticlePageSummaryModel,
     CommentPageModel,
     CommentPageRequest,
+    CommentUpdateRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -41,11 +41,11 @@ export const articleGet = (id: string) => {
 };
 
 export const articleCreate = (article: ArticleModel) => {
-    return Request.post<ArticleModel>('/article/create', article);
+    return Request.post<string>('/article/create', article);
 };
 
 export const articleUpdate = (article: ArticleModel) => {
-    return Request.put<ArticleModel>('/article/update', article);
+    return Request.put<string>('/article/update', article);
 };
 
 export const articleDelete = (id: string) => {
@@ -60,12 +60,8 @@ export const commentPage = (request: CommentPageRequest) => {
     return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
 };
 
-export const commentCreate = (name: string) => {
-    return Request.post<ArticleCommentModel>('/comment/create', { name });
-};
-
-export const commentUpdate = (commentId: string, name: string) => {
-    return Request.put<ArticleCommentModel>('/comment/update', { commentId, name });
+export const commentUpdate = (comment: CommentUpdateRequest) => {
+    return Request.put<string>('/comment/update', comment);
 };
 
 export const commentDelete = (id: string) => {
@@ -76,8 +72,8 @@ export const commentDelete = (id: string) => {
 
 //#region 文章分类
 
-export const articleCategoryList = () => {
-    return Request.get<Array<CategoryModel>>('/category/list');
+export const articleCategoryList = (name?: string) => {
+    return Request.get<Array<CategoryModel>>('/category/list', { params: { name: name } });
 };
 
 export const articleCategoryCreate = (name: string) => {
@@ -96,12 +92,12 @@ export const articleCategoryDelete = (id: string) => {
 
 //#region 文章标签
 
-export const articleTagList = () => {
-    return Request.get<Array<TagModel>>('/tag/list');
+export const articleTagList = (name?: string) => {
+    return Request.get<Array<TagModel>>('/tag/list', { params: { name: name } });
 };
 
-export const articleTagCreate = (name: string) => {
-    return Request.post<TagModel>('/tag/create', { name });
+export const articleTagCreate = (name: string, color: string) => {
+    return Request.post<TagModel>('/tag/create', { name, color });
 };
 
 export const articleTagUpdate = (tagId: string, name: string) => {

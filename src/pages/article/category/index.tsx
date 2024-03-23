@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IconTabs } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
+import { Button, Table, Popconfirm, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
@@ -33,26 +33,31 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: (_text, record: CategoryModel) => {
+            render: (_text, category: CategoryModel) => {
                 return (
-                    <Space>
-                        <Button
-                            theme="borderless"
-                            type="primary"
-                            size="small"
-                            onClick={() => handleEditCategory(record)}
-                        >
-                            编辑
-                        </Button>
-                        <Button
-                            theme="borderless"
-                            type="danger"
-                            size="small"
-                            onClick={() => handleDeleteCategory(record)}
-                        >
-                            删除
-                        </Button>
-                    </Space>
+                    category.categoryId != '1' && (
+                        <Space>
+                            <Button
+                                theme="borderless"
+                                type="primary"
+                                size="small"
+                                onClick={() => handleEditCategory(category)}
+                            >
+                                编辑
+                            </Button>
+
+                            <Popconfirm
+                                position="left"
+                                title="确定是否要删除此分类？"
+                                content="所有关联文章将变为[未分类]"
+                                onConfirm={() => handleDeleteCategory(category)}
+                            >
+                                <Button theme="borderless" type="danger" size="small">
+                                    删除
+                                </Button>
+                            </Popconfirm>
+                        </Space>
+                    )
                 );
             },
         },
@@ -60,14 +65,16 @@ const Index: React.FC = () => {
 
     const [data, loading, setData, setLoading] = useTable();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [saveCategoryForm, setSaveCategoryForm] = useState<FormApi>();
+    const [editForm, setEditForm] = useState<FormApi>();
+    const [searchForm, setSearchForm] = useState<FormApi>();
     const [editCategory, setEditCategory] = useState<CategoryModel | null>();
 
     // 获取分类列表
     let getCategoryList = async () => {
         setLoading(true);
 
-        let res = await articleCategoryList();
+        let search = searchForm?.getValues();
+        let res = await articleCategoryList(search?.name);
         if (res.isSuccess) {
             setData(res.data as any[]);
         }
@@ -79,8 +86,9 @@ const Index: React.FC = () => {
         getCategoryList();
     }, []);
 
+    // 确认编辑/新增分类
     const handleEditModalOk = () => {
-        saveCategoryForm?.validate().then(async ({ name }) => {
+        editForm?.validate().then(async ({ name }) => {
             var msg = '';
             var res;
             if (editCategory) {
@@ -101,11 +109,13 @@ const Index: React.FC = () => {
         });
     };
 
+    // 编辑/新增分类
     const handleEditCategory = (data: CategoryModel) => {
         setEditCategory(data);
         setEditVisible(true);
     };
 
+    // 删除分类
     const handleDeleteCategory = (data: CategoryModel) => {
         articleCategoryDelete(data.categoryId).then((res) => {
             if (!res.isSuccess) {
@@ -122,10 +132,23 @@ const Index: React.FC = () => {
             <div className="category-container">
                 <div className="category-list">
                     <div className="category-list-bar">
-                        <Form layout="horizontal">
-                            <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
+                        <Form
+                            labelPosition="inset"
+                            layout="horizontal"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Form.Input
+                                field="name"
+                                showClear
+                                label="名称"
+                                style={{ width: 190 }}
+                            />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit">
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getCategoryList()}
+                                >
                                     查询
                                 </Button>
 
@@ -163,7 +186,7 @@ const Index: React.FC = () => {
                 >
                     <Form
                         initValues={editCategory}
-                        getFormApi={(formData) => setSaveCategoryForm(formData)}
+                        getFormApi={(formData) => setEditForm(formData)}
                     >
                         <Form.Input
                             field="name"

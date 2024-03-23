@@ -104,7 +104,7 @@ export interface CommentPageModel {
     avatarOriginType: number;
     avatarOrigin: string;
     ip: string;
-    ipBelong: string;
+    region: string;
     showable: boolean;
     createTime: Date;
 }
@@ -120,9 +120,18 @@ export interface CommentModel {
     avatarOriginType: number;
     avatarOrigin: string;
     ip: string;
-    ipBelong: string;
+    region: string;
     showable: boolean;
     createTime: Date;
+}
+
+export interface CommentUpdateRequest {
+    commentId: string;
+    nickname: string;
+    email?: string;
+    content: string;
+    avatar?: string;
+    showable: boolean;
 }
 
 export interface CommentBelongModel {

@@ -55,8 +55,6 @@ export class Request {
                 const { response } = error;
                 if (response && response.data) {
                     const { code, message } = response.data;
-                    Toast.error(message);
-
                     // 需要登录
                     if (
                         code === resultCode.TOKEN_EXPIRED ||
@@ -66,7 +64,10 @@ export class Request {
                         removeLocalStorage(TOKEN);
                         removeLocalStorage(USER);
                         window.location.href = `/login${'?from=' + encodeURIComponent(location.pathname)}`;
+                        return Promise.reject(error);
                     }
+
+                    Toast.error(message);
                 }
 
                 return Promise.reject(error);

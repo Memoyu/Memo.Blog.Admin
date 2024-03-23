@@ -15,11 +15,11 @@ import {
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import Content from '@src/components/page-content';
-import { commentDelete, commentPage } from '@src/utils/request';
+import { commentDelete, commentPage, commentUpdate } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
-import { CommentModel, CommentPageModel, CommentPageRequest } from '@src/common/model';
+import { CommentUpdateRequest, CommentPageModel, CommentPageRequest } from '@src/common/model';
 import { format } from 'date-fns';
 
 const { Text } = Typography;
@@ -78,7 +78,7 @@ const Index: React.FC = () => {
         {
             title: 'IP所属',
             align: 'center',
-            dataIndex: 'ipBelong',
+            dataIndex: 'region',
         },
         {
             title: '第三方信息',
@@ -116,8 +116,7 @@ const Index: React.FC = () => {
                     </Button>
                     <Popconfirm
                         position="left"
-                        title="确定是否要保存此修改？"
-                        content="此修改将不可逆"
+                        title="确定是否要删除此评论？"
                         onConfirm={() => handleDeleteComment(comment)}
                     >
                         <Button theme="borderless" type="danger" size="small">
@@ -137,7 +136,7 @@ const Index: React.FC = () => {
 
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
-    const [editComment, setEditComment] = useState<CommentModel | null>();
+    const [editComment, setEditComment] = useState<CommentUpdateRequest | null>();
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {
@@ -194,7 +193,28 @@ const Index: React.FC = () => {
     };
 
     // 确认编辑
-    const handleEditModalOk = () => {};
+    const handleEditModalOk = () => {
+        editForm?.validate().then(async (form) => {
+            var msg = '';
+            let comment = {
+                commentId: editComment?.commentId,
+                // nickname: form.nickname,
+                // content: form.content,
+                // showable: form.showable,
+                ...form,
+            } as CommentUpdateRequest;
+            let res = await commentUpdate(comment);
+            msg = '更新成功';
+
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            setEditVisible(false);
+            Toast.success(msg);
+            getArticleCommentPage(currentPage);
+        });
+    };
 
     return (
         <Content title="文章评论" icon={<IconBadge />}>
@@ -203,6 +223,7 @@ const Index: React.FC = () => {
                     <div className="comment-list-bar">
                         <Form
                             layout="horizontal"
+                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input field="nickname" label="昵称" style={{ width: 190 }} />
@@ -254,7 +275,7 @@ const Index: React.FC = () => {
                             initValues={editComment}
                             labelPosition="left"
                             labelAlign="left"
-                            labelWidth={80}
+                            labelWidth={60}
                             getFormApi={(formData) => setEditForm(formData)}
                         >
                             <Form.Input
@@ -264,17 +285,20 @@ const Index: React.FC = () => {
                             />
                             <Form.Input field="avatar" label="头像" />
                             <Form.Input field="email" label="邮箱" />
-                            <Form.Input disabled={true} field="ip" label="IP" />
+                            <div style={{ display: 'flex' }}>
+                                <Form.Input disabled={true} field="ip" label="IP" />
+                                <Form.Input disabled={true} field="region" noLabel={true} />
+                            </div>
                             <Form.TextArea
                                 field="content"
-                                label="评论内容"
+                                label="内容"
                                 rules={[{ required: true, message: '评论内容必填' }]}
                             />
 
                             <Form.Switch
                                 field="showable"
-                                label={{ text: '是否公开' }}
-                                aria-label="是否公开"
+                                label={{ text: '公开' }}
+                                aria-label="公开"
                             />
                         </Form>
                     </Modal>

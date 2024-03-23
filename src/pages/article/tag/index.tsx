@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IconTag } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Modal, Form, Toast, Tag } from '@douyinfe/semi-ui';
+import { Button, Table, Popconfirm, Space, Modal, Form, Toast, Tag } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
@@ -28,9 +28,9 @@ const Index: React.FC = () => {
             title: '名称',
             align: 'center',
             dataIndex: 'name',
-            render: (text, record: TagModel) => (
+            render: (text, tag: TagModel) => (
                 <Tag
-                    style={{ color: record.color, borderColor: record.color }}
+                    style={{ color: tag.color, borderColor: tag.color }}
                     type="ghost"
                     // shape="circle"
                     size="large"
@@ -43,24 +43,25 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: (_text, record: TagModel) => (
+            render: (_text, tag: TagModel) => (
                 <Space>
                     <Button
                         theme="borderless"
                         type="primary"
                         size="small"
-                        onClick={() => handleEditTag(record)}
+                        onClick={() => handleEditTag(tag)}
                     >
                         编辑
                     </Button>
-                    <Button
-                        theme="borderless"
-                        type="danger"
-                        size="small"
-                        onClick={() => handleDeleteTag(record)}
+                    <Popconfirm
+                        position="left"
+                        title="确定是否要删除此分标签？"
+                        onConfirm={() => handleDeleteTag(tag)}
                     >
-                        删除
-                    </Button>
+                        <Button theme="borderless" type="danger" size="small">
+                            删除
+                        </Button>
+                    </Popconfirm>
                 </Space>
             ),
         },
@@ -68,17 +69,22 @@ const Index: React.FC = () => {
 
     const [data, loading, setData, setLoading] = useTable();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [saveTagForm, setSaveTagForm] = useState<FormApi>();
+    const [editForm, setEditForm] = useState<FormApi>();
+    const [searchForm, setSearchForm] = useState<FormApi>();
     const [editTag, setEditTag] = useState<TagModel | null>();
 
+    // 获取标签
     let getTagList = async () => {
-        articleTagList()
-            .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
-                }
-            })
-            .finally(() => setLoading(false));
+        setLoading(true);
+
+        let search = searchForm?.getValues();
+        let res = await articleTagList(search?.name);
+
+        if (res.isSuccess) {
+            setData(res.data as any[]);
+        }
+
+        setLoading(false);
     };
 
     // 使用 useEffect 来异步获取表格数据
@@ -86,15 +92,16 @@ const Index: React.FC = () => {
         getTagList();
     }, []);
 
+    // 确认编辑/新增标签
     const handleEditModalOk = () => {
-        saveTagForm?.validate().then(async ({ name }) => {
+        editForm?.validate().then(async ({ name, color }) => {
             var msg = '';
             var res;
             if (editTag) {
                 res = await articleTagUpdate(editTag.tagId, name);
                 msg = '更新成功';
             } else {
-                res = await articleTagCreate(name);
+                res = await articleTagCreate(name, '#dd3344');
                 msg = '添加成功';
             }
 
@@ -108,11 +115,13 @@ const Index: React.FC = () => {
         });
     };
 
+    // 编辑/新增标签
     const handleEditTag = (data: TagModel) => {
         setEditTag(data);
         setEditVisible(true);
     };
 
+    // 删除标签
     const handleDeleteTag = (data: TagModel) => {
         articleTagDelete(data.tagId).then((res) => {
             if (!res.isSuccess) {
@@ -129,10 +138,23 @@ const Index: React.FC = () => {
             <div className="tag-container">
                 <div className="tag-list">
                     <div className="tag-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
+                        <Form
+                            labelPosition="inset"
+                            layout="horizontal"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Form.Input
+                                field="name"
+                                showClear
+                                label="名称"
+                                style={{ width: 190 }}
+                            />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit">
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getTagList()}
+                                >
                                     查询
                                 </Button>
 
@@ -168,7 +190,7 @@ const Index: React.FC = () => {
                     bodyStyle={{ height: 120 }}
                     okText={'保存'}
                 >
-                    <Form initValues={editTag} getFormApi={(formData) => setSaveTagForm(formData)}>
+                    <Form initValues={editTag} getFormApi={(formData) => setEditForm(formData)}>
                         <Form.Input
                             field="name"
                             placeholder="分类名称不超10个字符"
