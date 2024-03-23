@@ -15,7 +15,13 @@ import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
-import { friendPage, friendCreate, friendDelete, friendUpdate } from '@src/utils/request';
+import {
+    friendPage,
+    friendCreate,
+    friendDelete,
+    friendUpdate,
+    friendGet,
+} from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
@@ -76,7 +82,7 @@ const Index: React.FC = () => {
                             type="primary"
                             size="small"
                             onClick={() => {
-                                handleEditFriend(friend);
+                                handleEditFriend(friend.friendId);
                                 setEditModelTitle('编辑友链');
                             }}
                         >
@@ -106,8 +112,9 @@ const Index: React.FC = () => {
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [editFriend, setEditFriend] = useState<FriendModel | null>();
+    const [editFriend, setEditFriend] = useState<FriendModel>();
 
+    // 获取友链分页
     let getFriendPage = async (page: number = 1) => {
         setLoading(true);
         setCurrentPage(page);
@@ -132,6 +139,7 @@ const Index: React.FC = () => {
         getFriendPage(page);
     };
 
+    // 保存编辑/新增友链
     const handleEditModalOk = () => {
         editForm?.validate().then(async (form) => {
             let friend = {
@@ -158,11 +166,23 @@ const Index: React.FC = () => {
         });
     };
 
-    const handleEditFriend = (data?: FriendModel) => {
-        setEditFriend(data);
+    // 编辑/新增友链
+    const handleEditFriend = async (friendId?: string) => {
+        let friend = { showable: true } as FriendModel;
+        if (friendId) {
+            let res = await friendGet(friendId);
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            friend = res.data as FriendModel;
+        }
+
+        setEditFriend(friend);
         setEditVisible(true);
     };
 
+    // 删除友链
     const handleDeleteFriend = async (data: FriendModel) => {
         let res = await friendDelete(data.friendId);
         if (!res.isSuccess) {
@@ -184,8 +204,9 @@ const Index: React.FC = () => {
                             labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Form.Input field="nickname" label="昵称" />
-                            <Form.Input field="site" label="站点" />
+                            <Form.Input field="nickname" showClear label="昵称" />
+                            <Form.Input field="description" showClear label="描述" />
+                            <Form.Input field="site" showClear label="站点" />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
                                 <Button
                                     type="primary"

@@ -15,11 +15,16 @@ import {
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import Content from '@src/components/page-content';
-import { commentDelete, commentPage, commentUpdate } from '@src/utils/request';
+import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
-import { CommentUpdateRequest, CommentPageModel, CommentPageRequest } from '@src/common/model';
+import {
+    CommentUpdateRequest,
+    CommentPageModel,
+    CommentPageRequest,
+    CommentModel,
+} from '@src/common/model';
 import { format } from 'date-fns';
 
 const { Text } = Typography;
@@ -110,7 +115,7 @@ const Index: React.FC = () => {
                         theme="borderless"
                         type="primary"
                         size="small"
-                        onClick={() => handleEditComment(comment)}
+                        onClick={() => handleEditComment(comment.commentId)}
                     >
                         编辑
                     </Button>
@@ -171,8 +176,15 @@ const Index: React.FC = () => {
     }, []);
 
     // 编辑评论
-    const handleEditComment = (data: CommentPageModel) => {
-        setEditComment({ ...data });
+    const handleEditComment = async (commentId: string) => {
+        let res = await commentGet(commentId);
+        if (!res.isSuccess) {
+            Toast.error(res.message);
+            return;
+        }
+        let comment = res.data as CommentModel;
+
+        setEditComment(comment);
         setEditVisible(true);
     };
 

@@ -10,6 +10,7 @@ import {
     articleTagCreate,
     articleTagDelete,
     articleTagUpdate,
+    articleTagGet,
 } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
@@ -49,17 +50,17 @@ const Index: React.FC = () => {
                         theme="borderless"
                         type="primary"
                         size="small"
-                        onClick={() => handleEditTag(tag)}
+                        onClick={() => {
+                            handleEditTag(tag.tagId);
+                            setEditModelTitle('编辑标签');
+                        }}
                     >
                         编辑
                     </Button>
                     <Popconfirm
                         position="left"
                         title="确定是否要删除此分标签？"
-                        onConfirm={() => {
-                            handleDeleteTag(tag);
-                            setEditModelTitle('编辑标签');
-                        }}
+                        onConfirm={() => handleDeleteTag(tag)}
                     >
                         <Button theme="borderless" type="danger" size="small">
                             删除
@@ -120,8 +121,18 @@ const Index: React.FC = () => {
     };
 
     // 编辑/新增标签
-    const handleEditTag = (data?: TagModel) => {
-        setEditTag(data);
+    const handleEditTag = async (tagId?: string) => {
+        let tag = null;
+        if (tagId) {
+            let res = await articleTagGet(tagId);
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            tag = res.data as TagModel;
+        }
+
+        setEditTag(tag);
         setEditVisible(true);
     };
 
@@ -192,7 +203,7 @@ const Index: React.FC = () => {
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 120 }}
+                    bodyStyle={{ height: 100 }}
                     okText={'保存'}
                 >
                     <Form initValues={editTag} getFormApi={(formData) => setEditForm(formData)}>

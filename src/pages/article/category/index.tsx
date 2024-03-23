@@ -10,6 +10,7 @@ import {
     articleCategoryCreate,
     articleCategoryDelete,
     articleCategoryUpdate,
+    articleCategoryGet,
 } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
@@ -42,7 +43,7 @@ const Index: React.FC = () => {
                                 type="primary"
                                 size="small"
                                 onClick={() => {
-                                    handleEditCategory(category);
+                                    handleEditCategory(category.categoryId);
                                     setEditModelTitle('编辑分类');
                                 }}
                             >
@@ -114,8 +115,18 @@ const Index: React.FC = () => {
     };
 
     // 编辑/新增分类
-    const handleEditCategory = (data?: CategoryModel) => {
-        setEditCategory(data);
+    const handleEditCategory = async (categoryId?: string) => {
+        let category = null;
+        if (categoryId) {
+            let res = await articleCategoryGet(categoryId);
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            category = res.data as CategoryModel;
+        }
+
+        setEditCategory(category);
         setEditVisible(true);
     };
 
@@ -186,7 +197,7 @@ const Index: React.FC = () => {
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 120 }}
+                    bodyStyle={{ height: 100 }}
                     okText={'保存'}
                 >
                     <Form

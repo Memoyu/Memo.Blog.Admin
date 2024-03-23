@@ -84,6 +84,10 @@ export const articleCategoryList = (name?: string) => {
     return Request.get<Array<CategoryModel>>('/category/list', { params: { name: name } });
 };
 
+export const articleCategoryGet = (id: string) => {
+    return Request.get<CategoryModel>('/category/get', { params: { categoryId: id } });
+};
+
 export const articleCategoryCreate = (name: string) => {
     return Request.post<CategoryModel>('/category/create', { name });
 };
@@ -102,6 +106,10 @@ export const articleCategoryDelete = (id: string) => {
 
 export const articleTagList = (name?: string) => {
     return Request.get<Array<TagModel>>('/tag/list', { params: { name: name } });
+};
+
+export const articleTagGet = (id: string) => {
+    return Request.get<TagModel>('/tag/get', { params: { tagId: id } });
 };
 
 export const articleTagCreate = (name: string, color: string) => {
