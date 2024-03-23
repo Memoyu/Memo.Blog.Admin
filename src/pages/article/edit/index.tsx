@@ -14,7 +14,7 @@ import {
 import { useNavigate } from 'react-router';
 import './index.scss';
 import 'md-editor-rt/lib/style.css';
-import { ArticleModel, ArticleStatus } from '@src/common/model';
+import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 
 const { Section, Input, Select, TextArea } = Form;
@@ -114,8 +114,8 @@ const Index: React.FC = () => {
     // 点击保存/发布
     let handleSaveArticle = (status: ArticleStatus) => {
         let formApi = formRef.current?.formApi;
-        formApi?.validate().then(async (formData) => {
-            let article = formData as ArticleModel;
+        formApi?.validate().then(async (form) => {
+            let article = form as ArticleEditRequest;
             article.status = status;
             article.content = articleContent;
             article.isTop = isTop;

@@ -17,6 +17,10 @@ import {
     CommentPageModel,
     CommentPageRequest,
     CommentUpdateRequest,
+    FriendEditRequest,
+    ArticleEditRequest,
+    FriendPageRequest,
+    CommentModel,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -40,11 +44,11 @@ export const articleGet = (id: string) => {
     return Request.get<ArticleModel>('/article/get', { params: { articleId: id } });
 };
 
-export const articleCreate = (article: ArticleModel) => {
+export const articleCreate = (article: ArticleEditRequest) => {
     return Request.post<string>('/article/create', article);
 };
 
-export const articleUpdate = (article: ArticleModel) => {
+export const articleUpdate = (article: ArticleEditRequest) => {
     return Request.put<string>('/article/update', article);
 };
 
@@ -58,6 +62,10 @@ export const articleDelete = (id: string) => {
 
 export const commentPage = (request: CommentPageRequest) => {
     return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
+};
+
+export const commentGet = (id: string) => {
+    return Request.get<CommentModel>('/comment/get', { params: { commentId: id } });
 };
 
 export const commentUpdate = (comment: CommentUpdateRequest) => {
@@ -112,16 +120,20 @@ export const articleTagDelete = (id: string) => {
 
 //#region 友链管理
 
-export const friendList = () => {
-    return Request.get<Array<FriendModel>>('/friend/list');
+export const friendPage = (request: FriendPageRequest) => {
+    return Request.get<PaginationResult<FriendModel>>('/friend/page', { params: request });
 };
 
-export const friendCreate = (name: string) => {
-    return Request.post<FriendModel>('/friend/create', { name });
+export const friendGet = (id: string) => {
+    return Request.get<FriendModel>('/friend/get', { params: { friendId: id } });
 };
 
-export const friendUpdate = (friendId: string, name: string) => {
-    return Request.put<FriendModel>('/friend/update', { friendId, name });
+export const friendCreate = (friend: FriendEditRequest) => {
+    return Request.post<string>('/friend/create', friend);
+};
+
+export const friendUpdate = (friend: FriendEditRequest) => {
+    return Request.put<string>('/friend/update', friend);
 };
 
 export const friendDelete = (id: string) => {

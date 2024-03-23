@@ -41,7 +41,10 @@ const Index: React.FC = () => {
                                 theme="borderless"
                                 type="primary"
                                 size="small"
-                                onClick={() => handleEditCategory(category)}
+                                onClick={() => {
+                                    handleEditCategory(category);
+                                    setEditModelTitle('编辑分类');
+                                }}
                             >
                                 编辑
                             </Button>
@@ -64,6 +67,7 @@ const Index: React.FC = () => {
     ];
 
     const [data, loading, setData, setLoading] = useTable();
+    const [editModelTitle, setEditModelTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
@@ -110,7 +114,7 @@ const Index: React.FC = () => {
     };
 
     // 编辑/新增分类
-    const handleEditCategory = (data: CategoryModel) => {
+    const handleEditCategory = (data?: CategoryModel) => {
         setEditCategory(data);
         setEditVisible(true);
     };
@@ -156,7 +160,8 @@ const Index: React.FC = () => {
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
-                                        setEditVisible(true);
+                                        handleEditCategory();
+                                        setEditModelTitle('新增分类');
                                     }}
                                 >
                                     新增
@@ -176,7 +181,7 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title="添加分类"
+                    title={editModelTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}

@@ -55,6 +55,20 @@ export interface ArticlePageModel {
     publicable: boolean;
 }
 
+export interface ArticleEditRequest {
+    articleId?: string; // 文章Id
+    category: CategoryModel; // 分类
+    title: string;
+    description: string;
+    tags: Array<TagModel>;
+    content: string;
+    banner: string;
+    status: ArticleStatus;
+    isTop: boolean;
+    commentable: boolean;
+    publicable: boolean;
+}
+
 export interface ArticleModel {
     articleId: string; // 文章Id
     category: CategoryModel; // 分类
@@ -67,6 +81,7 @@ export interface ArticleModel {
     isTop: boolean;
     commentable: boolean;
     publicable: boolean;
+    createTime: Date;
 }
 
 export enum ArticleStatus {
@@ -142,10 +157,16 @@ export interface CommentBelongModel {
 
 //#endregion
 
+//#region 分类
+
 export interface CategoryModel {
     categoryId: string; // 分类Id
     name: string; // 分类名称
 }
+
+//#endregion
+
+//#region 标签
 
 export interface TagModel {
     tagId: string; // 标签Id
@@ -153,28 +174,75 @@ export interface TagModel {
     color: string; // 标签颜色
 }
 
+//#endregion
+
+//#region 友链
+
+export interface FriendPageRequest extends PaginationRequest {
+    nickname: string; // 友链名称
+    description: string;
+    site: string;
+}
+
+export interface FriendEditRequest {
+    friendId?: string; // 友链Id
+    nickname: string; // 友链名称
+    description: string;
+    site: string;
+    avatar?: string;
+    showable: boolean;
+}
+
 export interface FriendModel {
     friendId: string; // 友链Id
-    name: string; // 友链名称
+    nickname: string; // 友链名称
+    description: string;
+    site: string;
+    avatar: string;
+    showable: boolean;
+    views: number;
+    createTime: Date;
 }
+
+//#endregion
+
+//#region 访问日志
 
 export interface AccessLogModel {
     logId: string; //
     visitor: string; //
 }
 
+//#endregion
+
+//#region 系统日志
+
 export interface SystemLogModel {
     logId: string; //
 }
+
+//#endregion
+
+//#region 用户管理
 
 export interface UserModel {
     userId: string; // 用户Id
 }
 
+//#endregion
+
+//#region 角色管理
+
 export interface RoleModel {
     roleId: string; // 角色Id
 }
 
+//#endregion
+
+//#region 权限管理
+
 export interface PermissionModel {
     permissionId: string; // 权限Id
 }
+
+//#endregion

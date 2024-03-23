@@ -226,8 +226,13 @@ const Index: React.FC = () => {
                             labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Form.Input field="nickname" label="昵称" style={{ width: 190 }} />
-                            <Form.Input field="ip" label="IP" style={{ width: 190 }} />
+                            <Form.Input
+                                field="nickname"
+                                showClear
+                                label="昵称"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Input field="ip" showClear label="IP" style={{ width: 190 }} />
                             <Form.DatePicker
                                 label="评论时间"
                                 type="dateTimeRange"

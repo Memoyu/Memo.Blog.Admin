@@ -1,108 +1,150 @@
 import React, { useEffect, useState } from 'react';
 import { IconSpin } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
+import {
+    Button,
+    Table,
+    Space,
+    Avatar,
+    Badge,
+    Modal,
+    Popconfirm,
+    Form,
+    Toast,
+} from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
-import { friendList, friendCreate, friendDelete, friendUpdate } from '@src/utils/request';
+import { friendPage, friendCreate, friendDelete, friendUpdate } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
-import { FriendModel } from '@src/common/model';
+import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
-            title: '序号',
+            title: 'ID',
             align: 'center',
             dataIndex: 'friendId',
             width: '10%',
         },
         {
+            title: '头像',
+            align: 'center',
+            dataIndex: 'avatar',
+            render: (text) => {
+                return <Avatar alt="cute cat" size="small" src={text} />;
+            },
+        },
+        {
             title: '昵称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'nickname',
         },
         {
             title: '描述',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'description',
         },
         {
             title: '站点',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'site',
         },
         {
             title: '浏览次数',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'views',
         },
         {
             title: '是否公开',
             align: 'center',
             dataIndex: 'name',
-            render: (text, record: FriendModel) => <></>,
+            render: (_, comment: FriendModel) =>
+                comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
         },
         {
             title: '操作',
             align: 'center',
             width: '15%',
-            render: (_text, record: FriendModel) => {
+            render: (_text, friend: FriendModel) => {
                 return (
                     <Space>
                         <Button
                             theme="borderless"
                             type="primary"
                             size="small"
-                            onClick={() => handleEditFriend(record)}
+                            onClick={() => {
+                                handleEditFriend(friend);
+                                setEditModelTitle('编辑友链');
+                            }}
                         >
                             编辑
                         </Button>
-                        <Button
-                            theme="borderless"
-                            type="danger"
-                            size="small"
-                            onClick={() => handleDeleteFriend(record)}
+
+                        <Popconfirm
+                            position="left"
+                            title="确定是否要删除此友链？"
+                            onConfirm={() => handleDeleteFriend(friend)}
                         >
-                            删除
-                        </Button>
+                            <Button theme="borderless" type="danger" size="small">
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </Space>
                 );
             },
         },
     ];
 
+    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [commentTotal, setCommentTotal] = useState(1);
     const [data, loading, setData, setLoading] = useTable();
+    const [editModelTitle, setEditModelTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [saveFriendForm, setSaveFriendForm] = useState<FormApi>();
+    const [editForm, setEditForm] = useState<FormApi>();
+    const [searchForm, setSearchForm] = useState<FormApi>();
     const [editFriend, setEditFriend] = useState<FriendModel | null>();
 
-    let getFriendList = async () => {
-        friendList()
-            .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
-                }
-            })
-            .finally(() => setLoading(false));
+    let getFriendPage = async (page: number = 1) => {
+        setLoading(true);
+        setCurrentPage(page);
+
+        let search = searchForm?.getValues();
+        let request = { ...search, page, size: pageSize } as FriendPageRequest;
+        let res = await friendPage(request);
+        if (res.isSuccess) {
+            setData(res.data?.items as any[]);
+            setCommentTotal(res.data?.total || 0);
+        }
+        setLoading(false);
     };
 
     // 使用 useEffect 来异步获取表格数据
     useEffect(() => {
-        getFriendList();
+        getFriendPage();
     }, []);
 
+    // 页数变更
+    const handlePageChange = (page: number) => {
+        getFriendPage(page);
+    };
+
     const handleEditModalOk = () => {
-        saveFriendForm?.validate().then(async ({ name }) => {
+        editForm?.validate().then(async (form) => {
+            let friend = {
+                ...form,
+            } as FriendEditRequest;
+
             var msg = '';
             var res;
             if (editFriend) {
-                res = await friendUpdate(editFriend.friendId, name);
+                res = await friendUpdate(friend);
                 msg = '更新成功';
             } else {
-                res = await friendCreate(name);
+                res = await friendCreate(friend);
                 msg = '添加成功';
             }
 
@@ -112,24 +154,24 @@ const Index: React.FC = () => {
             }
             setEditVisible(false);
             Toast.success(msg);
-            getFriendList();
+            getFriendPage();
         });
     };
 
-    const handleEditFriend = (data: FriendModel) => {
+    const handleEditFriend = (data?: FriendModel) => {
         setEditFriend(data);
         setEditVisible(true);
     };
 
-    const handleDeleteFriend = (data: FriendModel) => {
-        friendDelete(data.friendId).then((res) => {
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            Toast.success('删除成功');
-            getFriendList();
-        });
+    const handleDeleteFriend = async (data: FriendModel) => {
+        let res = await friendDelete(data.friendId);
+        if (!res.isSuccess) {
+            Toast.error(res.message);
+            return;
+        }
+
+        Toast.success('删除成功');
+        getFriendPage();
     };
 
     return (
@@ -137,11 +179,19 @@ const Index: React.FC = () => {
             <div className="friend-container">
                 <div className="friend-list">
                     <div className="friend-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="昵称" style={{ width: 190 }} />
-                            <Form.Input field="UserName" label="站点" style={{ width: 190 }} />
+                        <Form
+                            layout="horizontal"
+                            labelPosition="inset"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Form.Input field="nickname" label="昵称" />
+                            <Form.Input field="site" label="站点" />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit">
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getFriendPage(1)}
+                                >
                                     查询
                                 </Button>
 
@@ -151,7 +201,8 @@ const Index: React.FC = () => {
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
-                                        setEditVisible(true);
+                                        handleEditFriend();
+                                        setEditModelTitle('新增友链');
                                     }}
                                 >
                                     新增
@@ -166,32 +217,52 @@ const Index: React.FC = () => {
                             size="small"
                             columns={columns}
                             dataSource={data}
-                            pagination={false}
+                            pagination={{
+                                currentPage,
+                                pageSize: pageSize,
+                                total: commentTotal,
+                                onPageChange: handlePageChange,
+                            }}
                         />
                     </div>
                 </div>
                 <Modal
-                    title="添加友链"
+                    title={editModelTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 120 }}
+                    bodyStyle={{ height: 350 }}
                     okText={'保存'}
                 >
                     <Form
+                        labelPosition="left"
+                        labelAlign="left"
+                        labelWidth={60}
                         initValues={editFriend}
-                        getFormApi={(formData) => setSaveFriendForm(formData)}
+                        getFormApi={(formData) => setEditForm(formData)}
                     >
                         <Form.Input
-                            field="name"
-                            placeholder="友链昵称不超10个字符"
-                            label="友链昵称"
+                            field="nickname"
+                            placeholder="友链昵称不超20个字符"
+                            label="昵称"
                             rules={[
                                 { required: true, message: '友链昵称必填' },
-                                { max: 10, message: '长度不能超10个字符' },
+                                { max: 20, message: '长度不能超20个字符' },
                             ]}
                         />
+                        <Form.Input field="avatar" label="头像" />
+                        <Form.Input
+                            field="site"
+                            label="站点"
+                            rules={[{ required: true, message: '友链站点必填' }]}
+                        />
+                        <Form.TextArea
+                            field="description"
+                            label="描述"
+                            rules={[{ required: true, message: '友链描述必填' }]}
+                        />
+                        <Form.Switch field="showable" label={{ text: '公开' }} aria-label="公开" />
                     </Form>
                 </Modal>
             </div>

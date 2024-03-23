@@ -56,7 +56,10 @@ const Index: React.FC = () => {
                     <Popconfirm
                         position="left"
                         title="确定是否要删除此分标签？"
-                        onConfirm={() => handleDeleteTag(tag)}
+                        onConfirm={() => {
+                            handleDeleteTag(tag);
+                            setEditModelTitle('编辑标签');
+                        }}
                     >
                         <Button theme="borderless" type="danger" size="small">
                             删除
@@ -68,6 +71,7 @@ const Index: React.FC = () => {
     ];
 
     const [data, loading, setData, setLoading] = useTable();
+    const [editModelTitle, setEditModelTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
@@ -116,7 +120,7 @@ const Index: React.FC = () => {
     };
 
     // 编辑/新增标签
-    const handleEditTag = (data: TagModel) => {
+    const handleEditTag = (data?: TagModel) => {
         setEditTag(data);
         setEditVisible(true);
     };
@@ -162,7 +166,8 @@ const Index: React.FC = () => {
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
-                                        setEditVisible(true);
+                                        handleEditTag();
+                                        setEditModelTitle('新增标签');
                                     }}
                                 >
                                     新增
@@ -182,7 +187,7 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title="添加分类"
+                    title={editModelTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
