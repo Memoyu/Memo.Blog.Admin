@@ -74,11 +74,16 @@ const Index: React.FC = () => {
             title: '分类',
             align: 'center',
             dataIndex: 'category.name',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '标签',
             align: 'center',
-            width: '10%',
+            width: 150,
             render: (_, article: ArticlePageModel) => (
                 <TagGroup
                     maxTagCount={2}
@@ -99,6 +104,7 @@ const Index: React.FC = () => {
         {
             title: '状态',
             align: 'center',
+            width: 90,
             render: (_, article: ArticlePageModel) => (
                 <Space>
                     {article.status == ArticleStatus.Draft ? (
@@ -146,7 +152,7 @@ const Index: React.FC = () => {
         {
             title: '操作',
             align: 'center',
-            width: '15%',
+            width: 150,
             render: (_text, article: ArticlePageModel) => (
                 <Space>
                     <Button

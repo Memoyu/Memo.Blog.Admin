@@ -21,6 +21,7 @@ import {
     ArticleEditRequest,
     FriendPageRequest,
     CommentModel,
+    AboutModel,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -54,26 +55,6 @@ export const articleUpdate = (article: ArticleEditRequest) => {
 
 export const articleDelete = (id: string) => {
     return Request.delete('/article/delete', { params: { articleId: id } });
-};
-
-//#endregion
-
-//#region 评论
-
-export const commentPage = (request: CommentPageRequest) => {
-    return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
-};
-
-export const commentGet = (id: string) => {
-    return Request.get<CommentModel>('/comment/get', { params: { commentId: id } });
-};
-
-export const commentUpdate = (comment: CommentUpdateRequest) => {
-    return Request.put<string>('/comment/update', comment);
-};
-
-export const commentDelete = (id: string) => {
-    return Request.delete('/comment/delete', { params: { commentId: id } });
 };
 
 //#endregion
@@ -126,6 +107,26 @@ export const articleTagDelete = (id: string) => {
 
 //#endregion
 
+//#region 评论
+
+export const commentPage = (request: CommentPageRequest) => {
+    return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
+};
+
+export const commentGet = (id: string) => {
+    return Request.get<CommentModel>('/comment/get', { params: { commentId: id } });
+};
+
+export const commentUpdate = (comment: CommentUpdateRequest) => {
+    return Request.put<string>('/comment/update', comment);
+};
+
+export const commentDelete = (id: string) => {
+    return Request.delete('/comment/delete', { params: { commentId: id } });
+};
+
+//#endregion
+
 //#region 友链管理
 
 export const friendPage = (request: FriendPageRequest) => {
@@ -146,6 +147,18 @@ export const friendUpdate = (friend: FriendEditRequest) => {
 
 export const friendDelete = (id: string) => {
     return Request.delete('/friend/delete', { params: { friendId: id } });
+};
+
+//#endregion
+
+//#region 关于信息
+
+export const aboutGet = () => {
+    return Request.get<AboutModel>('/about/get');
+};
+
+export const aboutUpdate = (about: AboutModel) => {
+    return Request.put<string>('/about/update', about);
 };
 
 //#endregion

@@ -41,6 +41,7 @@ const Index: React.FC = () => {
             title: '头像',
             align: 'center',
             dataIndex: 'avatar',
+            width: 70,
             render: (text) => {
                 return <Avatar alt="cute cat" size="small" src={text} />;
             },
@@ -49,9 +50,14 @@ const Index: React.FC = () => {
             title: '昵称',
             align: 'center',
             dataIndex: 'nickname',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
-            title: '评论文章',
+            title: '评论所属',
             align: 'center',
             dataIndex: 'belong',
             width: 170,
@@ -74,21 +80,41 @@ const Index: React.FC = () => {
             title: '邮箱',
             align: 'center',
             dataIndex: 'email',
+            width: 130,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: 'IP',
             align: 'center',
             dataIndex: 'ip',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: 'IP所属',
             align: 'center',
             dataIndex: 'region',
+            width: 120,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '第三方信息',
             align: 'center',
             dataIndex: 'avatarOrigin',
+            width: 120,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '评论时间',
@@ -102,13 +128,14 @@ const Index: React.FC = () => {
         {
             title: '公开',
             align: 'center',
+            width: 60,
             render: (_, comment: CommentPageModel) =>
                 comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
         },
         {
             title: '操作',
             align: 'center',
-            width: '15%',
+            width: 150,
             render: (_text, comment: CommentPageModel) => (
                 <Space>
                     <Button

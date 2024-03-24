@@ -76,9 +76,9 @@ const Index: React.FC = () => {
             return;
         }
 
-        setArticle(res.data);
+        let article = res.data;
+        setArticle(article);
         let formApi = formRef.current?.formApi;
-        const article = res.data;
         article &&
             formApi?.setValues({
                 ...article,

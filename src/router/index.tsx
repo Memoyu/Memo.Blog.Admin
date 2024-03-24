@@ -9,11 +9,11 @@ import Empty from '@components/empty';
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
 
 const Article = lazy(() => import('@src/pages/article'));
-const ArticleComment = lazy(() => import('@src/pages/comment/article'));
 const ArticleEdit = lazy(() => import('@src/pages/article/edit'));
 const ArticleCategory = lazy(() => import('@src/pages/article/category'));
 const ArticleTag = lazy(() => import('@src/pages/article/tag'));
 
+const Comment = lazy(() => import('@src/pages/page/comment'));
 const Friend = lazy(() => import('@src/pages/page/friend'));
 const About = lazy(() => import('@src/pages/page/about'));
 
@@ -38,12 +38,6 @@ const routeList: RouteObject[] = [
                 element: <WrapperRouteComponent element={<Article />} titleId="文章管理" auth />,
             },
             {
-                path: 'article/comment',
-                element: (
-                    <WrapperRouteComponent element={<ArticleComment />} titleId="文章评论" auth />
-                ),
-            },
-            {
                 path: 'article/edit/:id?',
                 element: (
                     <WrapperRouteComponent element={<ArticleEdit />} titleId="文章编辑" auth />
@@ -58,6 +52,10 @@ const routeList: RouteObject[] = [
             {
                 path: 'article/tag',
                 element: <WrapperRouteComponent element={<ArticleTag />} titleId="文章标签" auth />,
+            },
+            {
+                path: 'page/comment',
+                element: <WrapperRouteComponent element={<Comment />} titleId="评论管理" auth />,
             },
             {
                 path: 'page/friend',

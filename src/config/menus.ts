@@ -47,18 +47,12 @@ const Menus: MenuItem[] = [
             },
             {
                 itemKey: '2-2',
-                text: '文章评论',
-                path: '/article/comment',
-                icon: IconBadge,
-            },
-            {
-                itemKey: '2-3',
                 text: '文章分类',
                 path: '/article/category',
                 icon: IconTabs,
             },
             {
-                itemKey: '2-4',
+                itemKey: '2-3',
                 text: '文章标签',
                 path: '/article/tag',
                 icon: IconTag,
@@ -71,12 +65,18 @@ const Menus: MenuItem[] = [
         items: [
             {
                 itemKey: '3-1',
+                text: '评论管理',
+                path: '/page/comment',
+                icon: IconBadge,
+            },
+            {
+                itemKey: '3-2',
                 text: '友链管理',
                 path: '/page/friend',
                 icon: IconSpin,
             },
             {
-                itemKey: '3-2',
+                itemKey: '3-3',
                 text: '关于信息',
                 path: '/page/about',
                 icon: IconRating,

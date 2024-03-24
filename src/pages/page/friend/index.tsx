@@ -6,6 +6,7 @@ import {
     Space,
     Avatar,
     Badge,
+    Typography,
     Modal,
     Popconfirm,
     Form,
@@ -27,18 +28,21 @@ import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
 
+const { Text } = Typography;
+
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
             title: 'ID',
             align: 'center',
             dataIndex: 'friendId',
-            width: '10%',
+            width: 160,
         },
         {
             title: '头像',
             align: 'center',
             dataIndex: 'avatar',
+            width: 70,
             render: (text) => {
                 return <Avatar alt="cute cat" size="small" src={text} />;
             },
@@ -47,33 +51,49 @@ const Index: React.FC = () => {
             title: '昵称',
             align: 'center',
             dataIndex: 'nickname',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '描述',
             align: 'center',
             dataIndex: 'description',
+            width: 170,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '站点',
             align: 'center',
             dataIndex: 'site',
+            width: 170,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '浏览次数',
             align: 'center',
             dataIndex: 'views',
+            width: 90,
         },
         {
-            title: '是否公开',
+            title: '公开',
             align: 'center',
-            dataIndex: 'name',
+            width: 60,
             render: (_, comment: FriendModel) =>
                 comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
         },
         {
             title: '操作',
             align: 'center',
-            width: '15%',
+            width: 150,
             render: (_text, friend: FriendModel) => {
                 return (
                     <Space>

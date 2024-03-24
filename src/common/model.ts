@@ -92,6 +92,25 @@ export enum ArticleStatus {
 
 //#endregion
 
+//#region 分类
+
+export interface CategoryModel {
+    categoryId: string; // 分类Id
+    name: string; // 分类名称
+}
+
+//#endregion
+
+//#region 标签
+
+export interface TagModel {
+    tagId: string; // 标签Id
+    name: string; // 标签名称
+    color: string; // 标签颜色
+}
+
+//#endregion
+
 //#region 评论
 
 export enum CommentType {
@@ -157,25 +176,6 @@ export interface CommentBelongModel {
 
 //#endregion
 
-//#region 分类
-
-export interface CategoryModel {
-    categoryId: string; // 分类Id
-    name: string; // 分类名称
-}
-
-//#endregion
-
-//#region 标签
-
-export interface TagModel {
-    tagId: string; // 标签Id
-    name: string; // 标签名称
-    color: string; // 标签颜色
-}
-
-//#endregion
-
 //#region 友链
 
 export interface FriendPageRequest extends PaginationRequest {
@@ -202,6 +202,18 @@ export interface FriendModel {
     showable: boolean;
     views: number;
     createTime: Date;
+}
+
+//#endregion
+
+//#region 关于信息
+
+export interface AboutModel {
+    title: string;
+    banner: string;
+    tags: Array<string>;
+    content: string;
+    commentable: boolean;
 }
 
 //#endregion
