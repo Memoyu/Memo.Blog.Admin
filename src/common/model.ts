@@ -229,8 +229,38 @@ export interface AccessLogModel {
 
 //#region 系统日志
 
+export enum SystemLogStatus {
+    Verbose = 0,
+    Debug = 1,
+    Information = 2,
+    Warning = 3,
+    Error = 4,
+    Fatal = 5,
+}
+
+export interface SystemLogPageRequest extends PaginationRequest {
+    level?: SystemLogStatus;
+    message?: string;
+    source?: string;
+    requestParamterName?: string;
+    requestParamterValue?: string;
+    requestId?: string;
+    requestPath?: string;
+    timeBegin?: Date;
+    timeEnd?: Date;
+}
+
 export interface SystemLogModel {
-    logId: string; //
+    id: string;
+    level: SystemLogStatus;
+    message: string;
+    source: string;
+    request: string;
+    requestId: string;
+    requestPath: string;
+    exceptionMessage: string;
+    exceptionStackTrace: string;
+    time: Date;
 }
 
 //#endregion

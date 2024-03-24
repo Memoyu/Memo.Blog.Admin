@@ -1,67 +1,147 @@
 import React, { useEffect, useState } from 'react';
 import { IconRadio } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Form } from '@douyinfe/semi-ui';
+import { Button, Table, Row, Col, Space, Typography, Form } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import Content from '@src/components/page-content';
-import { systemLogList } from '@src/utils/request';
+import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
+import { systemLogPage } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
-import { AccessLogModel } from '@src/common/model';
+import { SystemLogModel, SystemLogPageRequest } from '@src/common/model';
+import { format } from 'date-fns';
+
+const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
-            title: '序号',
+            title: 'ID',
             align: 'center',
-            dataIndex: 'logId',
+            dataIndex: 'id',
+            width: 100,
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
-            title: '操作人',
+            title: '日志等级',
             align: 'center',
-            dataIndex: 'name',
-        },
-        {
-            title: '请求方式',
-            align: 'center',
-            dataIndex: 'name',
-        },
-        {
-            title: '日志类型',
-            align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'level',
         },
         {
             title: '日志内容',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'message',
+            width: 500,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '日志源',
+            align: 'center',
+            dataIndex: 'source',
+            width: 300,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '请求参数',
+            align: 'center',
+            dataIndex: 'request',
+            width: 200,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '请求ID',
+            align: 'center',
+            dataIndex: 'requestId',
+            width: 160,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '请求路径',
+            align: 'center',
+            dataIndex: 'requestPath',
+            width: 200,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '异常信息',
+            align: 'center',
+            dataIndex: 'exceptionMessage',
+            width: 200,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
+        },
+        {
+            title: '异常堆栈',
+            align: 'center',
+            dataIndex: 'exceptionStackTrace',
+            width: 200,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '日志时间',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'time',
+            width: 150,
+            render: (_, log: SystemLogModel) => <Text>{format(log.time, 'yyyy-MM-dd HH:mm')}</Text>,
         },
     ];
 
-    const [currentPage, setPage] = useState(1);
+    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [logTotal, setLogTotal] = useState(1);
+    const [searchForm, setSearchForm] = useState<FormApi>();
     const [data, loading, setData, setLoading] = useTable();
 
-    let getAccessLogList = async () => {
-        systemLogList()
-            .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
-                }
-            })
-            .finally(() => setLoading(false));
+    let getSytemLogPage = async (page: number = 1) => {
+        setLoading(true);
+        setCurrentPage(page);
+
+        let search = searchForm?.getValues();
+        let request = {
+            ...search,
+            timeBegin: search?.commentTime && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
+            timeEnd: search?.commentTime && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
+            page: page,
+            size: pageSize,
+        } as SystemLogPageRequest;
+
+        let res = await systemLogPage(request);
+        if (res.isSuccess) {
+            setData(res.data?.items as any[]);
+            setLogTotal(res.data?.total || 0);
+        }
+
+        setLoading(false);
     };
 
     // 使用 useEffect 来异步获取表格数据
     useEffect(() => {
-        getAccessLogList();
+        getSytemLogPage();
     }, []);
 
     const handlePageChange = (page: any) => {
-        getAccessLogList();
+        getSytemLogPage(page);
     };
 
     return (
@@ -69,19 +149,66 @@ const Index: React.FC = () => {
             <div className="system-log-container">
                 <div className="system-log-list">
                     <div className="system-log-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="访客标识" style={{ width: 190 }} />
-                            <Form.DatePicker
-                                label="访问时间"
-                                type="dateTimeRange"
-                                field="customTime"
-                            />
+                        <Form
+                            layout="horizontal"
+                            labelPosition="inset"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Space vertical spacing="tight">
+                                <Row>
+                                    <Col span={8}>
+                                        <Form.Input field="message" showClear label="日志内容" />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Input field="message" showClear label="日志源" />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.DatePicker
+                                            label="日志时间"
+                                            type="dateTimeRange"
+                                            field="time"
+                                        />
+                                    </Col>
+                                </Row>
 
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit">
-                                    查询
-                                </Button>
-                                <Button htmlType="reset">重置</Button>
+                                <Row>
+                                    <Col span={8}>
+                                        <Form.Input
+                                            field="requestParamterName"
+                                            showClear
+                                            label="请求参数名"
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Input
+                                            field="requestParamterValue"
+                                            showClear
+                                            label="请求参数值"
+                                        />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Input field="requestId" showClear label="请求Id" />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Form.Input
+                                            field="requestPath"
+                                            showClear
+                                            label="请求路径"
+                                        />
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                                        <Button
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => getSytemLogPage(1)}
+                                        >
+                                            查询
+                                        </Button>
+                                        <Button htmlType="reset">重置</Button>
+                                    </Space>
+                                </Row>
                             </Space>
                         </Form>
                     </div>
@@ -94,8 +221,8 @@ const Index: React.FC = () => {
                             dataSource={data}
                             pagination={{
                                 currentPage,
-                                pageSize: 5,
-                                total: data.length,
+                                pageSize: pageSize,
+                                total: logTotal,
                                 onPageChange: handlePageChange,
                             }}
                         />

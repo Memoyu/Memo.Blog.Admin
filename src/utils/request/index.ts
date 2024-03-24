@@ -22,6 +22,7 @@ import {
     FriendPageRequest,
     CommentModel,
     AboutModel,
+    SystemLogPageRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -166,13 +167,14 @@ export const aboutUpdate = (about: AboutModel) => {
 //#region 日志
 
 // TODO： 待完善模型链接
-export const accessLogList = () => {
-    return Request.get<Array<AccessLogModel>>('/friend/list');
+export const accessLogPage = () => {
+    return Request.get<Array<AccessLogModel>>('/looger/access/page');
 };
 
-// TODO： 待完善模型链接
-export const systemLogList = () => {
-    return Request.get<Array<SystemLogModel>>('/friend/list');
+export const systemLogPage = (request: SystemLogPageRequest) => {
+    return Request.get<PaginationResult<SystemLogModel>>('/looger/system/page', {
+        params: request,
+    });
 };
 
 //#endregion

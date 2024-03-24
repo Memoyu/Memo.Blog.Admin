@@ -20,7 +20,7 @@ import { TagModel } from '@src/common/model';
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
-            title: '序号',
+            title: 'ID',
             align: 'center',
             dataIndex: 'tagId',
             width: '10%',

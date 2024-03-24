@@ -75,7 +75,7 @@ const Index: React.FC = () => {
 
     const columns: ColumnProps[] = [
         {
-            title: '序号',
+            title: 'ID',
             align: 'center',
             dataIndex: 'logId',
         },
