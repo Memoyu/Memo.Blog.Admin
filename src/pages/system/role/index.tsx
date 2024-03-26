@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { IconToast } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
+import {
+    Button,
+    Table,
+    CheckboxGroup,
+    Space,
+    Modal,
+    Popconfirm,
+    Form,
+    Toast,
+} from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
-import { roleList, roleCreate, roleDelete, roleUpdate } from '@src/utils/request';
+import { roleList, roleCreate, roleDelete, roleUpdate, permissionGroup } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
-import { RoleModel } from '@src/common/model';
+import { PermissionGroupModel, PermissionModel, RoleModel } from '@src/common/model';
+import Label from '@douyinfe/semi-ui/lib/es/form/label';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -19,65 +29,102 @@ const Index: React.FC = () => {
             dataIndex: 'userId',
         },
         {
-            title: '名称',
+            title: '角色名',
             align: 'center',
             dataIndex: 'name',
         },
         {
             title: '描述',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'description',
+        },
+        {
+            title: '类型',
+            align: 'center',
+            dataIndex: 'type',
         },
         {
             title: '操作',
             align: 'center',
-            render: (_text, record: RoleModel) => {
+            render: (_text, role: RoleModel) => {
                 return (
                     <Space>
                         <Button
                             theme="borderless"
                             type="primary"
                             size="small"
-                            onClick={() => handleEditUser(record)}
+                            onClick={() => {
+                                handleEditUser(role);
+                                setEditModalTitle('编辑角色');
+                            }}
                         >
                             编辑
                         </Button>
-                        <Button
-                            theme="borderless"
-                            type="danger"
-                            size="small"
-                            onClick={() => handleDeleteUser(record)}
+                        <Popconfirm
+                            position="left"
+                            title="确定是否要删除此分标签？"
+                            onConfirm={() => handleDeleteUser(role)}
                         >
-                            删除
-                        </Button>
+                            <Button theme="borderless" type="danger" size="small">
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </Space>
                 );
             },
         },
     ];
 
+    const permissionColumns: ColumnProps[] = [
+        {
+            title: '权限分组',
+            dataIndex: 'module',
+        },
+        {
+            title: '分组名称',
+            align: 'center',
+            dataIndex: 'moduleName',
+        },
+    ];
+
+    const [searchForm, setSearchForm] = useState<FormApi>();
     const [data, loading, setData, setLoading] = useTable();
+    const [permissionData, permissionLoading, setPermissionData, setPermissionLoading] = useTable();
+    const [editModalTitle, setEditModalTitle] = useState<string>();
+    const [modalSearchForm, setModalSearchForm] = useState<FormApi>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [saveRoleForm, setSaveRoleForm] = useState<FormApi>();
+    const [editForm, setEditForm] = useState<FormApi>();
     const [editRole, setEditRole] = useState<RoleModel | null>();
 
-    let getUserList = async () => {
-        roleList()
-            .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
-                }
-            })
-            .finally(() => setLoading(false));
+    // 获取角色列表
+    let getRoleList = async () => {
+        setLoading(true);
+
+        let search = searchForm?.getValues();
+        let res = await roleList(search?.name);
+        if (res.isSuccess) {
+            setData(res.data as any[]);
+        }
+
+        setLoading(false);
+    };
+
+    // 获取权限分组
+    let getPermissionGroup = async () => {
+        let search = modalSearchForm?.getValues();
+        let res = await permissionGroup(search?.name);
+        if (res.isSuccess) {
+            setPermissionData(res.data as any[]);
+        }
     };
 
     // 使用 useEffect 来异步获取表格数据
     useEffect(() => {
-        getUserList();
+        getRoleList();
     }, []);
 
     const handleEditModalOk = () => {
-        saveRoleForm?.validate().then(async ({ name }) => {
+        editForm?.validate().then(async ({ name }) => {
             var msg = '';
             var res;
             if (editRole) {
@@ -94,7 +141,7 @@ const Index: React.FC = () => {
             }
             setEditVisible(false);
             Toast.success(msg);
-            getUserList();
+            getRoleList();
         });
     };
 
@@ -103,26 +150,63 @@ const Index: React.FC = () => {
         setEditVisible(true);
     };
 
-    const handleDeleteUser = (data: RoleModel) => {
-        roleDelete(data.roleId).then((res) => {
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            Toast.success('删除成功');
-            getUserList();
-        });
+    const handleDeleteUser = async (data: RoleModel) => {
+        let res = await roleDelete(data.roleId);
+        if (!res.isSuccess) {
+            Toast.error(res.message);
+            return;
+        }
+        Toast.success('删除成功');
+        getRoleList();
+    };
+    const expandRowRender = (group: PermissionGroupModel, index?: number) => {
+        return (
+            <CheckboxGroup
+                key={group.module}
+                style={{ margin: '0px 30px' }}
+                options={group.permissions.map((g) => g.name)}
+                direction="horizontal"
+                // value={checkedList}
+                // onChange={onChange}
+            />
+        );
     };
 
+    const rowSelection = {
+        getCheckboxProps: (permission?: PermissionModel) => ({
+            disabled: permission?.name === '设计文档', // Column configuration not to be checked
+            name: permission?.name,
+        }),
+        onSelect: (permission?: PermissionModel, selected?: boolean) => {
+            console.log(`select row: ${selected}`, permission);
+        },
+        onSelectAll: (selected?: boolean, selectedRows?: Array<PermissionModel>) => {
+            console.log(`select all rows: ${selected}`, selectedRows);
+        },
+        onChange: (
+            selectedRowKeys?: Array<string | number>,
+            selectedRows?: Array<PermissionModel>
+        ) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+    };
     return (
         <Content title="角色管理" icon={<IconToast />}>
             <div className="role-container">
                 <div className="role-list">
                     <div className="role-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
+                        <Form
+                            layout="horizontal"
+                            labelPosition="inset"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Form.Input field="name" showClear label="角色名" />
                             <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                <Button type="primary" htmlType="submit">
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getRoleList()}
+                                >
                                     查询
                                 </Button>
 
@@ -130,7 +214,9 @@ const Index: React.FC = () => {
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
+                                        setEditModalTitle('新增角色');
                                         setEditVisible(true);
+                                        getPermissionGroup();
                                     }}
                                 >
                                     新增
@@ -150,27 +236,44 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title="添加角色"
+                    title={editModalTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 120 }}
+                    bodyStyle={{ height: 500 }}
+                    style={{ width: 700 }}
                     okText={'保存'}
                 >
                     <Form
-                        initValues={editRole}
-                        getFormApi={(formData) => setSaveRoleForm(formData)}
+                        initValues={editForm}
+                        labelPosition="left"
+                        labelAlign="left"
+                        labelWidth={60}
+                        getFormApi={(formData) => setEditForm(formData)}
                     >
                         <Form.Input
-                            field="name"
-                            placeholder="分类名称不超10个字符"
-                            label="分类名称"
-                            rules={[
-                                { required: true, message: '分类名称必填' },
-                                { max: 10, message: '长度不能超10个字符' },
-                            ]}
+                            field="nickname"
+                            label="名称"
+                            rules={[{ required: true, message: '角色名称' }]}
                         />
+                        <Form.TextArea
+                            field="description"
+                            label="描述"
+                            rules={[{ required: true, message: '角色描述必填' }]}
+                        />
+                        <Form.Section text={'添加权限'}>
+                            <Table
+                                rowKey="module"
+                                scroll={{ y: 250 }}
+                                columns={permissionColumns}
+                                loading={permissionLoading}
+                                dataSource={permissionData}
+                                expandedRowRender={expandRowRender}
+                                rowSelection={rowSelection}
+                                pagination={false}
+                            />
+                        </Form.Section>
                     </Form>
                 </Modal>
             </div>

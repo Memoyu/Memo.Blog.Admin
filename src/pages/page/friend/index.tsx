@@ -103,7 +103,7 @@ const Index: React.FC = () => {
                             size="small"
                             onClick={() => {
                                 handleEditFriend(friend.friendId);
-                                setEditModelTitle('编辑友链');
+                                setEditModalTitle('编辑友链');
                             }}
                         >
                             编辑
@@ -128,7 +128,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
     const [data, loading, setData, setLoading] = useTable();
-    const [editModelTitle, setEditModelTitle] = useState<string>();
+    const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
@@ -243,7 +243,7 @@ const Index: React.FC = () => {
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditFriend();
-                                        setEditModelTitle('新增友链');
+                                        setEditModalTitle('新增友链');
                                     }}
                                 >
                                     新增
@@ -268,7 +268,7 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title={editModelTitle}
+                    title={editModalTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}

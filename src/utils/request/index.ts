@@ -23,6 +23,7 @@ import {
     CommentModel,
     AboutModel,
     SystemLogPageRequest,
+    PermissionGroupModel,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -201,8 +202,8 @@ export const userDelete = (id: string) => {
 
 //#region 用户角色
 
-export const roleList = () => {
-    return Request.get<Array<RoleModel>>('/role/list');
+export const roleList = (name: string) => {
+    return Request.get<Array<RoleModel>>('/role/list', { params: { name } });
 };
 
 export const roleCreate = (name: string) => {
@@ -221,20 +222,12 @@ export const roleDelete = (id: string) => {
 
 //#region 用户权限
 
-export const permissionList = () => {
-    return Request.get<Array<PermissionModel>>('/permission/list');
+export const permissionList = (name: string) => {
+    return Request.get<Array<PermissionModel>>('/permission/list', { params: { name } });
 };
 
-export const permissionCreate = (name: string) => {
-    return Request.post<PermissionModel>('/permission/create', { name });
-};
-
-export const permissionUpdate = (permissionId: string, name: string) => {
-    return Request.put<PermissionModel>('/permission/update', { permissionId, name });
-};
-
-export const permissionDelete = (id: string) => {
-    return Request.delete('/permission/delete', { params: { permissionId: id } });
+export const permissionGroup = (name: string) => {
+    return Request.get<Array<PermissionGroupModel>>('/permission/group', { params: { name } });
 };
 
 //#endregion

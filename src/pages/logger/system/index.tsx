@@ -85,17 +85,7 @@ const Index: React.FC = () => {
         {
             title: '异常信息',
             align: 'center',
-            dataIndex: 'exceptionMessage',
-            width: 200,
-            ellipsis: { showTitle: false },
-            render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
-            },
-        },
-        {
-            title: '异常堆栈',
-            align: 'center',
-            dataIndex: 'exceptionStackTrace',
+            dataIndex: 'exMessage',
             width: 200,
             ellipsis: { showTitle: false },
             render: (text) => {

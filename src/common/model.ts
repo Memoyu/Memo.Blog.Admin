@@ -258,8 +258,7 @@ export interface SystemLogModel {
     request: string;
     requestId: string;
     requestPath: string;
-    exceptionMessage: string;
-    exceptionStackTrace: string;
+    exMessage: string;
     time: Date;
 }
 
@@ -275,16 +274,41 @@ export interface UserModel {
 
 //#region 角色管理
 
+export enum RoleType {
+    Create = 0,
+    Init = 1,
+}
+
+export interface RoleEditRequest {
+    name: string;
+    description: string;
+    roles: Array<string>;
+}
+
 export interface RoleModel {
     roleId: string; // 角色Id
+    name: string;
+    type: RoleType;
+    description: string;
 }
 
 //#endregion
 
 //#region 权限管理
 
+export interface PermissionGroupModel {
+    module: string;
+    moduleName: string;
+    permissions: Array<PermissionModel>;
+}
+
 export interface PermissionModel {
     permissionId: string; // 权限Id
+    module: string;
+    moduleName: string;
+    name: string;
+    signature: string;
+    roles: Array<RoleModel>;
 }
 
 //#endregion

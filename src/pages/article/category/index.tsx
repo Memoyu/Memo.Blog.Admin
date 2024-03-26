@@ -44,7 +44,7 @@ const Index: React.FC = () => {
                                 size="small"
                                 onClick={() => {
                                     handleEditCategory(category.categoryId);
-                                    setEditModelTitle('编辑分类');
+                                    setEditModalTitle('编辑分类');
                                 }}
                             >
                                 编辑
@@ -68,7 +68,7 @@ const Index: React.FC = () => {
     ];
 
     const [data, loading, setData, setLoading] = useTable();
-    const [editModelTitle, setEditModelTitle] = useState<string>();
+    const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
@@ -172,7 +172,7 @@ const Index: React.FC = () => {
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditCategory();
-                                        setEditModelTitle('新增分类');
+                                        setEditModalTitle('新增分类');
                                     }}
                                 >
                                     新增
@@ -192,7 +192,7 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title={editModelTitle}
+                    title={editModalTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
