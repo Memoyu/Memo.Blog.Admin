@@ -229,17 +229,17 @@ export interface AccessLogModel {
 
 //#region 系统日志
 
-export enum SystemLogStatus {
+export enum SystemLogLevel {
     Verbose = 0,
     Debug = 1,
-    Information = 2,
+    Info = 2,
     Warning = 3,
     Error = 4,
     Fatal = 5,
 }
 
 export interface SystemLogPageRequest extends PaginationRequest {
-    level?: SystemLogStatus;
+    level?: SystemLogLevel;
     message?: string;
     source?: string;
     requestParamterName?: string;
@@ -252,7 +252,7 @@ export interface SystemLogPageRequest extends PaginationRequest {
 
 export interface SystemLogModel {
     id: string;
-    level: SystemLogStatus;
+    level: SystemLogLevel;
     message: string;
     source: string;
     request: string;

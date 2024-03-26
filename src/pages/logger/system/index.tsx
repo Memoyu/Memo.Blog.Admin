@@ -7,7 +7,7 @@ import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { systemLogPage } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
-import { SystemLogModel, SystemLogPageRequest } from '@src/common/model';
+import { SystemLogLevel, SystemLogModel, SystemLogPageRequest } from '@src/common/model';
 import { format } from 'date-fns';
 
 const { Text } = Typography;
@@ -27,6 +27,10 @@ const Index: React.FC = () => {
             title: '日志等级',
             align: 'center',
             dataIndex: 'level',
+            width: 90,
+            render: (_, log: SystemLogModel) => {
+                return <Text ellipsis={{ showTooltip: true }}>{SystemLogLevel[log.level]}</Text>;
+            },
         },
         {
             title: '日志内容',
@@ -113,6 +117,7 @@ const Index: React.FC = () => {
     const [searchForm, setSearchForm] = useState<FormApi>();
     const [data, loading, setData, setLoading] = useTable();
 
+    // 获取日志分页
     let getSytemLogPage = async (page: number = 1) => {
         setLoading(true);
         setCurrentPage(page);
@@ -154,61 +159,70 @@ const Index: React.FC = () => {
                             labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Space vertical spacing="tight">
-                                <Row>
-                                    <Col span={8}>
-                                        <Form.Input field="message" showClear label="日志内容" />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Input field="message" showClear label="日志源" />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.DatePicker
-                                            label="日志时间"
-                                            type="dateTimeRange"
-                                            field="time"
-                                        />
-                                    </Col>
-                                </Row>
+                            <Row>
+                                <Col span={6}>
+                                    <Form.Input field="message" showClear label="日志内容" />
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Input field="message" showClear label="日志源" />
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Select
+                                        label="日志等级"
+                                        field="level"
+                                        style={{ width: '250px' }}
+                                    >
+                                        {Object.keys(SystemLogLevel)
+                                            .filter((key) => Number.isNaN(Number(key)))
+                                            .map((l, i) => {
+                                                return (
+                                                    <Form.Select.Option value={i}>
+                                                        {l}
+                                                    </Form.Select.Option>
+                                                );
+                                            })}
+                                    </Form.Select>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.DatePicker
+                                        label="日志时间"
+                                        type="dateTimeRange"
+                                        field="time"
+                                    />
+                                </Col>
+                            </Row>
 
-                                <Row>
-                                    <Col span={8}>
-                                        <Form.Input
-                                            field="requestParamterName"
-                                            showClear
-                                            label="请求参数名"
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Input
-                                            field="requestParamterValue"
-                                            showClear
-                                            label="请求参数值"
-                                        />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Input field="requestId" showClear label="请求Id" />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Input
-                                            field="requestPath"
-                                            showClear
-                                            label="请求路径"
-                                        />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
-                                        <Button
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => getSytemLogPage(1)}
-                                        >
-                                            查询
-                                        </Button>
-                                        <Button htmlType="reset">重置</Button>
-                                    </Space>
-                                </Row>
+                            <Row style={{ marginTop: 10 }}>
+                                <Col span={6}>
+                                    <Form.Input
+                                        field="requestParamterName"
+                                        showClear
+                                        label="请求参数名"
+                                    />
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Input
+                                        field="requestParamterValue"
+                                        showClear
+                                        label="请求参数值"
+                                    />
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Input field="requestId" showClear label="请求Id" />
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Input field="requestPath" showClear label="请求路径" />
+                                </Col>
+                            </Row>
+                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getSytemLogPage(1)}
+                                >
+                                    查询
+                                </Button>
+                                <Button htmlType="reset">重置</Button>
                             </Space>
                         </Form>
                     </div>
