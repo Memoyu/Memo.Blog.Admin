@@ -128,7 +128,7 @@ const Index: React.FC = () => {
             align: 'center',
             width: 150,
             render: (_, article: ArticlePageModel) => (
-                <Text>{format(article.createTime, 'yyyy-MM-dd HH:mm')}</Text>
+                <Text>{format(new Date(article.createTime), 'yyyy-MM-dd HH:mm')}</Text>
             ),
         },
         {

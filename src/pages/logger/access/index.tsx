@@ -3,7 +3,7 @@ import { IconProgress } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Form } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import Content from '@src/components/page-content';
-import { accessLogList } from '@src/utils/request';
+import { accessLogPage } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
 import { AccessLogModel } from '@src/common/model';
@@ -56,7 +56,7 @@ const Index: React.FC = () => {
     const [data, loading, setData, setLoading] = useTable();
 
     let getAccessLogList = async () => {
-        accessLogList()
+        accessLogPage()
             .then((res) => {
                 if (res.isSuccess) {
                     setData(res.data as any[]);
