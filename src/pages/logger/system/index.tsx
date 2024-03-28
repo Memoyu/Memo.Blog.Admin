@@ -97,7 +97,9 @@ const Index: React.FC = () => {
             align: 'center',
             dataIndex: 'time',
             width: 150,
-            render: (_, log: SystemLogModel) => <Text>{format(log.time, 'yyyy-MM-dd HH:mm')}</Text>,
+            render: (_, log: SystemLogModel) => (
+                <Text>{format(new Date(log.time), 'yyyy-MM-dd HH:mm')}</Text>
+            ),
         },
     ];
 

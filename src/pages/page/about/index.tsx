@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { MdEditor } from 'md-editor-rt';
 import { IconRating } from '@douyinfe/semi-icons-lab';
 import { Form, Toast, Row, Col, Button, Space, Switch, Typography } from '@douyinfe/semi-ui';
-import { IconUpload } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
+import { aboutGet, aboutUpdate } from '@src/utils/request';
+import { AboutModel } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
 import 'md-editor-rt/lib/style.css';
-import { aboutGet, aboutUpdate } from '@src/utils/request';
-import { AboutModel } from '@src/common/model';
 
 const { Section, Input, TagInput } = Form;
 const { Text } = Typography;
@@ -69,9 +69,9 @@ const Index: React.FC = () => {
         setCommentable(about?.commentable as boolean);
     };
 
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getAbout();
-    }, []);
+    });
 
     let handleSaveAbout = () => {
         let formApi = formRef.current?.formApi;

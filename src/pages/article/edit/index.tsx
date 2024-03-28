@@ -82,7 +82,7 @@ const Index: React.FC = () => {
         article &&
             formApi?.setValues({
                 ...article,
-                categoryId: article.category.categoryId,
+                categoryId: article.category?.categoryId,
                 tags: article.tags.map((t) => t.tagId),
             });
         setArticleContent(article?.content as string);
