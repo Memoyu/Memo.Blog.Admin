@@ -16,6 +16,7 @@ import './index.scss';
 import 'md-editor-rt/lib/style.css';
 import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Section, Input, Select, TextArea } = Form;
 const { Text } = Typography;
@@ -144,7 +145,7 @@ const Index: React.FC = () => {
         });
     };
 
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getCategories();
         getTags();
 
@@ -154,7 +155,7 @@ const Index: React.FC = () => {
             getArticleDetail(articleId);
             setSaveBtnText('保存');
         }
-    }, []);
+    });
 
     return (
         <Content title="📋 文章编辑">

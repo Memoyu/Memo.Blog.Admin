@@ -22,6 +22,7 @@ import {
 } from '@src/common/echart-options';
 import './index.scss';
 import Content from '@src/components/page-content';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Item } = Descriptions;
 const { Title } = Typography;
@@ -62,6 +63,8 @@ const Index: React.FC = () => {
     const [secondCardActiveTab, setSecondCardActiveTab] = useState('1');
 
     setTimeout(() => setLoading(false), 1000);
+
+    useOnMountUnsafe(() => {});
 
     return (
         <Content>

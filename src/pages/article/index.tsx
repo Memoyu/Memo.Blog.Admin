@@ -38,6 +38,7 @@ import {
     ArticleStatus,
 } from '@src/common/model';
 import { format } from 'date-fns';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Text } = Typography;
 const { Input, Select } = Form;
@@ -243,11 +244,11 @@ const Index: React.FC = () => {
         );
     };
 
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getArticlePage();
         getCategories();
         getTags();
-    }, []);
+    });
 
     // bool 转 Badge元素
     const getBoolTag = (value: boolean) => {

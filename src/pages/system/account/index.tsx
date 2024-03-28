@@ -10,6 +10,7 @@ import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { UserModel } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -91,10 +92,9 @@ const Index: React.FC = () => {
             .finally(() => setLoading(false));
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getUserList();
-    }, []);
+    });
 
     const handleEditModalOk = () => {
         saveUserForm?.validate().then(async ({ name }) => {

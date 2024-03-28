@@ -27,6 +27,7 @@ import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Text } = Typography;
 
@@ -149,10 +150,9 @@ const Index: React.FC = () => {
         setLoading(false);
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getFriendPage();
-    }, []);
+    });
 
     // 页数变更
     const handlePageChange = (page: number) => {

@@ -26,6 +26,7 @@ import {
     CommentModel,
 } from '@src/common/model';
 import { format } from 'date-fns';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Text } = Typography;
 
@@ -197,10 +198,9 @@ const Index: React.FC = () => {
         setLoading(false);
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getArticleCommentPage();
-    }, []);
+    });
 
     // 编辑评论
     const handleEditComment = async (commentId: string) => {

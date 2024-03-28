@@ -7,6 +7,7 @@ import { accessLogPage } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
 import { AccessLogModel } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -65,10 +66,9 @@ const Index: React.FC = () => {
             .finally(() => setLoading(false));
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getAccessLogList();
-    }, []);
+    });
 
     const handlePageChange = (page: any) => {
         getAccessLogList();

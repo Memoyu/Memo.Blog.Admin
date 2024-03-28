@@ -20,6 +20,7 @@ import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { PermissionGroupModel, PermissionModel, RoleModel } from '@src/common/model';
 import Label from '@douyinfe/semi-ui/lib/es/form/label';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -118,10 +119,9 @@ const Index: React.FC = () => {
         }
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getRoleList();
-    }, []);
+    });
 
     const handleEditModalOk = () => {
         editForm?.validate().then(async ({ name }) => {

@@ -16,6 +16,7 @@ import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { CategoryModel } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -86,10 +87,9 @@ const Index: React.FC = () => {
         setLoading(false);
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getCategoryList();
-    }, []);
+    });
 
     // 确认编辑/新增分类
     const handleEditModalOk = () => {

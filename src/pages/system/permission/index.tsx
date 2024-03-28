@@ -9,6 +9,7 @@ import { permissionList } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
 import { PermissionModel } from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -71,10 +72,9 @@ const Index: React.FC = () => {
         setLoading(false);
     };
 
-    // 使用 useEffect 来异步获取表格数据
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         getPermissionList();
-    }, []);
+    });
 
     return (
         <Content title="权限管理" icon={<IconButton />}>
