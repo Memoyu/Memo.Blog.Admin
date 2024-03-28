@@ -116,7 +116,7 @@ const Index: React.FC = () => {
 
     // 编辑/新增分类
     const handleEditCategory = async (categoryId?: string) => {
-        let category = null;
+        let category;
         if (categoryId) {
             let res = await articleCategoryGet(categoryId);
             if (!res.isSuccess) {

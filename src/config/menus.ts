@@ -4,7 +4,7 @@ import {
     IconChangelog,
     IconBadgeStar,
     IconTabs,
-    IconToken,
+    IconNotification,
     IconTag,
     IconAvatar,
     IconButton,
@@ -77,6 +77,12 @@ const Menus: MenuItem[] = [
             },
             {
                 itemKey: '3-3',
+                text: '动态管理',
+                path: '/page/moment',
+                icon: IconNotification,
+            },
+            {
+                itemKey: '3-4',
                 text: '关于信息',
                 path: '/page/about',
                 icon: IconRating,

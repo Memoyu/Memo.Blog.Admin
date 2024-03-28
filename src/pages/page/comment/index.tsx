@@ -20,7 +20,7 @@ import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import {
-    CommentUpdateRequest,
+    CommentEditRequest,
     CommentPageModel,
     CommentPageRequest,
     CommentModel,
@@ -169,7 +169,7 @@ const Index: React.FC = () => {
 
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
-    const [editComment, setEditComment] = useState<CommentUpdateRequest | null>();
+    const [editComment, setEditComment] = useState<CommentEditRequest | null>();
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {
@@ -182,9 +182,9 @@ const Index: React.FC = () => {
             nickname: search?.nickname,
             ip: search?.ip,
             commentTimeBegin:
-                search?.commentTime && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
+                search?.commentTime[0] && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
             commentTimeEnd:
-                search?.commentTime && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
+                search?.commentTime[1] && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
             page: page,
             size: pageSize,
         } as CommentPageRequest;
@@ -241,7 +241,7 @@ const Index: React.FC = () => {
                 // content: form.content,
                 // showable: form.showable,
                 ...form,
-            } as CommentUpdateRequest;
+            } as CommentEditRequest;
             let res = await commentUpdate(comment);
             msg = '更新成功';
 

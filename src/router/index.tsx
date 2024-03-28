@@ -15,6 +15,7 @@ const ArticleTag = lazy(() => import('@src/pages/article/tag'));
 
 const Comment = lazy(() => import('@src/pages/page/comment'));
 const Friend = lazy(() => import('@src/pages/page/friend'));
+const Moment = lazy(() => import('@src/pages/page/moment'));
 const About = lazy(() => import('@src/pages/page/about'));
 
 const AccessLog = lazy(() => import('@src/pages/logger/access'));
@@ -60,6 +61,10 @@ const routeList: RouteObject[] = [
             {
                 path: 'page/friend',
                 element: <WrapperRouteComponent element={<Friend />} titleId="友链管理" auth />,
+            },
+            {
+                path: 'page/moment',
+                element: <WrapperRouteComponent element={<Moment />} titleId="动态管理" auth />,
             },
             {
                 path: 'page/about',

@@ -24,6 +24,9 @@ import {
     AboutModel,
     SystemLogPageRequest,
     PermissionGroupModel,
+    MomentPageRequest,
+    MomentModel,
+    MomentEditRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -161,6 +164,30 @@ export const aboutGet = () => {
 
 export const aboutUpdate = (about: AboutModel) => {
     return Request.put<string>('/about/update', about);
+};
+
+//#endregion
+
+//#region 动态
+
+export const momentPage = (request: MomentPageRequest) => {
+    return Request.get<PaginationResult<MomentModel>>('/moment/page', { params: request });
+};
+
+export const momentGet = (id: string) => {
+    return Request.get<MomentModel>('/moment/get', { params: { momentId: id } });
+};
+
+export const momentCreate = (moment: MomentEditRequest) => {
+    return Request.post<string>('/moment/create', moment);
+};
+
+export const momentUpdate = (moment: MomentEditRequest) => {
+    return Request.put<string>('/moment/update', moment);
+};
+
+export const momentDelete = (id: string) => {
+    return Request.delete('/moment/delete', { params: { momentId: id } });
 };
 
 //#endregion

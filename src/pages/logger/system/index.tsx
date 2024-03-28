@@ -118,8 +118,8 @@ const Index: React.FC = () => {
         let search = searchForm?.getValues();
         let request = {
             ...search,
-            timeBegin: search?.commentTime && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
-            timeEnd: search?.commentTime && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
+            timeBegin: search?.commentTime[0] && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
+            timeEnd: search?.commentTime[1] && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
             page: page,
             size: pageSize,
         } as SystemLogPageRequest;

@@ -159,7 +159,7 @@ export interface CommentModel {
     createTime: Date;
 }
 
-export interface CommentUpdateRequest {
+export interface CommentEditRequest {
     commentId: string;
     nickname: string;
     email?: string;
@@ -214,6 +214,35 @@ export interface AboutModel {
     tags: Array<string>;
     content: string;
     commentable: boolean;
+}
+
+//#endregion
+
+//#region 动态
+
+export interface MomentPageRequest extends PaginationRequest {
+    tags: Array<string>;
+    content: string;
+    timeBegin: Date;
+    timeEnd: Date;
+}
+
+export interface MomentEditRequest {
+    momentId: string;
+    tags: Array<string>;
+    content: string;
+    Showable: boolean;
+    commentable: boolean;
+}
+
+export interface MomentModel {
+    momentId: string;
+    tags: Array<string>;
+    content: string;
+    likes: number;
+    showable: boolean;
+    commentable: boolean;
+    createTime: Date;
 }
 
 //#endregion
