@@ -23,6 +23,7 @@ const SystemLog = lazy(() => import('@src/pages/logger/system'));
 
 const Account = lazy(() => import('@src/pages/system/account'));
 const Role = lazy(() => import('@src/pages/system/role'));
+const RoleEdit = lazy(() => import('@src/pages/system/role/edit'));
 const Permission = lazy(() => import('@src/pages/system/permission'));
 
 const routeList: RouteObject[] = [
@@ -85,6 +86,10 @@ const routeList: RouteObject[] = [
             {
                 path: 'system/role',
                 element: <WrapperRouteComponent element={<Role />} titleId="角色管理" auth />,
+            },
+            {
+                path: 'system/role/edit/:id?',
+                element: <WrapperRouteComponent element={<RoleEdit />} titleId="角色编辑" auth />,
             },
             {
                 path: 'system/permission',

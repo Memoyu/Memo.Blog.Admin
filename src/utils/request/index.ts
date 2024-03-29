@@ -27,6 +27,7 @@ import {
     MomentPageRequest,
     MomentModel,
     MomentEditRequest,
+    RoleEditRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -233,12 +234,16 @@ export const roleList = (name: string) => {
     return Request.get<Array<RoleModel>>('/role/list', { params: { name } });
 };
 
-export const roleCreate = (name: string) => {
-    return Request.post<RoleModel>('/role/create', { name });
+export const roleGet = (id: string) => {
+    return Request.get<RoleModel>('/role/get', { params: { roleId: id } });
 };
 
-export const roleUpdate = (roleId: string, name: string) => {
-    return Request.put<RoleModel>('/role/update', { roleId, name });
+export const roleCreate = (role: RoleEditRequest) => {
+    return Request.post<string>('/role/create', role);
+};
+
+export const roleUpdate = (role: RoleEditRequest) => {
+    return Request.put<string>('/role/update', role);
 };
 
 export const roleDelete = (id: string) => {

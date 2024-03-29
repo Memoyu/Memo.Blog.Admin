@@ -309,9 +309,17 @@ export enum RoleType {
 }
 
 export interface RoleEditRequest {
+    roleId?: string;
     name: string;
     description: string;
-    roles: Array<string>;
+    permissions: Array<string>;
+}
+
+export interface RoleListModel {
+    roleId: string; // 角色Id
+    name: string;
+    type: RoleType;
+    description: string;
 }
 
 export interface RoleModel {
@@ -319,6 +327,7 @@ export interface RoleModel {
     name: string;
     type: RoleType;
     description: string;
+    permissions: Array<PermissionModel>;
 }
 
 //#endregion

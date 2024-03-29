@@ -255,14 +255,10 @@ const Index: React.FC = () => {
         return value ? <Badge dot type="success" /> : <Badge dot type="danger" />;
     };
 
-    // 添加文章
-    const handleAddArticle = () => {
-        navigate('/article/edit');
-    };
-
     // 编辑文章
-    const handleEditArticle = (data: ArticlePageModel) => {
-        navigate(`/article/edit/${data.articleId}`);
+    const handleEditArticle = (data?: ArticlePageModel) => {
+        var path = '/article/edit' + (data != undefined ? `/${data?.articleId}` : '');
+        navigate(path);
     };
 
     // 删除文章
@@ -365,7 +361,7 @@ const Index: React.FC = () => {
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
-                                    onClick={handleAddArticle}
+                                    onClick={() => handleEditArticle()}
                                 >
                                     新增
                                 </Button>
