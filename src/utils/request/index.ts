@@ -16,7 +16,7 @@ import {
     ArticlePageSummaryModel,
     CommentPageModel,
     CommentPageRequest,
-    CommentUpdateRequest,
+    CommentEditRequest,
     FriendEditRequest,
     ArticleEditRequest,
     FriendPageRequest,
@@ -122,7 +122,7 @@ export const commentGet = (id: string) => {
     return Request.get<CommentModel>('/comment/get', { params: { commentId: id } });
 };
 
-export const commentUpdate = (comment: CommentUpdateRequest) => {
+export const commentUpdate = (comment: CommentEditRequest) => {
     return Request.put<string>('/comment/update', comment);
 };
 
@@ -249,11 +249,11 @@ export const roleDelete = (id: string) => {
 
 //#region 用户权限
 
-export const permissionList = (name: string) => {
-    return Request.get<Array<PermissionModel>>('/permission/list', { params: { name } });
+export const permissionList = (name?: string, signature?: string) => {
+    return Request.get<Array<PermissionModel>>('/permission/list', { params: { name, signature } });
 };
 
-export const permissionGroup = (name: string) => {
+export const permissionGroup = (name?: string) => {
     return Request.get<Array<PermissionGroupModel>>('/permission/group', { params: { name } });
 };
 

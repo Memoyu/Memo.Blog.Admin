@@ -318,7 +318,6 @@ const Index: React.FC = () => {
                     <div className="article-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Input field="title" showClear label="标题" style={{ width: 190 }} />
@@ -350,7 +349,10 @@ const Index: React.FC = () => {
                                 </Select.Option>
                                 <Select.Option value={ArticleStatus.Offline}>下线</Select.Option>
                             </Select>
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"

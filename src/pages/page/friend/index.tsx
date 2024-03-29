@@ -221,13 +221,15 @@ const Index: React.FC = () => {
                     <div className="friend-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input field="nickname" showClear label="昵称" />
                             <Form.Input field="description" showClear label="描述" />
                             <Form.Input field="site" showClear label="站点" />
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"

@@ -64,7 +64,7 @@ const Index: React.FC = () => {
         setLoading(true);
 
         let search = searchForm?.getValues();
-        let res = await permissionList(search?.name);
+        let res = await permissionList(search?.name, search?.signature);
         if (res.isSuccess) {
             setData(res.data as any[]);
         }
@@ -83,11 +83,14 @@ const Index: React.FC = () => {
                     <div className="permission-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input field="name" showClear label="权限" />
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Form.Input field="signature" showClear label="标识" />
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"
@@ -105,6 +108,7 @@ const Index: React.FC = () => {
                             loading={loading}
                             size="small"
                             rowKey={'signature'}
+                            expandAllGroupRows={true}
                             groupBy={(permission: PermissionModel) =>
                                 permission.moduleName + ' - ' + permission.module
                             }

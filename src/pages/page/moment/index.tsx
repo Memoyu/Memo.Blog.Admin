@@ -119,7 +119,7 @@ const Index: React.FC = () => {
             dataIndex: 'name',
             width: 150,
             render: (_, moment: MomentModel) => (
-                <Text>{format(moment.createTime, 'yyyy-MM-dd HH:mm')}</Text>
+                <Text>{format(new Date(moment.createTime), 'yyyy-MM-dd HH:mm')}</Text>
             ),
         },
         {
@@ -183,14 +183,17 @@ const Index: React.FC = () => {
 
         let search = searchForm?.getValues();
         console.log(search);
+
         let request = {
             tags: search?.tags,
             content: search?.content,
-            timeBegin: search?.momentTime[0] && format(search?.momentTime[0], 'yyyy-MM-dd HH:mm'),
-            timeEnd: search?.momentTime[1] && format(search?.momentTime[1], 'yyyy-MM-dd HH:mm'),
             page: page,
             size: pageSize,
         } as MomentPageRequest;
+        if (search?.momentTime && search?.momentTime.length) {
+            request.timeBegin = format(search?.momentTime[0], 'yyyy-MM-dd 00:00');
+            request.timeEnd = format(search?.momentTime[1], 'yyyy-MM-dd 23:59');
+        }
 
         let res = await momentPage(request);
         if (res.isSuccess) {
@@ -281,7 +284,6 @@ const Index: React.FC = () => {
                     <div className="moment-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input
@@ -298,11 +300,15 @@ const Index: React.FC = () => {
                             />
                             <Form.DatePicker
                                 label="动态时间"
-                                type="dateTimeRange"
+                                needConfirm={true}
+                                type="dateRange"
                                 field="momentTime"
                             />
 
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"
@@ -359,7 +365,7 @@ const Index: React.FC = () => {
                         >
                             <Form.TagInput field="tags" label="标签" />
 
-                            <Form.Section className="content-editer" text={'内容'}>
+                            <Form.Section text={'内容'}>
                                 <MdEditor
                                     style={{ height: 490 }}
                                     modelValue={content}

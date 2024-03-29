@@ -141,7 +141,10 @@ const Index: React.FC = () => {
                     <div className="user-list-bar">
                         <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
                             <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button type="primary" htmlType="submit">
                                     查询
                                 </Button>

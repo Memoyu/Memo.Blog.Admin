@@ -154,7 +154,6 @@ const Index: React.FC = () => {
                 <div className="tag-list">
                     <div className="tag-list-bar">
                         <Form
-                            labelPosition="inset"
                             layout="horizontal"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
@@ -164,7 +163,10 @@ const Index: React.FC = () => {
                                 label="名称"
                                 style={{ width: 190 }}
                             />
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"

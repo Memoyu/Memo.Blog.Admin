@@ -36,7 +36,6 @@ const Index: React.FC = () => {
             <Col span={6} style={{ padding: '2rem', border: '1px solid var(--semi-color-border)' }}>
                 <Form
                     initValues={initUser}
-                    labelPosition="inset"
                     // 数据验证成功后的回调函数
                     onSubmit={(values) => submit(values)}
                     // 数据验证失败后的回调函数

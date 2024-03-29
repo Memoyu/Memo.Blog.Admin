@@ -123,8 +123,8 @@ export interface CommentPageRequest extends PaginationRequest {
     commentType: CommentType;
     nickname?: string;
     ip?: string;
-    commentTimeBegin?: Date;
-    commentTimeEnd?: Date;
+    commentTimeBegin?: string;
+    commentTimeEnd?: string;
 }
 
 export interface CommentPageModel {
@@ -223,8 +223,8 @@ export interface AboutModel {
 export interface MomentPageRequest extends PaginationRequest {
     tags: Array<string>;
     content: string;
-    timeBegin: Date;
-    timeEnd: Date;
+    timeBegin: string;
+    timeEnd: string;
 }
 
 export interface MomentEditRequest {
@@ -275,8 +275,8 @@ export interface SystemLogPageRequest extends PaginationRequest {
     requestParamterValue?: string;
     requestId?: string;
     requestPath?: string;
-    timeBegin?: Date;
-    timeEnd?: Date;
+    timeBegin?: string;
+    timeEnd?: string;
 }
 
 export interface SystemLogModel {

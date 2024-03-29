@@ -181,13 +181,13 @@ const Index: React.FC = () => {
         let request = {
             nickname: search?.nickname,
             ip: search?.ip,
-            commentTimeBegin:
-                search?.commentTime[0] && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
-            commentTimeEnd:
-                search?.commentTime[1] && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
             page: page,
             size: pageSize,
         } as CommentPageRequest;
+        if (search?.commentTime && search?.commentTime.length) {
+            request.commentTimeBegin = format(search?.commentTime[0], 'yyyy-MM-dd HH:mm:ss');
+            request.commentTimeEnd = format(search?.commentTime[1], 'yyyy-MM-dd HH:mm:ss');
+        }
 
         let res = await commentPage(request);
         if (res.isSuccess) {
@@ -262,7 +262,6 @@ const Index: React.FC = () => {
                     <div className="comment-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input
@@ -278,7 +277,10 @@ const Index: React.FC = () => {
                                 field="commentTime"
                             />
 
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"

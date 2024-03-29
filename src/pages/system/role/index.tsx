@@ -9,6 +9,8 @@ import {
     Popconfirm,
     Form,
     Toast,
+    Typography,
+    Input,
 } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -19,8 +21,9 @@ import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 import './index.scss';
 import { PermissionGroupModel, PermissionModel, RoleModel } from '@src/common/model';
-import Label from '@douyinfe/semi-ui/lib/es/form/label';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -90,6 +93,7 @@ const Index: React.FC = () => {
 
     const [searchForm, setSearchForm] = useState<FormApi>();
     const [data, loading, setData, setLoading] = useTable();
+    const [searchPermissionName, setSearchPermissionName] = useState<string>();
     const [permissionData, permissionLoading, setPermissionData, setPermissionLoading] = useTable();
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [modalSearchForm, setModalSearchForm] = useState<FormApi>();
@@ -111,12 +115,14 @@ const Index: React.FC = () => {
     };
 
     // 获取权限分组
-    let getPermissionGroup = async () => {
-        let search = modalSearchForm?.getValues();
-        let res = await permissionGroup(search?.name);
+    let getPermissionGroup = async (name?: string) => {
+        setPermissionLoading(true);
+        let res = await permissionGroup(name);
         if (res.isSuccess) {
             setPermissionData(res.data as any[]);
         }
+
+        setPermissionLoading(false);
     };
 
     useOnMountUnsafe(() => {
@@ -197,11 +203,13 @@ const Index: React.FC = () => {
                     <div className="role-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Input field="name" showClear label="角色名" />
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"
@@ -241,8 +249,8 @@ const Index: React.FC = () => {
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 500 }}
-                    style={{ width: 700 }}
+                    bodyStyle={{ height: 600 }}
+                    style={{ width: 900 }}
                     okText={'保存'}
                 >
                     <Form
@@ -262,10 +270,29 @@ const Index: React.FC = () => {
                             label="描述"
                             rules={[{ required: true, message: '角色描述必填' }]}
                         />
-                        <Form.Section text={'添加权限'}>
+                        <Form.Section
+                            text={
+                                <Space spacing="loose">
+                                    <Text style={{ width: 90 }} strong>
+                                        选择权限
+                                    </Text>
+                                    <Input
+                                        prefix="权限名"
+                                        onChange={(val) => setSearchPermissionName(val)}
+                                    ></Input>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => getPermissionGroup(searchPermissionName)}
+                                    >
+                                        查询
+                                    </Button>
+                                </Space>
+                            }
+                        >
                             <Table
                                 rowKey="module"
-                                scroll={{ y: 250 }}
+                                scroll={{ y: 350 }}
+                                expandAllRows={true}
                                 columns={permissionColumns}
                                 loading={permissionLoading}
                                 dataSource={permissionData}

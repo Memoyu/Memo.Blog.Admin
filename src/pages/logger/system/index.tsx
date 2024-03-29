@@ -118,11 +118,14 @@ const Index: React.FC = () => {
         let search = searchForm?.getValues();
         let request = {
             ...search,
-            timeBegin: search?.commentTime[0] && format(search?.commentTime[0], 'yyyy-MM-dd HH:mm'),
-            timeEnd: search?.commentTime[1] && format(search?.commentTime[1], 'yyyy-MM-dd HH:mm'),
             page: page,
             size: pageSize,
         } as SystemLogPageRequest;
+
+        if (search?.time && search?.time.length) {
+            request.timeBegin = format(search?.time[0], 'yyyy-MM-dd HH:mm:ss');
+            request.timeEnd = format(search?.time[1], 'yyyy-MM-dd HH:mm:ss');
+        }
 
         let res = await systemLogPage(request);
         if (res.isSuccess) {
@@ -148,65 +151,36 @@ const Index: React.FC = () => {
                     <div className="system-log-list-bar">
                         <Form
                             layout="horizontal"
-                            labelPosition="inset"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Row>
-                                <Col span={6}>
-                                    <Form.Input field="message" showClear label="日志内容" />
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Input field="message" showClear label="日志源" />
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Select
-                                        label="日志等级"
-                                        field="level"
-                                        style={{ width: '250px' }}
-                                    >
-                                        {Object.keys(SystemLogLevel)
-                                            .filter((key) => Number.isNaN(Number(key)))
-                                            .map((l, i) => {
-                                                return (
-                                                    <Form.Select.Option value={i}>
-                                                        {l}
-                                                    </Form.Select.Option>
-                                                );
-                                            })}
-                                    </Form.Select>
-                                </Col>
-                                <Col span={6}>
-                                    <Form.DatePicker
-                                        label="日志时间"
-                                        type="dateTimeRange"
-                                        field="time"
-                                    />
-                                </Col>
-                            </Row>
+                            <Form.Input field="message" showClear label="日志内容" />
 
-                            <Row style={{ marginTop: 10 }}>
-                                <Col span={6}>
-                                    <Form.Input
-                                        field="requestParamterName"
-                                        showClear
-                                        label="请求参数名"
-                                    />
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Input
-                                        field="requestParamterValue"
-                                        showClear
-                                        label="请求参数值"
-                                    />
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Input field="requestId" showClear label="请求Id" />
-                                </Col>
-                                <Col span={6}>
-                                    <Form.Input field="requestPath" showClear label="请求路径" />
-                                </Col>
-                            </Row>
-                            <Space spacing="loose" style={{ alignItems: 'flex-end' }}>
+                            <Form.Input field="message" showClear label="日志源" />
+
+                            <Form.Select label="日志等级" field="level" style={{ width: '250px' }}>
+                                {Object.keys(SystemLogLevel)
+                                    .filter((key) => Number.isNaN(Number(key)))
+                                    .map((l, i) => {
+                                        return (
+                                            <Form.Select.Option value={i}>{l}</Form.Select.Option>
+                                        );
+                                    })}
+                            </Form.Select>
+
+                            <Form.DatePicker label="日志时间" type="dateTimeRange" field="time" />
+
+                            <Form.Input field="requestParamterName" showClear label="请求参数名" />
+
+                            <Form.Input field="requestParamterValue" showClear label="请求参数值" />
+
+                            <Form.Input field="requestId" showClear label="请求Id" />
+
+                            <Form.Input field="requestPath" showClear label="请求路径" />
+
+                            <Space
+                                spacing="loose"
+                                style={{ alignItems: 'flex-end', marginTop: 10 }}
+                            >
                                 <Button
                                     type="primary"
                                     htmlType="submit"
