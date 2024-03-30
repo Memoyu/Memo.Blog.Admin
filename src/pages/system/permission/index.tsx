@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IconButton } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Form, TagGroup } from '@douyinfe/semi-ui';
+import { Button, Table, Typography, Space, Form, TagGroup } from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -10,6 +10,8 @@ import { useTable } from '@src/hooks/useTable';
 import './index.scss';
 import { PermissionModel } from '@src/common/model';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -113,14 +115,7 @@ const Index: React.FC = () => {
                                 permission.moduleName + ' - ' + permission.module
                             }
                             columns={columns}
-                            renderGroupSection={(groupKey) => <strong>{groupKey}</strong>}
-                            onGroupedRow={(group, index) => {
-                                return {
-                                    onClick: (e) => {
-                                        console.log(`Grouped row clicked: `, group, index);
-                                    },
-                                };
-                            }}
+                            renderGroupSection={(groupKey) => <Text strong>{groupKey}</Text>}
                             clickGroupedRowToExpand // if you want to click the entire row to expand
                             pagination={false}
                         />

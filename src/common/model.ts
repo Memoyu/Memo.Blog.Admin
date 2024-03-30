@@ -295,8 +295,67 @@ export interface SystemLogModel {
 
 //#region 用户管理
 
+export interface UserPageRequest extends PaginationRequest {
+    userId?: string;
+    username?: string;
+    nickname?: string;
+    email?: string;
+    phoneNumber?: string;
+    userIdentityType?: UserIdentityType;
+    roles?: Array<string>;
+}
+
+export interface UserPageModel {
+    userId: string;
+    username: string;
+    nickname: string;
+    avatar: string;
+    email: string;
+    phoneNumber: string;
+    userIdentityType: UserIdentityType;
+    roles: Array<RoleListModel>;
+    lastLoginTime: Date;
+    createTime: Date;
+}
+
 export interface UserModel {
-    userId: string; // 用户Id
+    userId: string;
+    username: string;
+    nickname: string;
+    avatar: string;
+    email: string;
+    phoneNumber: string;
+    roles: Array<RoleListModel>;
+    userIdentity: UserIdentityModel;
+    lastLoginTime: Date;
+    createTime: Date;
+}
+
+export interface UserIdentityModel {
+    identityType: UserIdentityType;
+    identifier: string;
+    credential: string;
+}
+
+export enum UserIdentityType {
+    Password = 0,
+    WeiXin = 1,
+    Qq = 2,
+    GitHub = 3,
+    Gitee = 4,
+}
+
+export interface UserEditRequest {
+    userId?: string;
+    username: string;
+    nickname: string;
+    userIdentityType: UserIdentityType;
+    identifier: string;
+    credential: string;
+    avatar?: string;
+    phoneNumber?: string;
+    email?: string;
+    roles: Array<string>;
 }
 
 //#endregion

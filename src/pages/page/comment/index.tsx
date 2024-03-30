@@ -18,7 +18,6 @@ import Content from '@src/components/page-content';
 import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
-import './index.scss';
 import {
     CommentEditRequest,
     CommentPageModel,
@@ -27,6 +26,8 @@ import {
 } from '@src/common/model';
 import { format } from 'date-fns';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+import './index.scss';
 
 const { Text } = Typography;
 

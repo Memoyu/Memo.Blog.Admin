@@ -4,6 +4,12 @@
         }
         &-table {
             margin-top: 10px;
+            .semi-table-row-section {
+                background-color: var(--semi-color-fill-0);
+            }
+            .semi-table-row-cell {
+                background-color: transparent !important;
+            }
         }
     }
 }

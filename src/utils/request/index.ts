@@ -28,6 +28,9 @@ import {
     MomentModel,
     MomentEditRequest,
     RoleEditRequest,
+    UserPageModel,
+    UserPageRequest,
+    UserEditRequest,
 } from '@common/model';
 
 export const loginApi = (username: string, password: string) => {
@@ -76,11 +79,11 @@ export const articleCategoryGet = (id: string) => {
 };
 
 export const articleCategoryCreate = (name: string) => {
-    return Request.post<CategoryModel>('/category/create', { name });
+    return Request.post<string>('/category/create', { name });
 };
 
 export const articleCategoryUpdate = (categoryId: string, name: string) => {
-    return Request.put<CategoryModel>('/category/update', { categoryId, name });
+    return Request.put<string>('/category/update', { categoryId, name });
 };
 
 export const articleCategoryDelete = (id: string) => {
@@ -100,11 +103,11 @@ export const articleTagGet = (id: string) => {
 };
 
 export const articleTagCreate = (name: string, color: string) => {
-    return Request.post<TagModel>('/tag/create', { name, color });
+    return Request.post<string>('/tag/create', { name, color });
 };
 
 export const articleTagUpdate = (tagId: string, name: string) => {
-    return Request.put<TagModel>('/tag/update', { tagId, name });
+    return Request.put<string>('/tag/update', { tagId, name });
 };
 
 export const articleTagDelete = (id: string) => {
@@ -210,16 +213,22 @@ export const systemLogPage = (request: SystemLogPageRequest) => {
 
 //#region 用户
 
-export const userList = () => {
-    return Request.get<Array<UserModel>>('/user/list');
+export const userPage = (request: UserPageRequest) => {
+    return Request.get<PaginationResult<UserPageModel>>('/user/page', {
+        params: request,
+    });
 };
 
-export const userCreate = (name: string) => {
-    return Request.post<UserModel>('/user/create', { name });
+export const userGet = (id: string) => {
+    return Request.get<UserModel>('/user/get', { params: { userId: id } });
 };
 
-export const userUpdate = (userId: string, name: string) => {
-    return Request.put<UserModel>('/user/update', { userId, name });
+export const userCreate = (user: UserEditRequest) => {
+    return Request.post<string>('/user/create', user);
+};
+
+export const userUpdate = (user: UserEditRequest) => {
+    return Request.put<string>('/user/update', user);
 };
 
 export const userDelete = (id: string) => {
@@ -230,7 +239,7 @@ export const userDelete = (id: string) => {
 
 //#region 用户角色
 
-export const roleList = (name: string) => {
+export const roleList = (name?: string) => {
     return Request.get<Array<RoleModel>>('/role/list', { params: { name } });
 };
 

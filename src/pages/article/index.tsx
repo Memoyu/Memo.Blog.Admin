@@ -331,7 +331,7 @@ const Index: React.FC = () => {
                                 label={{ text: '标签' }}
                                 style={{ width: 290 }}
                                 optionList={tags}
-                                showClear={true}
+                                showClear
                             ></Select>
                             <Select
                                 initValue={undefined}

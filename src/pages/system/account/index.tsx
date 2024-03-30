@@ -1,16 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IconAvatar } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
+import {
+    Button,
+    Table,
+    Space,
+    Avatar,
+    Typography,
+    Modal,
+    Form,
+    Popconfirm,
+    TagGroup,
+    Toast,
+} from '@douyinfe/semi-ui';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
+import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
+import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
-import { userList, userCreate, userDelete, userUpdate } from '@src/utils/request';
+import {
+    userPage,
+    userCreate,
+    userGet,
+    userDelete,
+    userUpdate,
+    roleList,
+} from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
-import './index.scss';
-import { UserModel } from '@src/common/model';
+import {
+    UserEditRequest,
+    UserModel,
+    UserIdentityType,
+    UserPageModel,
+    UserPageRequest,
+} from '@src/common/model';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { format } from 'date-fns';
+
+import './index.scss';
+
+const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -18,120 +48,347 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'userId',
+            width: 160,
         },
         {
             title: '头像',
             align: 'center',
             dataIndex: 'name',
+            width: 70,
+            render: (text) => {
+                return <Avatar alt="cute cat" size="small" src={text} />;
+            },
         },
         {
             title: '昵称',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'nickname',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '用户名',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'username',
+            width: 100,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '邮箱',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'email',
+            width: 130,
+            ellipsis: { showTitle: false },
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '手机号码',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'phoneNumber',
+            width: 140,
+        },
+        {
+            title: '角色',
+            align: 'center',
+            dataIndex: 'roles',
+            width: 130,
+            render: (_, user: UserPageModel) => (
+                <TagGroup
+                    maxTagCount={2}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: 140,
+                    }}
+                    tagList={user.roles.map((r) => {
+                        return { color: 'purple', children: r.name } as TagProps;
+                    })}
+                    size="large"
+                    avatarShape="circle"
+                    showPopover
+                />
+            ),
         },
         {
             title: '上次登录时间',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'lastLoginTime',
+            width: 150,
+            render: (_, user: UserPageModel) => (
+                <Text>{format(user.lastLoginTime, 'yyyy-MM-dd HH:mm')}</Text>
+            ),
+        },
+        {
+            title: '创建时间',
+            align: 'center',
+            dataIndex: 'createTime',
+            width: 150,
+            render: (_, user: UserPageModel) => (
+                <Text>{format(user.createTime, 'yyyy-MM-dd HH:mm')}</Text>
+            ),
         },
         {
             title: '操作',
             align: 'center',
-            render: (_text, record: UserModel) => {
+            width: 150,
+            fixed: 'right',
+            render: (_text, user: UserPageModel) => {
                 return (
                     <Space>
                         <Button
                             theme="borderless"
                             type="primary"
                             size="small"
-                            onClick={() => handleEditUser(record)}
+                            onClick={() => {
+                                handleEditUser(user.userId);
+                                setEditModalTitle('编辑用户');
+                            }}
                         >
                             编辑
                         </Button>
-                        <Button
-                            theme="borderless"
-                            type="danger"
-                            size="small"
-                            onClick={() => handleDeleteUser(record)}
+                        <Popconfirm
+                            position="left"
+                            title="确定是否要删除此用户？"
+                            onConfirm={() => handleDeleteUser(user.userId)}
                         >
-                            删除
-                        </Button>
+                            <Button theme="borderless" type="danger" size="small">
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </Space>
                 );
             },
         },
     ];
 
-    const [data, loading, setData, setLoading] = useTable();
-    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [saveUserForm, setSaveUserForm] = useState<FormApi>();
-    const [editUser, setEditUser] = useState<UserModel | null>();
+    const userIdentityOpts: Array<OptionProps> = [
+        {
+            value: 0,
+            label: '密码',
+        },
+        {
+            value: 1,
+            label: '微信',
+        },
+        {
+            value: 2,
+            label: 'QQ',
+        },
+        {
+            value: 3,
+            label: 'Github',
+        },
+        {
+            value: 4,
+            label: 'Gitee',
+        },
+    ];
 
-    let getUserList = async () => {
-        userList()
+    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [userTotal, setUserTotal] = useState(1);
+    const [searchForm, setSearchForm] = useState<FormApi>();
+    const [users, loading, setUsers, setLoading] = useTable();
+    const [roles, setRoles] = useState<Array<OptionProps>>();
+
+    const [editModalTitle, setEditModalTitle] = useState<string>();
+    const [editModalHeight, setEditModalHeight] = useState<number>(430);
+    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
+    const [editForm, setEditForm] = useState<FormApi>();
+    const [editUser, setEditUser] = useState<UserEditRequest>();
+    const [userIdentityType, setUserIdentityType] = useState<UserIdentityType>(
+        UserIdentityType.Password
+    );
+
+    // 获取用户分页
+    let getUserPage = (page: number = 1) => {
+        setLoading(true);
+        setCurrentPage(page);
+
+        let search = searchForm?.getValues();
+        // console.log(search);
+
+        let request = {
+            userId: search?.userId,
+            username: search?.username,
+            nickname: search?.nickname,
+            email: search?.email,
+            phoneNumber: search?.phoneNumber,
+            roles: search?.roles,
+            page: page,
+            size: pageSize,
+        } as UserPageRequest;
+
+        userPage(request)
             .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data as any[]);
+                if (!res.isSuccess || res.data == undefined) {
+                    Toast.error(res.message);
+                    return;
                 }
+                setUsers(res.data.items);
+                setUserTotal(res.data.total);
             })
             .finally(() => setLoading(false));
     };
 
+    // 获取角色列表
+    let getRoleList = async () => {
+        let res = await roleList();
+        if (res.isSuccess && res.data != undefined) {
+            setRoles(
+                res.data.map((c) => {
+                    return { value: c.roleId, label: c.name };
+                })
+            );
+        }
+    };
+
     useOnMountUnsafe(() => {
-        getUserList();
+        getRoleList();
+        getUserPage();
     });
 
+    // 页数变更
+    const handlePageChange = (page: number) => {
+        getUserPage(page);
+    };
+
+    // 保存编辑/新增
     const handleEditModalOk = () => {
-        saveUserForm?.validate().then(async ({ name }) => {
+        editForm?.validate().then(async (form) => {
+            let user = {
+                ...form,
+            } as UserEditRequest;
+
             var msg = '';
             var res;
-            if (editUser) {
-                res = await userUpdate(editUser.userId, name);
-                msg = '更新成功';
+            if (editUser?.userId != undefined) {
+                res = await userUpdate(user);
+                msg = '更新';
             } else {
-                res = await userCreate(name);
-                msg = '添加成功';
+                res = await userCreate(user);
+                msg = '添加';
             }
 
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
+
             setEditVisible(false);
-            Toast.success(msg);
-            getUserList();
+            Toast.success(msg + '用户成功');
+            getUserPage();
         });
     };
 
-    const handleEditUser = (data: UserModel) => {
-        setEditUser(data);
+    // 触发编辑
+    const handleEditUser = async (userId?: string) => {
+        getRoleList();
+
+        let user: UserEditRequest = {
+            username: '',
+            nickname: '',
+            roles: [],
+            userIdentityType: UserIdentityType.Password,
+            identifier: '',
+            credential: '',
+        };
+        setEditModalHeight(430);
+
+        if (userId) {
+            let res = await userGet(userId);
+            if (!res.isSuccess || res.data == undefined) {
+                Toast.error(res.message);
+                return;
+            }
+            var roleIds: Array<string> = [];
+            res.data.roles.forEach((r) => {
+                roleIds.push(r.roleId);
+            });
+
+            user = {
+                userId: res.data.userId,
+                username: res.data.username,
+                nickname: res.data.nickname,
+                email: res.data.email,
+                phoneNumber: res.data.phoneNumber,
+                roles: roleIds,
+                userIdentityType: res.data.userIdentity.identityType,
+                identifier: res.data.userIdentity.identifier,
+                credential: res.data.userIdentity.credential,
+            } as UserEditRequest;
+            setEditModalHeight(340);
+        }
+
+        // console.log(user);
+        setUserIdentityType(user.userIdentityType);
+        setEditUser(user);
         setEditVisible(true);
     };
 
-    const handleDeleteUser = (data: UserModel) => {
-        userDelete(data.userId).then((res) => {
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            Toast.success('删除成功');
-            getUserList();
-        });
+    // 触发删除
+    const handleDeleteUser = async (userId: string) => {
+        let res = await userDelete(userId);
+        if (!res.isSuccess) {
+            Toast.error(res.message);
+            return;
+        }
+
+        Toast.success('删除用户成功');
+        getUserPage();
+    };
+
+    const getIdentityRender = () => {
+        return editUser?.userId == undefined ? (
+            <>
+                <Form.Select
+                    field="userIdentityType"
+                    label={{ text: '认证方式' }}
+                    optionList={userIdentityOpts}
+                    style={{ width: 270 }}
+                    onChange={(val) => setUserIdentityType(val as UserIdentityType)}
+                    rules={[{ required: true, message: '用户认证类型必填' }]}
+                ></Form.Select>
+                {userIdentityType == UserIdentityType.Password ? (
+                    <Form.Input
+                        field="credential"
+                        label={{ text: <span>密码</span>, required: true }}
+                        required
+                        validate={validatePassword}
+                    />
+                ) : (
+                    <Form.Input
+                        field="credential"
+                        label="凭证"
+                        rules={[
+                            { required: true, message: '凭证必填' },
+                            { min: 5, message: '凭证长度不能小于5个字符' },
+                        ]}
+                    />
+                )}
+            </>
+        ) : (
+            <></>
+        );
+    };
+
+    const validatePassword = (value: string) => {
+        // 校验密码强度
+        // 1. 必须同时包含大写字母、小写字母和数字，三种组合
+        // 2. 长度在8-30之间
+        if (!value) return '密码不能为空';
+        const passwordReg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/;
+        if (!passwordReg.test(value)) return '密码必须同时包含大写字母、小写字母和数字';
+        if (value.length < 6 || value.length > 22) return '密码长度8-30位';
+        return '';
     };
 
     return (
@@ -139,13 +396,57 @@ const Index: React.FC = () => {
             <div className="user-container">
                 <div className="user-list">
                     <div className="user-list-bar">
-                        <Form layout="horizontal" onValueChange={(values) => console.log(values)}>
-                            <Form.Input field="UserName" label="名称" style={{ width: 190 }} />
+                        <Form
+                            layout="horizontal"
+                            getFormApi={(formData) => setSearchForm(formData)}
+                        >
+                            <Form.Input
+                                field="userId"
+                                showClear
+                                label="用户ID"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Input
+                                field="username"
+                                showClear
+                                label="用户名"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Input
+                                field="nickname"
+                                showClear
+                                label="昵称"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Input
+                                field="email"
+                                showClear
+                                label="邮箱"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Input
+                                field="phoneNumber"
+                                showClear
+                                label="电话"
+                                style={{ width: 190 }}
+                            />
+                            <Form.Select
+                                multiple
+                                field="roles"
+                                label={{ text: '角色' }}
+                                style={{ width: 290 }}
+                                optionList={roles}
+                                showClear
+                            ></Form.Select>
                             <Space
                                 spacing="loose"
                                 style={{ alignItems: 'flex-end', marginTop: 10 }}
                             >
-                                <Button type="primary" htmlType="submit">
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => getUserPage()}
+                                >
                                     查询
                                 </Button>
 
@@ -153,7 +454,8 @@ const Index: React.FC = () => {
                                     icon={<IconPlusCircleStroked size="small" />}
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
-                                        setEditVisible(true);
+                                        handleEditUser();
+                                        setEditModalTitle('新增用户');
                                     }}
                                 >
                                     新增
@@ -167,33 +469,70 @@ const Index: React.FC = () => {
                             loading={loading}
                             size="small"
                             columns={columns}
-                            dataSource={data}
-                            pagination={false}
+                            dataSource={users}
+                            pagination={{
+                                currentPage,
+                                pageSize: pageSize,
+                                total: userTotal,
+                                onPageChange: handlePageChange,
+                            }}
                         />
                     </div>
                 </div>
                 <Modal
-                    title="添加用户"
+                    title={editModalTitle}
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
                     centered
-                    bodyStyle={{ height: 120 }}
+                    bodyStyle={{ height: editModalHeight }}
+                    style={{ width: 450 }}
                     okText={'保存'}
                 >
                     <Form
+                        labelPosition="left"
+                        labelAlign="left"
+                        labelWidth={90}
                         initValues={editUser}
-                        getFormApi={(formData) => setSaveUserForm(formData)}
+                        getFormApi={(formData) => setEditForm(formData)}
                     >
                         <Form.Input
-                            field="name"
-                            placeholder="分类名称不超10个字符"
-                            label="分类名称"
+                            field="username"
+                            label="用户名"
                             rules={[
-                                { required: true, message: '分类名称必填' },
-                                { max: 10, message: '长度不能超10个字符' },
+                                { required: true, message: '用户名必填' },
+                                { max: 20, message: '用户名长度不能超20个字符' },
                             ]}
                         />
+                        <Form.Input
+                            field="nickname"
+                            label="昵称"
+                            rules={[
+                                { required: true, message: '用户昵称必填' },
+                                { max: 20, message: '用户昵称长度不能超20个字符' },
+                            ]}
+                        />
+                        <Form.Input field="email" label="邮箱" />
+                        <Form.Input field="phoneNumber" label="电话" />
+
+                        {getIdentityRender()}
+
+                        <Form.Select
+                            multiple
+                            field="roles"
+                            label={{ text: '角色' }}
+                            optionList={roles}
+                            showClear
+                            style={{ width: 270 }}
+                            rules={[
+                                { required: true, message: '用户角色必填' },
+                                {
+                                    validator: (rule, value) =>
+                                        value != undefined && value.length > 0,
+                                    message: '用户角色至少选一个',
+                                },
+                            ]}
+                        ></Form.Select>
                     </Form>
                 </Modal>
             </div>
