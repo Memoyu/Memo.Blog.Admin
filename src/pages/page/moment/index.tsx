@@ -138,6 +138,7 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: 150,
+            fixed: 'right',
             render: (_text, moment: MomentModel) => (
                 <Space>
                     <Button

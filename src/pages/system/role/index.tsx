@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconToast } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
+import { Button, Table, Typography, Space, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
 import { useNavigate } from 'react-router';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -9,8 +9,10 @@ import Content from '@src/components/page-content';
 import { roleList, roleDelete } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import './index.scss';
-import { RoleListModel } from '@src/common/model';
+import { RoleListModel, RoleType } from '@src/common/model';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -33,6 +35,17 @@ const Index: React.FC = () => {
             title: '类型',
             align: 'center',
             dataIndex: 'type',
+            render: (_, role: RoleListModel) => {
+                return (
+                    <Text>
+                        {role.type == RoleType.Create
+                            ? '手动创建'
+                            : role.type == RoleType.Init
+                              ? '初始化创建'
+                              : ''}
+                    </Text>
+                );
+            },
         },
         {
             title: '操作',
@@ -50,7 +63,7 @@ const Index: React.FC = () => {
                         </Button>
                         <Popconfirm
                             position="left"
-                            title="确定是否要删除此分标签？"
+                            title="确定是否要删除此角色？"
                             onConfirm={() => handleDeleteRole(role)}
                         >
                             <Button theme="borderless" type="danger" size="small">

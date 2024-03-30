@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MdEditor } from 'md-editor-rt';
 import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
-import { IconUpload } from '@douyinfe/semi-icons';
+import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import Content from '@src/components/page-content';
 import { useParams } from 'react-router-dom';
 import {
@@ -158,7 +158,7 @@ const Index: React.FC = () => {
     });
 
     return (
-        <Content title="📋 文章编辑">
+        <Content title="文章编辑" icon={<IconChangelog />}>
             <div className="edit-container">
                 <Form ref={formRef} initValues={article}>
                     <Section text={'基本信息'}>

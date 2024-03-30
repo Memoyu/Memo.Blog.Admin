@@ -30,11 +30,6 @@ import './index.scss';
 
 const { Text } = Typography;
 
-interface SelectedPermissionModule {
-    module: string;
-    permissions: Array<string>;
-}
-
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
         {
@@ -42,7 +37,7 @@ const Index: React.FC = () => {
             dataIndex: 'module',
             render: (_, permission: PermissionGroupModel) => {
                 return (
-                    <Text ellipsis={{ showTooltip: true }}>
+                    <Text strong ellipsis={{ showTooltip: true }}>
                         {permission.moduleName} - {permission.module}
                     </Text>
                 );
@@ -56,6 +51,7 @@ const Index: React.FC = () => {
     const params = useParams();
     const [roleId, setRoleId] = useState<string>();
     const [role, setRole] = useState<RoleModel>();
+    const refSelectedPermissions = useRef<Array<PermissionModel>>();
 
     const [searchPermissionName, setSearchPermissionName] = useState<string>();
     const [
@@ -78,41 +74,19 @@ const Index: React.FC = () => {
         //console.log('role', res);
         var role = res.data;
         setRole(role);
+        refSelectedPermissions.current = role.permissions;
         let formApi = formRef.current?.formApi;
         role &&
             formApi?.setValues({
                 ...role,
             });
 
-        initSelectedPermissionModules(role);
+        initSelectedPermissionModules();
     };
 
     // 初始化选中的权限
-    const initSelectedPermissionModules = (role: RoleModel) => {
-        let modules = refpermissionModules.current;
-        if (modules != undefined) {
-            //console.log('refRole.current', refRole.current);
-            // 做group by 操作
-            const groups = role.permissions.reduce((group: any, permission) => {
-                const { module } = permission;
-                group[module] = group[module] ?? [];
-                group[module].push(permission.permissionId);
-                return group;
-            }, {});
-            // console.log('groups', groups);
-
-            modules.map((m) => {
-                m.permissions.map((mp) => {
-                    var rp = groups[m.module]?.find((p: any) => p == mp.permissionId);
-                    mp.checked = rp != undefined;
-                });
-
-                handleRowCheckboxChanges(m);
-            });
-        }
-        // console.log('modules', modules);
-
-        setPermissionGroups(modules ?? []);
+    const initSelectedPermissionModules = () => {
+        handleRowCheckboxChanges();
     };
 
     // 获取权限分组
@@ -125,7 +99,7 @@ const Index: React.FC = () => {
             refpermissionModules.current = modules;
             setPermissionGroups(modules);
         }
-
+        handleRowCheckboxChanges();
         setPermissionGroupLoading(false);
     };
 
@@ -144,11 +118,8 @@ const Index: React.FC = () => {
         let formApi = formRef.current?.formApi;
         formApi?.validate().then(async (form) => {
             var permissions = [] as Array<string>;
-
-            permissionGroups.map((mg: PermissionGroupModel) => {
-                mg.permissions.map((mp) => {
-                    if (mp.checked) permissions.push(mp.permissionId);
-                });
+            (refSelectedPermissions.current ?? []).map((sp) => {
+                permissions.push(sp.permissionId);
             });
 
             let role = { permissions, ...form } as RoleEditRequest;
@@ -177,16 +148,14 @@ const Index: React.FC = () => {
 
     // 权限组选中事件
     const handleCheckboxGroupChange = (module: PermissionGroupModel, selecteds: any[]) => {
-        // console.log('handleCheckboxGroupChange', module, selecteds);
-        module.permissions.map((mp) => {
-            var rp = selecteds?.find((p: any) => p == mp.permissionId);
-            mp.checked = rp != undefined;
+        // console.log(`handleCheckboxGroupChange`, selecteds, module);
+        handleSelectedPermissionChanges(module, (p: PermissionModel) => {
+            let permissionId = selecteds?.find((id: any) => id == p.permissionId);
+            return permissionId != undefined;
         });
-
-        handleRowCheckboxChanges(module);
-        setPermissionGroups([...permissionGroups]);
     };
 
+    // 行展开后渲染的内容
     const expandRowRender = (module: PermissionGroupModel) => {
         return (
             <CheckboxGroup
@@ -202,6 +171,7 @@ const Index: React.FC = () => {
         );
     };
 
+    // 行行为属性配置
     const rowSelection = {
         selectedRowKeys: selectedRowKeys,
         getCheckboxProps: (module?: PermissionGroupModel) => {
@@ -233,46 +203,90 @@ const Index: React.FC = () => {
         onSelect: (module?: PermissionGroupModel, selected?: boolean) => {
             // console.log(`select row: ${selected}`, module);
             if (!module) return;
-            module.permissions.map((mp) => {
-                mp.checked = selected == undefined ? false : selected;
-            });
-            // 处理当前row内部选中框状态
-            handleRowCheckboxChanges(module);
+
+            handleSelectedPermissionChanges(module, () =>
+                selected == undefined ? false : selected
+            );
         },
-        onSelectAll: (selected?: boolean) => {
+        onSelectAll: (
+            selected?: boolean,
+            selectedRows?: Array<PermissionGroupModel>,
+            changedRows?: Array<PermissionGroupModel>
+        ) => {
             // console.log(`select all rows: ${selected}`, groups);
-            // 处理row内部选中框状态
-            permissionGroups.forEach((mg: PermissionGroupModel) => {
-                mg.permissions.map((mp) => {
-                    mp.checked = selected == undefined ? false : selected;
-                });
-                handleRowCheckboxChanges(mg);
+            // console.log(`select all rows: ${selected}`, selectedRows, changedRows);
+
+            if (changedRows == undefined) return;
+
+            // 选中时，才需要全部添加，否则清空
+            var targets: Array<PermissionGroupModel> = [];
+            if ((selectedRows ?? [])?.length > 0) targets = selectedRows ?? [];
+            else targets = changedRows ?? [];
+
+            targets.forEach((mg: PermissionGroupModel) => {
+                handleSelectedPermissionChanges(mg, () =>
+                    selected == undefined ? false : selected
+                );
             });
         },
     };
 
-    const handleRowCheckboxChanges = (module: PermissionGroupModel) => {
-        var checkeds: Array<string> = [];
-        var selectedKeys: Array<string> = selectedRowKeys;
+    // 触发选中变更，对选中/取消的权限在选择数组中进行增删
+    const handleSelectedPermissionChanges = (
+        module: PermissionGroupModel,
+        getSelected: (permission: PermissionModel) => boolean
+    ) => {
+        var selectedPermissions: Array<PermissionModel> = refSelectedPermissions.current ?? [];
+        //console.log(`handleSelectedPermissionChanges`, selectedPermissions);
         module.permissions.map((mp) => {
-            if (mp.checked) {
-                checkeds.push(mp.permissionId);
+            let index = selectedPermissions.findIndex((p) => p.permissionId == mp.permissionId);
+            let checked = getSelected(mp);
+            if (checked) {
+                if (index < 0) selectedPermissions.push(mp);
+            } else {
+                if (index > -1) selectedPermissions.splice(index, 1);
             }
         });
 
-        var selectedRowKeyIndex = selectedRowKeys.findIndex((k) => k == module.module);
-        if (checkeds.length == 0 || checkeds.length < module.permissions.length) {
-            if (selectedRowKeyIndex > -1) {
-                selectedRowKeys.splice(selectedRowKeyIndex, 1);
+        refSelectedPermissions.current = selectedPermissions;
+        handleRowCheckboxChanges();
+    };
+
+    // 触发Table列表checkbox状态变更，进行权限数据的选中数据配置
+    const handleRowCheckboxChanges = () => {
+        var selectedKeys: Array<string> = selectedRowKeys;
+        var selectedPermissions = refSelectedPermissions.current ?? [];
+        var permissionModules = refpermissionModules.current ?? [];
+
+        // console.log('permissionGroups', permissionModules);
+
+        // 处理权限列表的选项选中状态
+        permissionModules.map((pg: PermissionGroupModel) => {
+            var groupCheckeds: Array<string> = [];
+            pg.permissions.map((mp) => {
+                let spIndex = selectedPermissions.findIndex(
+                    (p) => p.permissionId == mp.permissionId
+                );
+                mp.checked = spIndex > -1;
+                if (mp.checked) groupCheckeds.push(mp.permissionId);
+            });
+
+            // 处理行选中状态
+            var selectedRowKeyIndex = selectedRowKeys.findIndex((k) => k == pg.module);
+            if (groupCheckeds.length == 0 || groupCheckeds.length < pg.permissions.length) {
+                if (selectedRowKeyIndex > -1) {
+                    selectedRowKeys.splice(selectedRowKeyIndex, 1);
+                }
+            } else if (groupCheckeds.length == pg.permissions.length) {
+                if (selectedRowKeyIndex < 0) {
+                    selectedKeys.push(pg.module);
+                }
             }
-        } else if (checkeds.length == module.permissions.length) {
-            if (selectedRowKeyIndex < 0) {
-                selectedKeys.push(module.module);
-            }
-        }
+        });
+
         // console.log('selectedKeys', selectedKeys);
         setSelectedRowKeys(selectedKeys);
-        setPermissionGroups([...permissionGroups]);
+        setPermissionGroups([...permissionModules]);
     };
 
     return (
@@ -307,7 +321,9 @@ const Index: React.FC = () => {
                             <Space spacing="loose" style={{ marginBottom: 10 }}>
                                 <Input
                                     prefix="权限名"
+                                    showClear
                                     onChange={(val) => setSearchPermissionName(val)}
+                                    onEnterPress={() => getPermissionGroup(searchPermissionName)}
                                 ></Input>
                                 <Button
                                     type="primary"

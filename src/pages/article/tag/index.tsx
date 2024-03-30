@@ -60,7 +60,7 @@ const Index: React.FC = () => {
                     </Button>
                     <Popconfirm
                         position="left"
-                        title="确定是否要删除此分标签？"
+                        title="确定是否要删除此标签？"
                         onConfirm={() => handleDeleteTag(tag)}
                     >
                         <Button theme="borderless" type="danger" size="small">
