@@ -334,10 +334,14 @@ export interface RoleModel {
 
 //#region 权限管理
 
+export interface PermissionWithCheckModel extends PermissionModel {
+    checked: boolean;
+}
+
 export interface PermissionGroupModel {
     module: string;
     moduleName: string;
-    permissions: Array<PermissionModel>;
+    permissions: Array<PermissionWithCheckModel>;
 }
 
 export interface PermissionModel {
