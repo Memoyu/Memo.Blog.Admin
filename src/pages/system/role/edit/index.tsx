@@ -22,6 +22,7 @@ import {
     PermissionModel,
     RoleEditRequest,
     RoleModel,
+    RolePermissionModel,
 } from '@src/common/model';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { CheckboxProps } from '@douyinfe/semi-ui/lib/es/checkbox';
@@ -33,6 +34,12 @@ const { Text } = Typography;
 interface SelectedPermissionModule {
     module: string;
     permissions: Array<string>;
+}
+
+interface RowCheckProps {
+    module: string;
+    indeterminate: boolean;
+    checked: boolean;
 }
 
 const Index: React.FC = () => {
@@ -52,6 +59,7 @@ const Index: React.FC = () => {
 
     const navigate = useNavigate();
     const formRef = useRef<Form>(null);
+    const [rowCheckProps, setRowCheckProps] = useState<Array<RowCheckProps>>([]);
     const [selectedPermissionModules, setSelectedPermissionModules] = useState<
         Array<SelectedPermissionModule>
     >([]);
@@ -59,7 +67,7 @@ const Index: React.FC = () => {
     const params = useParams();
     const [roleId, setRoleId] = useState<string>();
     const [role, setRole] = useState<RoleModel>();
-    let refRole = useRef<RoleModel>();
+    let refPermissionGroups = useRef<Array<PermissionGroupModel>>();
     const [searchPermissionName, setSearchPermissionName] = useState<string>();
     const [
         permissionGroups,
@@ -80,7 +88,6 @@ const Index: React.FC = () => {
         //console.log('role', res);
         var role = res.data;
         setRole(role);
-        refRole.current = role;
 
         let formApi = formRef.current?.formApi;
         role &&
@@ -106,6 +113,8 @@ const Index: React.FC = () => {
         for (let key in groups) {
             var current = { module: key, permissions: groups[key] } as SelectedPermissionModule;
             selecteds.push(current);
+            var modules = refPermissionGroups.current?.find((s) => s.module == key);
+            if (modules) handleCheckboxGroupSelect(current, modules);
         }
 
         setSelectedPermissionModules(selecteds);
@@ -119,19 +128,20 @@ const Index: React.FC = () => {
         let res = await permissionGroup(name);
         if (res.isSuccess) {
             setPermissionGroups(res.data as any[]);
+            refPermissionGroups.current = res.data;
         }
 
         setPermissionGroupLoading(false);
     };
 
     useOnMountUnsafe(() => {
+        getPermissionGroup();
+
         var roleId = params.id;
         if (roleId) {
             setRoleId(roleId);
             getRoleDetail(roleId);
         }
-
-        getPermissionGroup();
     });
 
     // 新增/编辑评论
@@ -183,6 +193,8 @@ const Index: React.FC = () => {
 
         // 需要使用解构赋值，这样才能重新渲染界面
         setSelectedPermissionModules([...selectedPermissionModules]);
+
+        handleCheckboxGroupSelect(current, modules);
     };
 
     const expandRowRender = (group: PermissionGroupModel, index?: number) => {
@@ -194,9 +206,9 @@ const Index: React.FC = () => {
                     return { label: p.name, value: p.permissionId.toString() };
                 })}
                 direction="horizontal"
-                value={group.permissions.map((p) => {
-                    if (p.checked) return p.permissionId;
-                })}
+                value={
+                    selectedPermissionModules?.find((s) => s.module == group.module)?.permissions
+                }
                 onChange={(vals) => handleCheckboxGroupChange(group, vals)}
             />
         );
@@ -204,29 +216,21 @@ const Index: React.FC = () => {
 
     const rowSelection = {
         getCheckboxProps: (group?: PermissionGroupModel) => {
-            var props = { indeterminate: false, checked: false } as CheckboxProps;
-            if (!group) return props;
-            // var noChecks =
-            //     group.permissions.filter((rp) => {
-            //         return rp.checked;
-            //     }) ?? [];
-            var checkeds =
-                group.permissions.filter((rp) => {
-                    return !rp.checked;
-                }) ?? [];
+            // var def = { indeterminate: false, checked: false } as CheckboxProps;
+            // if (!group) return def;
+            // var current = rowCheckProps.find((r) => r.module == group.module);
+            // if (!current) return def;
+            // console.log('group', group);
+            var noCheck = group?.permissions.find((rp) => {
+                return rp.checked == false;
+            });
+            var indeterminate = noCheck != undefined;
 
-            if (checkeds.length == 0) {
-                props.indeterminate = false;
-                props.checked = false;
-            } else if (checkeds.length < group.permissions.length) {
-                props.indeterminate = true;
-                props.checked = false;
-            } else if (checkeds.length == group.permissions.length) {
-                props.indeterminate = false;
-                props.checked = true;
-            }
-
-            return props;
+            return {
+                indeterminate: current.indeterminate,
+                checked: current.checked,
+                //defaultChecked: current.checked,
+            } as CheckboxProps;
         },
         onSelect: (group?: PermissionGroupModel, selected?: boolean) => {
             console.log(`select row: ${selected}`, group);
@@ -285,35 +289,37 @@ const Index: React.FC = () => {
 
         // console.log('x', selectedPermissions);
         setSelectedPermissionModules([...selectedPermissionModules]);
+
+        handleCheckboxGroupSelect(current, modules);
     };
 
-    // const handleCheckboxGroupSelect = (
-    //     selectedModule: SelectedPermissionModule,
-    //     modules: PermissionGroupModel
-    // ) => {
-    //     var selecteds = selectedModule.permissions;
-    //     var permissions = modules.permissions;
-    //     // 处理行的选中状态
-    //     var rowProps = rowCheckProps.find((r) => r.module == selectedModule.module);
-    //     if (!rowProps) {
-    //         rowProps = { module: selectedModule.module } as RowCheckProps;
-    //         rowCheckProps.push(rowProps);
-    //     }
+    const handleCheckboxGroupSelect = (
+        selectedModule: SelectedPermissionModule,
+        modules: PermissionGroupModel
+    ) => {
+        var selecteds = selectedModule.permissions;
+        var permissions = modules.permissions;
+        // 处理行的选中状态
+        var rowProps = rowCheckProps.find((r) => r.module == selectedModule.module);
+        if (!rowProps) {
+            rowProps = { module: selectedModule.module } as RowCheckProps;
+            rowCheckProps.push(rowProps);
+        }
 
-    //     if (selecteds.length == 0) {
-    //         rowProps.indeterminate = false;
-    //         rowProps.checked = false;
-    //     } else if (selecteds.length < permissions.length) {
-    //         rowProps.indeterminate = true;
-    //         rowProps.checked = false;
-    //     } else if (selecteds.length == permissions.length) {
-    //         rowProps.indeterminate = false;
-    //         rowProps.checked = true;
-    //     }
-    //     setRowCheckProps([...rowCheckProps]);
+        if (selecteds.length == 0) {
+            rowProps.indeterminate = false;
+            rowProps.checked = false;
+        } else if (selecteds.length < permissions.length) {
+            rowProps.indeterminate = true;
+            rowProps.checked = false;
+        } else if (selecteds.length == permissions.length) {
+            rowProps.indeterminate = false;
+            rowProps.checked = true;
+        }
+        setRowCheckProps([...rowCheckProps]);
 
-    //     console.log('rowCheckProps', JSON.stringify(rowCheckProps));
-    // };
+        console.log('rowCheckProps', JSON.stringify(rowCheckProps));
+    };
 
     return (
         <Content title="编辑角色" icon={<IconToast />}>
