@@ -1,5 +1,7 @@
 import React, { FC, ReactNode, ReactElement } from 'react';
 import { Layout, Typography } from '@douyinfe/semi-ui';
+import UserModal from '../user-modal';
+
 import './index.scss';
 
 const { Title } = Typography;
@@ -22,6 +24,7 @@ const Index: FC<HeaderProps> = ({ icon, title, children }) => {
                 )}
             </div>
             <div className="page-content">{children}</div>
+            <UserModal />
         </Layout>
     );
 };

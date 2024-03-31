@@ -360,6 +360,7 @@ const Index: React.FC = () => {
                 {userIdentityType == UserIdentityType.Password ? (
                     <Form.Input
                         field="credential"
+                        mode="password"
                         label={{ text: <span>密码</span>, required: true }}
                         required
                         validate={validatePassword}

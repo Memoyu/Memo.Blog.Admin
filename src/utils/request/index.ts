@@ -219,7 +219,7 @@ export const userPage = (request: UserPageRequest) => {
     });
 };
 
-export const userGet = (id: string) => {
+export const userGet = (id?: string) => {
     return Request.get<UserModel>('/user/get', { params: { userId: id } });
 };
 

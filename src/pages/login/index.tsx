@@ -1,29 +1,51 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Col, Form, Row, Typography } from '@douyinfe/semi-ui';
+import { Button, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
 import { setLocalStorage } from '@utils/storage';
-import { loginApi } from '@utils/request';
-import { TOKEN, USER } from '@common/constant';
+import { loginApi, userGet } from '@utils/request';
+import { TOKEN } from '@common/constant';
+import { useDispatch } from 'react-redux';
+import { setUserInfo, UserInfo } from '@redux/slices/userSlice';
 
 import './index.scss';
 
+const { Text } = Typography;
+
 const Index: React.FC = () => {
-    const { Text } = Typography;
     const initUser = {
         username: 'memoyu',
         password: 'memoyu',
     };
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const submit = async (values: any) => {
-        const { isSuccess, data } = await loginApi(values.username, values.password);
-        if (isSuccess && data) {
-            setLocalStorage(TOKEN, data.accessToken);
-            setLocalStorage(USER, data.username);
-            navigate(`/dashboard`, { replace: true });
+        const loginRes = await loginApi(values.username, values.password);
+        if (!loginRes.isSuccess || loginRes.data == undefined) {
+            Toast.error(loginRes.message);
+            return;
         }
+
+        setLocalStorage(TOKEN, loginRes.data.accessToken);
+
+        let userRes = await userGet();
+        if (!userRes.isSuccess || userRes.data == undefined) {
+            Toast.error(userRes.message);
+            return;
+        }
+        let user = userRes.data;
+        dispatch(
+            setUserInfo({
+                userId: user.userId,
+                username: user.username,
+                nickname: user.nickname,
+                avatar: user.avatar,
+            } as UserInfo)
+        );
+
+        navigate(`/dashboard`, { replace: true });
     };
 
     const submitFail = (errors: any) => {

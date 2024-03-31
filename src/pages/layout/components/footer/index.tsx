@@ -1,14 +1,23 @@
 import { IconMoon, IconSun } from '@douyinfe/semi-icons';
 import { Tooltip, Button, Dropdown, Avatar } from '@douyinfe/semi-ui';
 import { useEffect, useState } from 'react';
-import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
+import { useNavigate } from 'react-router-dom';
+import { setLocalStorage, getLocalStorage, removeLocalStorage } from '@src/utils/storage';
+import { THEME_MODE, TOKEN, USER } from '@common/constant';
 import './index.scss';
+import { useDispatch } from 'react-redux';
+import { toggleUserModal } from '@redux/slices/userSlice';
+import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 const body = document.body;
 
 const Index = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const user = useTypedSelector((state) => state.userInfo);
     const [isLight, setIsLight] = useState<boolean>(false);
-    const [mode, setMode] = useState<string>(getLocalStorage('theme-mode') || 'light');
+    const [mode, setMode] = useState<string>(getLocalStorage(THEME_MODE) || 'light');
 
     const switchMode = () => {
         let theme = mode == 'light' ? 'dark' : 'light';
@@ -17,29 +26,40 @@ const Index = () => {
 
     const setThemeMode = (mode: string) => {
         if (mode == 'light') {
-            body.removeAttribute('theme-mode');
+            body.removeAttribute(THEME_MODE);
         } else {
-            body.setAttribute('theme-mode', mode);
+            body.setAttribute(THEME_MODE, mode);
         }
 
         setIsLight(mode == 'light');
         setMode(mode);
-        setLocalStorage('theme-mode', mode);
+        setLocalStorage(THEME_MODE, mode);
     };
 
     useEffect(() => {
         setThemeMode(mode);
     }, []);
 
+    // 展示用户信息
+    const handelShowUser = async () => {
+        dispatch(toggleUserModal(true));
+    };
+
+    // 退出登录
+    const handelLogout = () => {
+        removeLocalStorage(TOKEN);
+        removeLocalStorage(USER);
+        navigate(`/login`, { replace: true });
+    };
     return (
         <div className="footer-btn">
             <Dropdown
                 position={'top'}
                 render={
                     <Dropdown.Menu>
-                        <Dropdown.Title>{'这是用户昵称'}</Dropdown.Title>
+                        <Dropdown.Item onClick={handelShowUser}>{user.username}</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item>退出登录</Dropdown.Item>
+                        <Dropdown.Item onClick={handelLogout}>退出登录</Dropdown.Item>
                     </Dropdown.Menu>
                 }
             >
