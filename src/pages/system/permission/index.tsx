@@ -115,7 +115,7 @@ const Index: React.FC = () => {
                                 permission.moduleName + ' - ' + permission.module
                             }
                             columns={columns}
-                            renderGroupSection={(groupKey) => <Text strong>{groupKey}</Text>}
+                            renderGroupSection={(groupKey) => <strong>{groupKey}</strong>}
                             clickGroupedRowToExpand // if you want to click the entire row to expand
                             pagination={false}
                         />

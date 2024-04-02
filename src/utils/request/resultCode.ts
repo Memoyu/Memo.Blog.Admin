@@ -5,4 +5,5 @@ export enum resultCode {
     TOKEN_EXPIRED = 4010, // 令牌过期
     TOKEN_INVALIDATION = 4011, // 无效令牌
     AUTHENTICATION_FAILURE = 4012, // 认证失败
+    FORBIDDEN = 4030, // 未授权
 }

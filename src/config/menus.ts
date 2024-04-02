@@ -2,7 +2,6 @@ import {
     IconBanner,
     IconBadge,
     IconChangelog,
-    IconBadgeStar,
     IconTabs,
     IconNotification,
     IconTag,
@@ -20,9 +19,7 @@ import { IconProps } from '@douyinfe/semi-ui/lib/es/icons';
 export interface MenuItem {
     itemKey: string;
     text: string;
-    icon?: React.ForwardRefExoticComponent<
-        Omit<IconProps, 'ref'> & React.RefAttributes<HTMLSpanElement>
-    >;
+    icon?: any;
     path?: string;
     items?: MenuItem[];
     component?: React.ComponentType<any>;

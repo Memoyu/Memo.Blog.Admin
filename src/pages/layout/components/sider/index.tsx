@@ -83,7 +83,7 @@ const Index: FC = () => {
     }, [pathname]);
 
     return (
-        <Sider>
+        <Sider className="layout-sider">
             <Nav
                 selectedKeys={selectedKeys}
                 onCollapseChange={onCollapseChange}
@@ -93,18 +93,20 @@ const Index: FC = () => {
                     logo={<IconSemiLogo style={{ height: '36px', fontSize: 36 }} />}
                     text={"memoyu's blog"}
                 />
-                {menus.map((sub: MenuItem) => (
-                    <div key={sub.itemKey}>
-                        {sub.path ? (
-                            getNavItem(sub)
-                        ) : isCollapsed ? (
-                            <></>
-                        ) : (
-                            <div className="nav-sub">{sub.text}</div>
-                        )}
-                        {sub?.items?.map((item: MenuItem) => getNavItem(item))}
-                    </div>
-                ))}
+                <div>
+                    {menus.map((sub: MenuItem) => (
+                        <div key={sub.itemKey}>
+                            {sub.path ? (
+                                getNavItem(sub)
+                            ) : isCollapsed ? (
+                                <></>
+                            ) : (
+                                <div className="nav-sub">{sub.text}</div>
+                            )}
+                            {sub?.items?.map((item: MenuItem) => getNavItem(item))}
+                        </div>
+                    ))}
+                </div>
                 <Nav.Footer
                     collapseButton={true}
                     collapseText={(isCollapsed) => <span>{isCollapsed ? '展开' : '收起'}</span>}

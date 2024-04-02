@@ -46,13 +46,14 @@ export class Request {
             (response) => {
                 // 2xx 范围内的状态码都会触发该函数。
                 // 对响应数据做点什么
-                // console.log(response.data);
+                // console.log('响应success', response.data);
                 return response.data;
             },
             (error) => {
                 // 超出 2xx 范围的状态码都会触发该函数。
                 // 对响应错误做点什么
                 const { response } = error;
+                console.log('响应error', error);
                 if (response && response.data) {
                     const { code, message } = response.data;
                     // 需要登录
