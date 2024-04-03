@@ -90,7 +90,7 @@ const Index: FC = () => {
                 style={{ maxWidth: 200, height: '100%' }}
             >
                 <Nav.Header
-                    style={{ paddingBottom: 10 }}
+                    // style={{ paddingBottom: 10, paddingTop: 15 }}
                     logo={<IconSemiLogo style={{ fontSize: 36 }} />}
                     text={"memoyu's blog"}
                 />
