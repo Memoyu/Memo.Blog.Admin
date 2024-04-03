@@ -842,10 +842,10 @@
   resolved "https://registry.npmmirror.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.12.0.tgz#9ffdf9ed133a7464f4ae187eb9e1294413fab235"
   integrity sha512-ZYmr5mS2wd4Dew/JjT0Fqi2NPB/ZhZ2VvPp7SmvPZb4Y1CG/LRcS6tcRo2cYU7zLK5A7cdbhWnnWmUjoI4qapg==
 
-"@semi-bot/semi-theme-volcano_engine@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.npmmirror.com/@semi-bot/semi-theme-volcano_engine/-/semi-theme-volcano_engine-1.0.14.tgz#f79f47e43affb079c244985668eec2e881a46b6f"
-  integrity sha512-QDMiUBjV/mmwZGlWBqLebZpV3gleKyycreqogliiNfdXObVStWii7HRuSWeeEqjfiM/lrawfzWQd6XJOlbnOkg==
+"@semi-bot/semi-theme-volcano_engine@^1.0.16":
+  version "1.0.16"
+  resolved "https://registry.npmmirror.com/@semi-bot/semi-theme-volcano_engine/-/semi-theme-volcano_engine-1.0.16.tgz#926c81b234a1b1c96eacaa15bc295809ff1b435d"
+  integrity sha512-9iL41Va80kxuamfz4F+P/okTquOr4YTlcR6UFROX393khe2bO2gxy9jRk6QrYf7eqhk8jcZFnH6n7/SoCuD+4Q==
 
 "@swc/core-darwin-arm64@1.4.2":
   version "1.4.2"

@@ -90,23 +90,22 @@ const Index: FC = () => {
                 style={{ maxWidth: 200, height: '100%' }}
             >
                 <Nav.Header
-                    logo={<IconSemiLogo style={{ height: '36px', fontSize: 36 }} />}
+                    style={{ paddingBottom: 10 }}
+                    logo={<IconSemiLogo style={{ fontSize: 36 }} />}
                     text={"memoyu's blog"}
                 />
-                <div>
-                    {menus.map((sub: MenuItem) => (
-                        <div key={sub.itemKey}>
-                            {sub.path ? (
-                                getNavItem(sub)
-                            ) : isCollapsed ? (
-                                <></>
-                            ) : (
-                                <div className="nav-sub">{sub.text}</div>
-                            )}
-                            {sub?.items?.map((item: MenuItem) => getNavItem(item))}
-                        </div>
-                    ))}
-                </div>
+                {menus.map((sub: MenuItem) => (
+                    <div key={sub.itemKey}>
+                        {sub.path ? (
+                            getNavItem(sub)
+                        ) : isCollapsed ? (
+                            <></>
+                        ) : (
+                            <div className="nav-sub">{sub.text}</div>
+                        )}
+                        {sub?.items?.map((item: MenuItem) => getNavItem(item))}
+                    </div>
+                ))}
                 <Nav.Footer
                     collapseButton={true}
                     collapseText={(isCollapsed) => <span>{isCollapsed ? '展开' : '收起'}</span>}
