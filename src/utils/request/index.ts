@@ -31,6 +31,7 @@ import {
     UserPageModel,
     UserPageRequest,
     UserEditRequest,
+    QiniuUploadTokenModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -38,6 +39,10 @@ export const login = (username: string, password: string) => {
         username: username,
         password: password,
     });
+};
+
+export const qiniuTokenGet = (path: string) => {
+    return Request.get<QiniuUploadTokenModel>('/file-storage/qiniu/generate', { params: { path } });
 };
 
 //#region 文章管理

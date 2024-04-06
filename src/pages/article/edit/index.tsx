@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { MdEditor } from 'md-editor-rt';
-import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
+import { Form, Typography, Switch, Row, Col, Button, Space, Toast, Image } from '@douyinfe/semi-ui';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
+import { IconPlus } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
+import UploadImage from '@src/components/upload-image';
 import { useParams } from 'react-router-dom';
 import {
     articleGet,
@@ -17,6 +19,7 @@ import 'md-editor-rt/lib/style.css';
 import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { FileItem } from '@douyinfe/semi-ui/lib/es/upload';
 
 const { Section, Input, Select, TextArea } = Form;
 const { Text } = Typography;
@@ -62,6 +65,7 @@ const Index: React.FC = () => {
     const [saveBtnText, setSaveBtnText] = useState<string>('发布');
     const [articleId, setArticleId] = useState<string>();
     const [article, setArticle] = useState<ArticleModel>();
+    const [articleBanner, setArticleBanner] = useState<Array<FileItem>>([]);
     const [articleContent, setArticleContent] = useState<string>('');
     const [isTop, setIsTop] = useState<boolean>(false);
     const [commentable, setCommentable] = useState<boolean>(true);
@@ -83,10 +87,13 @@ const Index: React.FC = () => {
         article &&
             formApi?.setValues({
                 ...article,
+                banner: [{ url: article.banner }],
                 categoryId: article.category?.categoryId,
                 tags: article.tags.map((t) => t.tagId),
             });
         setArticleContent(article?.content as string);
+        setArticleBanner([{ uid: '2', url: article?.banner } as FileItem]);
+        console.log('articleBanner', articleBanner);
         setIsTop(article?.isTop as boolean);
         setCommentable(article?.commentable as boolean);
         setPublicable(article?.publicable as boolean);
@@ -115,6 +122,8 @@ const Index: React.FC = () => {
     // 点击保存/发布
     let handleSaveArticle = (status: ArticleStatus) => {
         let formApi = formRef.current?.formApi;
+        console.log(articleBanner);
+        return;
         formApi?.validate().then(async (form) => {
             let article = form as ArticleEditRequest;
             article.status = status;
@@ -122,8 +131,6 @@ const Index: React.FC = () => {
             article.isTop = isTop;
             article.commentable = commentable;
             article.publicable = publicable;
-            //TODO: 暂时赋默认值
-            article.banner = '3333';
             console.log(article);
 
             let res;
@@ -175,15 +182,9 @@ const Index: React.FC = () => {
                                 />
                             </Col>
                             <Col span={12}>
-                                {/* <Form.Upload
-                                    // field="banner"
-                                    label="头图"
-                                    action="//semi.design/api/upload"
-                                >
-                                    <Button icon={<IconUpload />} theme="light">
-                                        文章头图
-                                    </Button>
-                                </Form.Upload> */}
+                                <Form.Slot label={{ text: '头图', required: true }}>
+                                    <UploadImage files={articleBanner} path="articles/test.png" />
+                                </Form.Slot>
                             </Col>
                         </Row>
                         <Row gutter={16}>

@@ -16,6 +16,11 @@ export interface TokenModel {
     username: string; // 用户名
 }
 
+export interface QiniuUploadTokenModel {
+    token: string;
+    host: string;
+}
+
 //#region 文章
 
 export interface ArticleCreateReq {

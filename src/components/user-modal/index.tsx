@@ -1,19 +1,8 @@
-import {
-    Modal,
-    Card,
-    Typography,
-    Tooltip,
-    Toast,
-    Space,
-    Button,
-    Dropdown,
-    Avatar,
-} from '@douyinfe/semi-ui';
+import { Modal, Card, Typography, Avatar } from '@douyinfe/semi-ui';
 
 import { useDispatch } from 'react-redux';
 import { toggleUserShow } from '@redux/slices/userSlice';
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
-import { store } from '@redux/store';
 
 import './index.scss';
 
