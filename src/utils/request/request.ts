@@ -1,19 +1,15 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Toast } from '@douyinfe/semi-ui';
-import { getLocalStorage, removeLocalStorage } from '@utils/storage';
-import { TOKEN, USER } from '@common/constant';
 import { resultCode } from './resultCode';
+import { store } from '@redux/store';
+import { logout } from '@redux/slices/userSlice';
 
 type Result<T> = {
     isSuccess: boolean; // 是否成功
     code: number; // 响应编码
     data?: T; // 响应数据
     message: string; // 响应消息
-};
-
-const getToken = () => {
-    return getLocalStorage(TOKEN);
 };
 
 // 导出Request类，可以用来自定义传递配置来创建实例
@@ -29,7 +25,7 @@ export class Request {
 
         this.instance.interceptors.request.use(
             function (config) {
-                const token = getToken();
+                const token = store.getState().userLogin?.token;
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`; //携带权限参数
                 }
@@ -62,8 +58,7 @@ export class Request {
                         code === resultCode.TOKEN_INVALIDATION ||
                         code === resultCode.AUTHENTICATION_FAILURE
                     ) {
-                        removeLocalStorage(TOKEN);
-                        removeLocalStorage(USER);
+                        store.dispatch(logout());
                         window.location.href = `/login${'?from=' + encodeURIComponent(location.pathname)}`;
                         return Promise.reject(error);
                     }

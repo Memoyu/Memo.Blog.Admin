@@ -2,6 +2,7 @@ import { FC, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import { PathRouteProps, useLocation } from 'react-router';
 import Empty from '@components/empty';
+import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 export interface WrapperRouteProps extends PathRouteProps {
     /** document title id */
@@ -16,9 +17,8 @@ const PublicRoute = (props: PathRouteProps) => {
 
 const PrivateRoute = (props: PathRouteProps) => {
     const location = useLocation();
+    const { logged } = useTypedSelector((state) => state.userLogin);
     const { pathname } = location;
-    // const logged = useStore((state) => state.logged)
-    const logged = true; // 这里做登录验证
 
     return logged ? (
         pathname === '/' ? (
@@ -27,7 +27,7 @@ const PrivateRoute = (props: PathRouteProps) => {
             props.element
         )
     ) : (
-        <Empty title="没有权限" description="您还没有登录，请先去登录" type="403" />
+        <Navigate to={{ pathname: `/login` }} replace />
     );
 };
 

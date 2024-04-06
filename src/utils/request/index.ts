@@ -33,7 +33,7 @@ import {
     UserEditRequest,
 } from '@common/model';
 
-export const loginApi = (username: string, password: string) => {
+export const login = (username: string, password: string) => {
     return Request.post<TokenModel>('/tokens/generate', {
         username: username,
         password: password,

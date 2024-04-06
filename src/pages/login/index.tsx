@@ -2,11 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
-import { setLocalStorage } from '@utils/storage';
-import { loginApi, userGet } from '@utils/request';
-import { TOKEN } from '@common/constant';
+import { login as ToLogin, userGet } from '@utils/request';
 import { useDispatch } from 'react-redux';
-import { setUserInfo, UserInfo } from '@redux/slices/userSlice';
+import { login, setUserInfo } from '@redux/slices/userSlice';
 
 import './index.scss';
 
@@ -22,13 +20,13 @@ const Index: React.FC = () => {
     const dispatch = useDispatch();
 
     const submit = async (values: any) => {
-        const loginRes = await loginApi(values.username, values.password);
+        const loginRes = await ToLogin(values.username, values.password);
         if (!loginRes.isSuccess || loginRes.data == undefined) {
             Toast.error(loginRes.message);
             return;
         }
-
-        setLocalStorage(TOKEN, loginRes.data.accessToken);
+        let token = loginRes.data;
+        dispatch(login(token.accessToken));
 
         let userRes = await userGet();
         if (!userRes.isSuccess || userRes.data == undefined) {
@@ -36,14 +34,7 @@ const Index: React.FC = () => {
             return;
         }
         let user = userRes.data;
-        dispatch(
-            setUserInfo({
-                userId: user.userId,
-                username: user.username,
-                nickname: user.nickname,
-                avatar: user.avatar,
-            } as UserInfo)
-        );
+        dispatch(setUserInfo(user));
 
         navigate(`/dashboard`, { replace: true });
     };

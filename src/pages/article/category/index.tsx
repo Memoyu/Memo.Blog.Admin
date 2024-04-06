@@ -80,11 +80,15 @@ const Index: React.FC = () => {
         setLoading(true);
 
         let search = searchForm?.getValues();
-        let res = await articleCategoryList(search?.name);
-        if (res.isSuccess) {
-            setData(res.data as any[]);
-        }
-        setLoading(false);
+        articleCategoryList(search?.name)
+            .then((res) => {
+                if (!res.isSuccess || res.data == undefined) {
+                    Toast.error(res.message);
+                    return;
+                }
+                setData(res.data as any[]);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {
