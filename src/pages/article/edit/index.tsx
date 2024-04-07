@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { MdEditor } from 'md-editor-rt';
-import { Form, Typography, Switch, Row, Col, Button, Space, Toast, Image } from '@douyinfe/semi-ui';
+import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
-import { IconPlus } from '@douyinfe/semi-icons';
 import Content from '@src/components/page-content';
 import UploadImage from '@src/components/upload-image';
+import MdEditor from '@src/components/md-editor';
 import { useParams } from 'react-router-dom';
 import {
     articleGet,
@@ -14,49 +13,17 @@ import {
     articleTagList,
 } from '@src/utils/request';
 import { useNavigate } from 'react-router';
-import './index.scss';
-import 'md-editor-rt/lib/style.css';
 import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { FileItem } from '@douyinfe/semi-ui/lib/es/upload';
 
+import './index.scss';
+
 const { Section, Input, Select, TextArea } = Form;
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-    const toolbars: Array<any> = [
-        'bold',
-        'underline',
-        'italic',
-        '-',
-        'strikeThrough',
-        'sub',
-        'sup',
-        'quote',
-        'unorderedList',
-        'orderedList',
-        'task',
-        '-',
-        'codeRow',
-        'code',
-        'link',
-        'image',
-        'table',
-        'mermaid',
-        'katex',
-        '-',
-        'revoke',
-        'next',
-        'save',
-        '=',
-        'pageFullscreen',
-        'fullscreen',
-        'preview',
-        'htmlPreview',
-        'catalog',
-    ];
-
     const navigate = useNavigate();
 
     const formRef = useRef<Form>(null);
@@ -66,6 +33,7 @@ const Index: React.FC = () => {
     const [articleId, setArticleId] = useState<string>();
     const [article, setArticle] = useState<ArticleModel>();
     const [articleBanner, setArticleBanner] = useState<Array<FileItem>>([]);
+    const [articleBannerUrl, setArticleBannerUrl] = useState<string>('');
     const [articleContent, setArticleContent] = useState<string>('');
     const [isTop, setIsTop] = useState<boolean>(false);
     const [commentable, setCommentable] = useState<boolean>(true);
@@ -92,8 +60,7 @@ const Index: React.FC = () => {
                 tags: article.tags.map((t) => t.tagId),
             });
         setArticleContent(article?.content as string);
-        setArticleBanner([{ uid: '2', url: article?.banner } as FileItem]);
-        console.log('articleBanner', articleBanner);
+        setArticleBanner([{ url: article?.banner } as FileItem]);
         setIsTop(article?.isTop as boolean);
         setCommentable(article?.commentable as boolean);
         setPublicable(article?.publicable as boolean);
@@ -122,8 +89,6 @@ const Index: React.FC = () => {
     // 点击保存/发布
     let handleSaveArticle = (status: ArticleStatus) => {
         let formApi = formRef.current?.formApi;
-        console.log(articleBanner);
-        return;
         formApi?.validate().then(async (form) => {
             let article = form as ArticleEditRequest;
             article.status = status;
@@ -131,6 +96,7 @@ const Index: React.FC = () => {
             article.isTop = isTop;
             article.commentable = commentable;
             article.publicable = publicable;
+            article.banner = articleBannerUrl;
             console.log(article);
 
             let res;
@@ -181,26 +147,21 @@ const Index: React.FC = () => {
                                     ]}
                                 />
                             </Col>
-                            <Col span={12}>
-                                <Form.Slot label={{ text: '头图', required: true }}>
-                                    <UploadImage files={articleBanner} path="articles/test.png" />
-                                </Form.Slot>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={12}>
+                            <Col span={6}>
                                 <Select
                                     style={{ width: '100%' }}
+                                    maxTagCount={3}
                                     multiple
                                     field="tags"
                                     label="标签"
                                     placeholder="请选文章标签"
                                     optionList={tags}
-                                    rules={[{ required: true, message: '文章分类必填' }]}
+                                    rules={[{ required: true, message: '文章标签必填' }]}
                                 />
                             </Col>
-                            <Col span={12}>
+                            <Col span={6}>
                                 <Select
+                                    style={{ width: '100%' }}
                                     field="categoryId"
                                     label="分类"
                                     placeholder="请选文章分类"
@@ -209,8 +170,8 @@ const Index: React.FC = () => {
                                 />
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row gutter={16}>
+                            <Col span={16}>
                                 <TextArea
                                     style={{ height: 120 }}
                                     field="description"
@@ -222,14 +183,24 @@ const Index: React.FC = () => {
                                     ]}
                                 />
                             </Col>
+                            <Col span={8}>
+                                <Form.Slot label={{ text: '头图' }}>
+                                    <UploadImage
+                                        key={JSON.stringify(articleBanner)}
+                                        files={articleBanner}
+                                        path="articles/banner"
+                                        onSuccess={(url) => setArticleBannerUrl(url)}
+                                    />
+                                </Form.Slot>
+                            </Col>
                         </Row>
                     </Section>
                 </Form>
                 <Section className="content-editer" text={'文章内容'}>
                     <MdEditor
-                        style={{ height: 800 }}
-                        modelValue={articleContent}
-                        toolbars={toolbars}
+                        key={articleContent}
+                        height={800}
+                        content={articleContent}
                         onChange={setArticleContent}
                     />
                 </Section>
