@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IconBadge } from '@douyinfe/semi-icons-lab';
 import {
     Button,
@@ -11,21 +11,29 @@ import {
     Popconfirm,
     Modal,
     Toast,
+    Row,
+    Col,
 } from '@douyinfe/semi-ui';
-import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
-import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
+import { format } from 'date-fns';
+
 import Content from '@src/components/page-content';
-import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
+import MdEditor from '@src/components/md-editor';
+import UploadImage from '@src/components/upload-image';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
+
+import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
+
+import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import {
     CommentEditRequest,
     CommentPageModel,
     CommentPageRequest,
     CommentModel,
 } from '@src/common/model';
-import { format } from 'date-fns';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
 
@@ -172,6 +180,8 @@ const Index: React.FC = () => {
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [editComment, setEditComment] = useState<CommentEditRequest | null>();
+    const [commentContent, setCommentContent] = useState<string>('');
+    const [avatar, setAvatar] = useState<string>('');
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {
@@ -239,9 +249,8 @@ const Index: React.FC = () => {
             var msg = '';
             let comment = {
                 commentId: editComment?.commentId,
-                // nickname: form.nickname,
-                // content: form.content,
-                // showable: form.showable,
+                avatar: avatar,
+                content: commentContent,
                 ...form,
             } as CommentEditRequest;
             let res = await commentUpdate(comment);
@@ -316,7 +325,8 @@ const Index: React.FC = () => {
                         onOk={handleEditModalOk}
                         onCancel={() => setEditVisible(false)}
                         centered
-                        bodyStyle={{ height: 420 }}
+                        bodyStyle={{ height: 570 }}
+                        style={{ width: 1000 }}
                         okText={'保存'}
                     >
                         <Form
@@ -326,28 +336,47 @@ const Index: React.FC = () => {
                             labelWidth={60}
                             getFormApi={(formData) => setEditForm(formData)}
                         >
-                            <Form.Input
-                                field="nickname"
-                                label="昵称"
-                                rules={[{ required: true, message: '昵称必填' }]}
-                            />
-                            <Form.Input field="avatar" label="头像" />
-                            <Form.Input field="email" label="邮箱" />
-                            <div style={{ display: 'flex' }}>
-                                <Form.Input disabled={true} field="ip" label="IP" />
-                                <Form.Input disabled={true} field="region" noLabel={true} />
-                            </div>
-                            <Form.TextArea
-                                field="content"
-                                label="内容"
-                                rules={[{ required: true, message: '评论内容必填' }]}
-                            />
+                            <Row gutter={16}>
+                                <Col span={4}>
+                                    <Form.Slot label={{ text: '头像' }}>
+                                        <UploadImage
+                                            height={66}
+                                            width={66}
+                                            url={avatar}
+                                            path="page/about/banner"
+                                            onSuccess={setAvatar}
+                                        />
+                                    </Form.Slot>
+                                </Col>
+                                <Col span={10}>
+                                    <Form.Input
+                                        field="nickname"
+                                        label="昵称"
+                                        rules={[{ required: true, message: '昵称必填' }]}
+                                    />
+                                    <Form.Input field="email" label="邮箱" />
+                                </Col>
+                                <Col span={10}>
+                                    <div style={{ display: 'flex' }}>
+                                        <Form.Input disabled={true} field="ip" label="IP" />
+                                        <Form.Input disabled={true} field="region" noLabel={true} />
+                                    </div>
+                                    <Form.Switch
+                                        field="showable"
+                                        label={{ text: '公开' }}
+                                        aria-label="公开"
+                                    />
+                                </Col>
+                            </Row>
 
-                            <Form.Switch
-                                field="showable"
-                                label={{ text: '公开' }}
-                                aria-label="公开"
-                            />
+                            <Form.Section text={'评论内容'}>
+                                <MdEditor
+                                    imgPath="articles/comments"
+                                    height={420}
+                                    content={commentContent}
+                                    onChange={setCommentContent}
+                                />
+                            </Form.Section>
                         </Form>
                     </Modal>
                 </div>

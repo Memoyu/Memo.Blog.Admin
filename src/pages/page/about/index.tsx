@@ -80,7 +80,7 @@ const Index: React.FC = () => {
                                 <Form.Slot label={{ text: '头图' }}>
                                     <UploadImage
                                         url={banner}
-                                        path="page/about"
+                                        path="page/about/banner"
                                         onSuccess={setBanner}
                                     />
                                 </Form.Slot>
@@ -91,7 +91,7 @@ const Index: React.FC = () => {
                 </Form>
                 <Section className="content-editer" text={'内容'}>
                     <MdEditor
-                        imgPath="page/about"
+                        imgPath="page/about/content"
                         height={800}
                         content={content}
                         onChange={setContent}

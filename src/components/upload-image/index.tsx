@@ -15,14 +15,25 @@ import './index.scss';
 import { getFileExt } from '@src/utils/file';
 
 interface Iprops {
+    width?: number;
+    height?: number;
     limit?: number;
     path: string;
     url?: string;
+    title?: string;
     onSuccess: (url: string) => void;
 }
 
 // 上传单个图片组件
-const Index: FC<Iprops> = ({ limit = 1, path, url, onSuccess }) => {
+const Index: FC<Iprops> = ({
+    width = 120,
+    height = 300,
+    limit = 1,
+    path,
+    url,
+    title = '',
+    onSuccess,
+}) => {
     const [filePath, setFilePath] = useState<string>('');
     const [fileFullPath, setFileFullPath] = useState<string>('');
     const [images, setImages] = useState<Array<FileItem>>([]);
@@ -100,8 +111,8 @@ const Index: FC<Iprops> = ({ limit = 1, path, url, onSuccess }) => {
             style={{ margin: '0px 5px' }}
             defaultFileList={images}
             fileList={images}
-            picHeight={120}
-            picWidth={300}
+            picHeight={width}
+            picWidth={height}
             accept="image/*"
             listType="picture"
             name="file"
@@ -119,7 +130,7 @@ const Index: FC<Iprops> = ({ limit = 1, path, url, onSuccess }) => {
             onChange={(ocProps) => handleUploadChange(ocProps)}
         >
             <IconPlus size="extra-large" style={{ margin: 4 }} />
-            添加头图
+            {title}
         </Upload>
     );
 };

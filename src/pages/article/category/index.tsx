@@ -1,10 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IconTabs } from '@douyinfe/semi-icons-lab';
+import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import { Button, Table, Popconfirm, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+
+import { useTable } from '@src/hooks/useTable';
+import { useModal } from '@src/hooks/useModal';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import Content from '@src/components/page-content';
+import { CategoryModel } from '@src/common/model';
+
 import {
     articleCategoryList,
     articleCategoryCreate,
@@ -12,11 +20,8 @@ import {
     articleCategoryUpdate,
     articleCategoryGet,
 } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import { useModal } from '@src/hooks/useModal';
+
 import './index.scss';
-import { CategoryModel } from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [

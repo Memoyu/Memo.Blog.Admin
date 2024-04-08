@@ -36,38 +36,6 @@ import './index.scss';
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-    const toolbars: Array<any> = [
-        'bold',
-        'underline',
-        'italic',
-        '-',
-        'strikeThrough',
-        'sub',
-        'sup',
-        'quote',
-        'unorderedList',
-        'orderedList',
-        'task',
-        '-',
-        'codeRow',
-        'code',
-        'link',
-        'image',
-        'table',
-        'mermaid',
-        'katex',
-        '-',
-        'revoke',
-        'next',
-        'save',
-        '=',
-        'pageFullscreen',
-        'fullscreen',
-        'preview',
-        'htmlPreview',
-        'catalog',
-    ];
-
     const columns: ColumnProps[] = [
         {
             title: 'ID',
@@ -365,7 +333,7 @@ const Index: React.FC = () => {
                         >
                             <Form.TagInput field="tags" label="标签" />
 
-                            <Form.Section text={'内容'}>
+                            <Form.Section text={'动态内容'}>
                                 <MdEditor
                                     imgPath="articles/comments"
                                     height={490}
