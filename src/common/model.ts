@@ -21,6 +21,16 @@ export interface QiniuUploadTokenModel {
     host: string;
 }
 
+export interface QiniuUploadModel {
+    hash: string;
+    key: string;
+}
+
+export interface QiniuUploadRequest {
+    file: File;
+    key: string;
+}
+
 //#region 文章
 
 export interface ArticleCreateReq {

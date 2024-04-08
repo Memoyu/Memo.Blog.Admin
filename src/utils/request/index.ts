@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Request from './request';
 import {
     TokenModel,
@@ -32,6 +33,8 @@ import {
     UserPageRequest,
     UserEditRequest,
     QiniuUploadTokenModel,
+    QiniuUploadRequest,
+    QiniuUploadModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -41,9 +44,43 @@ export const login = (username: string, password: string) => {
     });
 };
 
+//#region 七牛云文件存储
+
 export const qiniuTokenGet = (path: string) => {
     return Request.get<QiniuUploadTokenModel>('/file-storage/qiniu/generate', { params: { path } });
 };
+
+export const qiniuUpload = (data: QiniuUploadRequest) => {
+    return new Promise<string>(async (rev, rej) => {
+        let fd = new FormData();
+        fd.append('key', data.key);
+        fd.append('file', data.file, data.file.name); //file是文件对象
+
+        let tokenRes = await qiniuTokenGet(data.key);
+        if (!tokenRes.isSuccess || !tokenRes.data) return;
+        let token = tokenRes.data.token;
+        let host = tokenRes.data.host;
+        fd.append('token', token); //从后端获取到的token'
+
+        let instance = axios.create({ withCredentials: false });
+        instance
+            .post<QiniuUploadModel>('https://up-z2.qiniup.com', fd, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then((resp) => {
+                let res = resp?.data;
+                if (res && res.key?.length > 0) rev(host + res.key);
+                else rej('上传七牛云失败' + resp);
+            })
+            .catch((error) => {
+                rej(error);
+            });
+    });
+};
+
+//#endregion
 
 //#region 文章管理
 

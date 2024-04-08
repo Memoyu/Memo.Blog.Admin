@@ -10,6 +10,9 @@ import {
     FileItem,
     OnChangeProps,
 } from '@douyinfe/semi-ui/lib/es/upload';
+import { QiniuUploadModel } from '@src/common/model';
+
+import './index.scss';
 
 interface Iprops {
     limit?: number;
@@ -18,15 +21,11 @@ interface Iprops {
     onSuccess: (url: string) => void;
 }
 
-interface QiniuUploadResp {
-    hash: string;
-    key: string;
-}
-
 const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
     // 获取七牛云上传token
     let getQiniuUploadToken = async (fileName: string) => {
         let fullPath = filePath + fileName;
+        setFileName(fileName);
         setFileFullPath(fullPath);
         let res = await qiniuTokenGet(fullPath);
         if (!res.isSuccess || !res.data) {
@@ -46,6 +45,7 @@ const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
     };
 
     const [filePath, setFilePath] = useState<string>('');
+    const [fileName, setFileName] = useState<string>('');
     const [fileFullPath, setFileFullPath] = useState<string>('');
     const [images, setImages] = useState<Array<FileItem>>([]);
     const qiniuTokenRef = useRef<string>('');
@@ -85,7 +85,7 @@ const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
 
     let handleUploadSuccess = async (responseBody: object) => {
         // console.log('responseBody', responseBody);
-        let res = { ...responseBody } as QiniuUploadResp;
+        let res = { ...responseBody } as QiniuUploadModel;
         if (res.key.length > 0) onSuccess(host + res.key);
     };
 
@@ -97,6 +97,7 @@ const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
 
     return (
         <Upload
+            className="blog-upload-image"
             style={{ margin: '0px 5px' }}
             defaultFileList={images}
             fileList={images}

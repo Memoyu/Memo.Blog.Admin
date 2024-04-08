@@ -4,6 +4,8 @@ import { MdEditor } from 'md-editor-rt';
 
 import 'md-editor-rt/lib/style.css';
 import './index.scss';
+import { qiniuUpload } from '@src/utils/request';
+import { QiniuUploadRequest } from '@src/common/model';
 
 interface Iprops {
     height?: number;
@@ -50,6 +52,16 @@ const Index: FC<Iprops> = ({ height = 500, content, onChange }) => {
         setMdContent(content ?? '');
     });
 
+    let handleUploadImg = async (files: Array<File>, callBack: (urls: string[]) => void) => {
+        if (files.length <= 0) return;
+        let file = files[0];
+        let req: QiniuUploadRequest = { file, key: 'articles/' + file.name };
+        let url = await qiniuUpload(req);
+        if (url.length > 0) {
+            callBack([url]);
+        }
+    };
+
     return (
         <div className="blog-md-editor">
             <MdEditor
@@ -57,6 +69,7 @@ const Index: FC<Iprops> = ({ height = 500, content, onChange }) => {
                 modelValue={mdContent}
                 toolbars={toolbars}
                 onChange={(c) => onChange && onChange(c)}
+                onUploadImg={(files, callback) => handleUploadImg(files, callback)}
             />
         </div>
     );
