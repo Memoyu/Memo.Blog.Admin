@@ -1,19 +1,21 @@
-import { FC, useState } from 'react';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { FC, useState, useEffect } from 'react';
 import { MdEditor } from 'md-editor-rt';
+import { qiniuUpload } from '@src/utils/request';
+import { uuid } from '@src/utils/uuid';
+import { QiniuUploadRequest } from '@src/common/model';
 
 import 'md-editor-rt/lib/style.css';
 import './index.scss';
-import { qiniuUpload } from '@src/utils/request';
-import { QiniuUploadRequest } from '@src/common/model';
+import { getFileExt } from '@src/utils/file';
 
 interface Iprops {
+    imgPath: string;
     height?: number;
     content?: string;
     onChange?: (content: string) => void;
 }
 
-const Index: FC<Iprops> = ({ height = 500, content, onChange }) => {
+const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange }) => {
     const toolbars: Array<any> = [
         'bold',
         'underline',
@@ -47,19 +49,39 @@ const Index: FC<Iprops> = ({ height = 500, content, onChange }) => {
     ];
 
     const [mdContent, setMdContent] = useState<string>('');
+    const [imagePath, setIamgePath] = useState<string>('');
 
-    useOnMountUnsafe(() => {
+    useEffect(() => {
         setMdContent(content ?? '');
-    });
+        setIamgePath(imgPath.replace(new RegExp('\\/+$', 'g'), '') + '/');
+    }, [content]);
 
-    let handleUploadImg = async (files: Array<File>, callBack: (urls: string[]) => void) => {
+    // 触发上传图片
+    let handleUploadImg = async (files: Array<File>, callBack: (urls: any[]) => void) => {
         if (files.length <= 0) return;
-        let file = files[0];
-        let req: QiniuUploadRequest = { file, key: 'articles/' + file.name };
-        let url = await qiniuUpload(req);
-        if (url.length > 0) {
-            callBack([url]);
-        }
+
+        // 上传图片文件
+        const res = await Promise.all(
+            files.map((file) => {
+                let fileExt = getFileExt(file.name);
+                if (fileExt) {
+                    let req: QiniuUploadRequest = { file, key: imagePath + uuid() + fileExt };
+                    return qiniuUpload(req);
+                }
+            })
+        );
+
+        // 回调填入编辑框
+        callBack(
+            res.map((upRes) => {
+                if (upRes) {
+                    return {
+                        url: upRes.url,
+                        alt: upRes.file.name,
+                    };
+                }
+            })
+        );
     };
 
     return (
@@ -68,7 +90,10 @@ const Index: FC<Iprops> = ({ height = 500, content, onChange }) => {
                 style={{ height: height }}
                 modelValue={mdContent}
                 toolbars={toolbars}
-                onChange={(c) => onChange && onChange(c)}
+                onChange={(c) => {
+                    setMdContent(c);
+                    onChange && onChange(c);
+                }}
                 onUploadImg={(files, callback) => handleUploadImg(files, callback)}
             />
         </div>

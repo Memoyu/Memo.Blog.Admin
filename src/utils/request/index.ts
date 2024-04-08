@@ -35,6 +35,7 @@ import {
     QiniuUploadTokenModel,
     QiniuUploadRequest,
     QiniuUploadModel,
+    UploadResultModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -51,7 +52,7 @@ export const qiniuTokenGet = (path: string) => {
 };
 
 export const qiniuUpload = (data: QiniuUploadRequest) => {
-    return new Promise<string>(async (rev, rej) => {
+    return new Promise<UploadResultModel>(async (rev, rej) => {
         let fd = new FormData();
         fd.append('key', data.key);
         fd.append('file', data.file, data.file.name); //file是文件对象
@@ -71,7 +72,7 @@ export const qiniuUpload = (data: QiniuUploadRequest) => {
             })
             .then((resp) => {
                 let res = resp?.data;
-                if (res && res.key?.length > 0) rev(host + res.key);
+                if (res && res.key?.length > 0) rev({ url: host + res.key, file: data.file });
                 else rej('上传七牛云失败' + resp);
             })
             .catch((error) => {

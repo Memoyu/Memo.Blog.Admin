@@ -26,13 +26,12 @@ import {
 } from '@src/utils/request';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
-import { MdEditor } from 'md-editor-rt';
+import MdEditor from '@src/components/md-editor';
 import { MomentEditRequest, MomentPageRequest, MomentModel } from '@src/common/model';
 import { format } from 'date-fns';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
-import 'md-editor-rt/lib/style.css';
 
 const { Text } = Typography;
 
@@ -368,9 +367,9 @@ const Index: React.FC = () => {
 
                             <Form.Section text={'内容'}>
                                 <MdEditor
-                                    style={{ height: 490 }}
-                                    modelValue={content}
-                                    toolbars={toolbars}
+                                    imgPath="articles/comments"
+                                    height={490}
+                                    content={content}
                                     onChange={setContent}
                                 />
                             </Form.Section>

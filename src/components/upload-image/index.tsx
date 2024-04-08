@@ -1,9 +1,8 @@
-import React, { FC, useState, useRef } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import { Image } from '@douyinfe/semi-ui';
 import { Upload } from '@douyinfe/semi-ui';
 import { IconPlus } from '@douyinfe/semi-icons';
 import { qiniuTokenGet } from '@src/utils/request';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import {
     BeforeUploadObjectResult,
     BeforeUploadProps,
@@ -13,19 +12,26 @@ import {
 import { QiniuUploadModel } from '@src/common/model';
 
 import './index.scss';
+import { getFileExt } from '@src/utils/file';
 
 interface Iprops {
     limit?: number;
     path: string;
-    files?: Array<FileItem>;
+    url?: string;
     onSuccess: (url: string) => void;
 }
 
-const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
+// 上传单个图片组件
+const Index: FC<Iprops> = ({ limit = 1, path, url, onSuccess }) => {
+    const [filePath, setFilePath] = useState<string>('');
+    const [fileFullPath, setFileFullPath] = useState<string>('');
+    const [images, setImages] = useState<Array<FileItem>>([]);
+    const qiniuTokenRef = useRef<string>('');
+    const [host, setHost] = useState<string>('');
+
     // 获取七牛云上传token
     let getQiniuUploadToken = async (fileName: string) => {
         let fullPath = filePath + fileName;
-        setFileName(fileName);
         setFileFullPath(fullPath);
         let res = await qiniuTokenGet(fullPath);
         if (!res.isSuccess || !res.data) {
@@ -35,27 +41,18 @@ const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
         return res.data;
     };
 
+    // 组装uuid文件名
     let getFileName = (file: FileItem) => {
-        let sourceName = file.name;
         let uid = file.uid;
-        var re = /(?:\.([^.]+))?$/;
-        var ext = re.exec(sourceName);
-        if (ext == null) return sourceName;
-        return uid + '.' + ext[1];
+        return uid + getFileExt(file.name);
     };
 
-    const [filePath, setFilePath] = useState<string>('');
-    const [fileName, setFileName] = useState<string>('');
-    const [fileFullPath, setFileFullPath] = useState<string>('');
-    const [images, setImages] = useState<Array<FileItem>>([]);
-    const qiniuTokenRef = useRef<string>('');
-    const [host, setHost] = useState<string>('');
-
-    useOnMountUnsafe(() => {
-        setImages(files ?? []);
+    useEffect(() => {
+        if (url && url?.length > 0) setImages([{ url: url } as FileItem]);
         setFilePath(path.replace(new RegExp('\\/+$', 'g'), '') + '/');
-    });
+    }, [url]);
 
+    // 上传图片前触发
     let handleBeforeUpload = async (upProps: BeforeUploadProps) => {
         let file = upProps.file;
         let result = {
@@ -83,12 +80,14 @@ const Index: FC<Iprops> = ({ limit = 1, path, files, onSuccess }) => {
         return result;
     };
 
+    // 上传图片成功后触发
     let handleUploadSuccess = async (responseBody: object) => {
         // console.log('responseBody', responseBody);
         let res = { ...responseBody } as QiniuUploadModel;
         if (res.key.length > 0) onSuccess(host + res.key);
     };
 
+    // 图片变更触发
     const handleUploadChange = (ocProps: OnChangeProps) => {
         // console.log('change', ocProps);
         let newFileList = [...ocProps.fileList];

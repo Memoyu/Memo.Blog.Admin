@@ -26,6 +26,11 @@ export interface QiniuUploadModel {
     key: string;
 }
 
+export interface UploadResultModel {
+    file: File;
+    url: string;
+}
+
 export interface QiniuUploadRequest {
     file: File;
     key: string;

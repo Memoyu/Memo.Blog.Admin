@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router';
 import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { FileItem } from '@douyinfe/semi-ui/lib/es/upload';
 
 import './index.scss';
 
@@ -32,8 +31,7 @@ const Index: React.FC = () => {
     const [saveBtnText, setSaveBtnText] = useState<string>('发布');
     const [articleId, setArticleId] = useState<string>();
     const [article, setArticle] = useState<ArticleModel>();
-    const [articleBanner, setArticleBanner] = useState<Array<FileItem>>([]);
-    const [articleBannerUrl, setArticleBannerUrl] = useState<string>('');
+    const [articleBanner, setArticleBanner] = useState<string>();
     const [articleContent, setArticleContent] = useState<string>('');
     const [isTop, setIsTop] = useState<boolean>(false);
     const [commentable, setCommentable] = useState<boolean>(true);
@@ -60,7 +58,7 @@ const Index: React.FC = () => {
                 tags: article.tags.map((t) => t.tagId),
             });
         setArticleContent(article?.content as string);
-        setArticleBanner([{ url: article?.banner } as FileItem]);
+        setArticleBanner(article?.banner);
         setIsTop(article?.isTop as boolean);
         setCommentable(article?.commentable as boolean);
         setPublicable(article?.publicable as boolean);
@@ -96,7 +94,7 @@ const Index: React.FC = () => {
             article.isTop = isTop;
             article.commentable = commentable;
             article.publicable = publicable;
-            article.banner = articleBannerUrl;
+            article.banner = articleBanner ?? '';
             console.log(article);
 
             let res;
@@ -186,10 +184,9 @@ const Index: React.FC = () => {
                             <Col span={8}>
                                 <Form.Slot label={{ text: '头图' }}>
                                     <UploadImage
-                                        key={JSON.stringify(articleBanner)}
-                                        files={articleBanner}
+                                        url={articleBanner}
                                         path="articles/banner"
-                                        onSuccess={(url) => setArticleBannerUrl(url)}
+                                        onSuccess={setArticleBanner}
                                     />
                                 </Form.Slot>
                             </Col>
@@ -198,7 +195,7 @@ const Index: React.FC = () => {
                 </Form>
                 <Section className="content-editer" text={'文章内容'}>
                     <MdEditor
-                        key={articleContent}
+                        imgPath="articles/content"
                         height={800}
                         content={articleContent}
                         onChange={setArticleContent}

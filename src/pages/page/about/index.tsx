@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { MdEditor } from 'md-editor-rt';
+import MdEditor from '@src/components/md-editor';
+import UploadImage from '@src/components/upload-image';
 import { IconRating } from '@douyinfe/semi-icons-lab';
 import { Form, Toast, Row, Col, Button, Space, Switch, Typography } from '@douyinfe/semi-ui';
 import Content from '@src/components/page-content';
@@ -8,50 +9,19 @@ import { AboutModel } from '@src/common/model';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
-import 'md-editor-rt/lib/style.css';
 
 const { Section, Input, TagInput } = Form;
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-    const toolbars: Array<any> = [
-        'bold',
-        'underline',
-        'italic',
-        '-',
-        'strikeThrough',
-        'sub',
-        'sup',
-        'quote',
-        'unorderedList',
-        'orderedList',
-        'task',
-        '-',
-        'codeRow',
-        'code',
-        'link',
-        'image',
-        'table',
-        'mermaid',
-        'katex',
-        '-',
-        'revoke',
-        'next',
-        'save',
-        '=',
-        'pageFullscreen',
-        'fullscreen',
-        'preview',
-        'htmlPreview',
-        'catalog',
-    ];
-
     const formRef = useRef<Form>(null);
 
     const [about, setAbout] = useState<AboutModel>();
-    const [content, setContent] = useState<string>('');
+    const [content, setContent] = useState<string>();
+    const [banner, setBanner] = useState<string>();
     const [commentable, setCommentable] = useState<boolean>(true);
 
+    // 获取当前关于信息
     let getAbout = async () => {
         let res = await aboutGet();
         if (!res.isSuccess) {
@@ -65,7 +35,8 @@ const Index: React.FC = () => {
             formApi?.setValues({
                 ...about,
             });
-        setContent(about?.content as string);
+        setContent(about?.content);
+        setBanner(about?.banner);
         setCommentable(about?.commentable as boolean);
     };
 
@@ -73,10 +44,11 @@ const Index: React.FC = () => {
         getAbout();
     });
 
+    // 触发保存关于信息
     let handleSaveAbout = () => {
         let formApi = formRef.current?.formApi;
         formApi?.validate().then(async (form) => {
-            let about = { ...form, content, commentable } as AboutModel;
+            let about = { ...form, banner, content, commentable } as AboutModel;
             let res = await aboutUpdate(about);
 
             if (!res.isSuccess) {
@@ -93,31 +65,35 @@ const Index: React.FC = () => {
                 <Form ref={formRef} initValues={about}>
                     <Section text={'基本信息'}>
                         <Row gutter={16}>
-                            <Col span={8}>
-                                <Input field="title" label="标题" trigger="blur" />
+                            <Col span={16}>
+                                <div>
+                                    <Input field="title" label="标题" trigger="blur" />
+                                    <TagInput
+                                        style={{ width: '100%' }}
+                                        field="tags"
+                                        label="标签"
+                                        placeholder="请输个人标签"
+                                    />
+                                </div>
                             </Col>
                             <Col span={8}>
-                                <TagInput field="tags" label="标签" placeholder="请输个人标签" />
-                            </Col>
-                            <Col span={4}>
-                                {/* <Form.Upload
-                                    field="banner"
-                                    label="头图"
-                                    action="//semi.design/api/upload"
-                                >
-                                    <Button icon={<IconUpload />} theme="light">
-                                        文章头图
-                                    </Button>
-                                </Form.Upload> */}
+                                <Form.Slot label={{ text: '头图' }}>
+                                    <UploadImage
+                                        url={banner}
+                                        path="page/about"
+                                        onSuccess={setBanner}
+                                    />
+                                </Form.Slot>
                             </Col>
                         </Row>
+                        <Row></Row>
                     </Section>
                 </Form>
                 <Section className="content-editer" text={'内容'}>
                     <MdEditor
-                        style={{ height: 800 }}
-                        modelValue={content}
-                        toolbars={toolbars}
+                        imgPath="page/about"
+                        height={800}
+                        content={content}
                         onChange={setContent}
                     />
                 </Section>
