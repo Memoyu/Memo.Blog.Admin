@@ -1,13 +1,16 @@
-import { IconMoon, IconSun } from '@douyinfe/semi-icons';
-import { Tooltip, Button, Dropdown, Avatar } from '@douyinfe/semi-ui';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IconMoon, IconSun } from '@douyinfe/semi-icons';
+import { Tooltip, Button, Dropdown, Avatar } from '@douyinfe/semi-ui';
+
 import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
 import { THEME_MODE } from '@common/constant';
-import './index.scss';
+
 import { useDispatch } from 'react-redux';
-import { logout, toggleUserShow } from '@redux/slices/userSlice';
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
+import { logout, toggleUserShow } from '@redux/slices/userSlice';
+
+import './index.scss';
 
 const body = document.body;
 

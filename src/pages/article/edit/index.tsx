@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
+import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
+
 import Content from '@src/components/page-content';
 import UploadImage from '@src/components/upload-image';
 import MdEditor from '@src/components/md-editor';
-import { useParams } from 'react-router-dom';
+
+import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
+
 import {
     articleGet,
     articleCreate,
@@ -12,10 +19,6 @@ import {
     articleCategoryList,
     articleTagList,
 } from '@src/utils/request';
-import { useNavigate } from 'react-router';
-import { ArticleEditRequest, ArticleModel, ArticleStatus } from '@src/common/model';
-import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
 

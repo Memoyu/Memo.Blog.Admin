@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { IconBadge } from '@douyinfe/semi-icons-lab';
 import {
     Button,
@@ -14,7 +15,6 @@ import {
     Row,
     Col,
 } from '@douyinfe/semi-ui';
-import { format } from 'date-fns';
 
 import Content from '@src/components/page-content';
 import MdEditor from '@src/components/md-editor';
@@ -24,8 +24,6 @@ import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useTable } from '@src/hooks/useTable';
 import { useModal } from '@src/hooks/useModal';
 
-import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
-
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import {
@@ -34,6 +32,8 @@ import {
     CommentPageRequest,
     CommentModel,
 } from '@src/common/model';
+
+import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 
 import './index.scss';
 

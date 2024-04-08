@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IconSpin } from '@douyinfe/semi-icons-lab';
+import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import {
     Button,
     Table,
@@ -12,10 +13,17 @@ import {
     Form,
     Toast,
 } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useTable } from '@src/hooks/useTable';
+import { useModal } from '@src/hooks/useModal';
+
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import Content from '@src/components/page-content';
+import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
+
 import {
     friendPage,
     friendCreate,
@@ -23,11 +31,8 @@ import {
     friendUpdate,
     friendGet,
 } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import { useModal } from '@src/hooks/useModal';
+
 import './index.scss';
-import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Text } = Typography;
 

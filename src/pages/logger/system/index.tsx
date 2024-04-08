@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { IconRadio } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Row, Col, Space, Typography, Form } from '@douyinfe/semi-ui';
-import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
-import Content from '@src/components/page-content';
-import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { systemLogPage } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import './index.scss';
-import { SystemLogLevel, SystemLogModel, SystemLogPageRequest } from '@src/common/model';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
+import { IconRadio } from '@douyinfe/semi-icons-lab';
+import { Button, Table, Space, Typography, Form } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+
+import { useTable } from '@src/hooks/useTable';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
+import { SystemLogLevel, SystemLogModel, SystemLogPageRequest } from '@src/common/model';
+
+import { systemLogPage } from '@src/utils/request';
+
+import './index.scss';
 
 const { Text } = Typography;
 

@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { IconToast } from '@douyinfe/semi-icons-lab';
 import {
     Button,
@@ -11,20 +13,22 @@ import {
     Input,
     Collapse,
 } from '@douyinfe/semi-ui';
-import { useNavigate } from 'react-router';
-import { useParams } from 'react-router-dom';
-import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+
 import Content from '@src/components/page-content';
-import { roleGet, roleCreate, roleUpdate, permissionGroup } from '@src/utils/request';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useTable } from '@src/hooks/useTable';
+
+import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { CheckboxProps } from '@douyinfe/semi-ui/lib/es/checkbox';
 import {
     PermissionGroupModel,
     PermissionModel,
     RoleEditRequest,
     RoleModel,
 } from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { CheckboxProps } from '@douyinfe/semi-ui/lib/es/checkbox';
+
+import { roleGet, roleCreate, roleUpdate, permissionGroup } from '@src/utils/request';
 
 import './index.scss';
 

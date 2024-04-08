@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { IconToast } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Typography, Space, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
 import { useNavigate } from 'react-router';
+import { IconToast } from '@douyinfe/semi-icons-lab';
+import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
+import { Button, Table, Typography, Space, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useTable } from '@src/hooks/useTable';
+
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import Content from '@src/components/page-content';
-import { roleList, roleDelete } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import './index.scss';
 import { RoleListModel, RoleType } from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+import { roleList, roleDelete } from '@src/utils/request';
+
+import './index.scss';
 
 const { Text } = Typography;
 

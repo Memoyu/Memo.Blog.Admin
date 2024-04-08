@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IconProgress } from '@douyinfe/semi-icons-lab';
 import { Button, Table, Space, Form } from '@douyinfe/semi-ui';
-import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+
 import Content from '@src/components/page-content';
-import { accessLogPage } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import './index.scss';
-import { AccessLogModel } from '@src/common/model';
+
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useTable } from '@src/hooks/useTable';
+
+import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { AccessLogModel } from '@src/common/model';
+
+import { accessLogPage } from '@src/utils/request';
+
+import './index.scss';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [

@@ -1,12 +1,16 @@
 import React, { useState, useRef } from 'react';
-import MdEditor from '@src/components/md-editor';
-import UploadImage from '@src/components/upload-image';
 import { IconRating } from '@douyinfe/semi-icons-lab';
 import { Form, Toast, Row, Col, Button, Space, Switch, Typography } from '@douyinfe/semi-ui';
+
 import Content from '@src/components/page-content';
-import { aboutGet, aboutUpdate } from '@src/utils/request';
-import { AboutModel } from '@src/common/model';
+import MdEditor from '@src/components/md-editor';
+
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+
+import UploadImage from '@src/components/upload-image';
+import { AboutModel } from '@src/common/model';
+
+import { aboutGet, aboutUpdate } from '@src/utils/request';
 
 import './index.scss';
 

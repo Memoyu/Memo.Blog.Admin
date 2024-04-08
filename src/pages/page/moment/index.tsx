@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { IconNotification } from '@douyinfe/semi-icons-lab';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import {
@@ -13,10 +14,19 @@ import {
     Modal,
     Toast,
 } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+import MdEditor from '@src/components/md-editor';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useTable } from '@src/hooks/useTable';
+import { useModal } from '@src/hooks/useModal';
+
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
-import Content from '@src/components/page-content';
+import { MomentEditRequest, MomentPageRequest, MomentModel } from '@src/common/model';
+
 import {
     momentCreate,
     momentDelete,
@@ -24,12 +34,6 @@ import {
     momentPage,
     momentUpdate,
 } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import { useModal } from '@src/hooks/useModal';
-import MdEditor from '@src/components/md-editor';
-import { MomentEditRequest, MomentPageRequest, MomentModel } from '@src/common/model';
-import { format } from 'date-fns';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import './index.scss';
 

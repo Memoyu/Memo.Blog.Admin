@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
-import { login as ToLogin, userGet } from '@utils/request';
+import { Button, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
+
 import { useDispatch } from 'react-redux';
 import { login, setUserInfo } from '@redux/slices/userSlice';
+
+import { login as ToLogin, userGet } from '@utils/request';
 
 import './index.scss';
 

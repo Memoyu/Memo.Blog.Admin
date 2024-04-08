@@ -1,8 +1,10 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
 import { Layout, Nav } from '@douyinfe/semi-ui';
 import { IconSemiLogo } from '@douyinfe/semi-icons';
 import configMenus, { MenuItem } from '@src/config/menus';
-import { useLocation, useNavigate } from 'react-router';
+
 import './index.scss';
 
 const { Sider } = Layout;

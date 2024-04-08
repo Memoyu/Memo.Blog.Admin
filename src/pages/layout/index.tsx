@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Layout } from '@douyinfe/semi-ui';
+
 import Sider from './components/sider';
 import Footer from './components/footer';
-import { Outlet } from 'react-router-dom';
 
 import './index.scss';
 

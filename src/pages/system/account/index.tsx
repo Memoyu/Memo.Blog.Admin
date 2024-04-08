@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { format } from 'date-fns';
 import { IconAvatar } from '@douyinfe/semi-icons-lab';
+import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import {
     Button,
     Table,
@@ -12,12 +14,24 @@ import {
     TagGroup,
     Toast,
 } from '@douyinfe/semi-ui';
+
+import Content from '@src/components/page-content';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useTable } from '@src/hooks/useTable';
+import { useModal } from '@src/hooks/useModal';
+
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import Content from '@src/components/page-content';
+import {
+    UserEditRequest,
+    UserIdentityType,
+    UserPageModel,
+    UserPageRequest,
+} from '@src/common/model';
+
 import {
     userPage,
     userCreate,
@@ -26,17 +40,6 @@ import {
     userUpdate,
     roleList,
 } from '@src/utils/request';
-import { useTable } from '@src/hooks/useTable';
-import { useModal } from '@src/hooks/useModal';
-import {
-    UserEditRequest,
-    UserModel,
-    UserIdentityType,
-    UserPageModel,
-    UserPageRequest,
-} from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { format } from 'date-fns';
 
 import './index.scss';
 
