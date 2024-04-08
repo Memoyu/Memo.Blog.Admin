@@ -224,6 +224,7 @@ const Index: React.FC = () => {
         let comment = res.data as CommentModel;
 
         setEditComment(comment);
+        setCommentContent(comment.content);
         setEditVisible(true);
     };
 
