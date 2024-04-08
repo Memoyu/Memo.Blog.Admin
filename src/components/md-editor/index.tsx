@@ -1,12 +1,15 @@
 import { FC, useState, useEffect } from 'react';
 import { MdEditor } from 'md-editor-rt';
-import { qiniuUpload } from '@src/utils/request';
+
 import { uuid } from '@src/utils/uuid';
+import { getFileExt } from '@src/utils/file';
+
 import { QiniuUploadRequest } from '@src/common/model';
+
+import { qiniuUpload } from '@src/utils/request';
 
 import 'md-editor-rt/lib/style.css';
 import './index.scss';
-import { getFileExt } from '@src/utils/file';
 
 interface Iprops {
     imgPath: string;

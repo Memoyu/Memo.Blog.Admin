@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Empty, Button } from '@douyinfe/semi-ui';
 import { useNavigate } from 'react-router-dom';
 import { IllustrationNoAccess, IllustrationConstruction } from '@douyinfe/semi-illustrations';

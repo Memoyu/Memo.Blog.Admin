@@ -2,7 +2,7 @@ import * as echarts from 'echarts/core';
 import {
     LineChart,
     BarChart,
-    // PieChart,
+    PieChart,
     // ScatterChart,
     RadarChart,
     // MapChart,
@@ -72,6 +72,7 @@ echarts.use([
     ToolboxComponent,
     BarChart,
     LineChart,
+    PieChart,
     RadarChart,
     CanvasRenderer,
 ]);
