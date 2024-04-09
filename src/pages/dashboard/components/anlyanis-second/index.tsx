@@ -3,7 +3,7 @@ import { IconArrowDown, IconArrowUp, IconInfoCircle } from '@douyinfe/semi-icons
 import { Row, Col, Card, List, Avatar, Descriptions, Typography } from '@douyinfe/semi-ui';
 import echarts from '@src/common/echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
-import { anlyanisSalesOption } from '@src/common/echart-options';
+import { anlyanisCategoryOption, anlyanisSalesOption } from '@src/common/echart-options';
 
 import './index.scss';
 
@@ -58,11 +58,6 @@ const Index: FC<Iprops> = ({ loading }) => {
                 <Row gutter={20}>
                     <Col span={8}>
                         <List
-                            header={
-                                <div className="anlyanis-container-second-card-sales-card-header">
-                                    <Title heading={4}>文章排行</Title>
-                                </div>
-                            }
                             dataSource={listData}
                             renderItem={(item, index) => (
                                 <List.Item>
@@ -86,10 +81,19 @@ const Index: FC<Iprops> = ({ loading }) => {
                             )}
                         />
                     </Col>
-                    <Col span={16}>
+                    <Col span={8}>
                         <ReactEChartsCore
                             echarts={echarts}
-                            option={anlyanisSalesOption}
+                            option={anlyanisCategoryOption}
+                            notMerge={true}
+                            lazyUpdate={true}
+                            style={{ minHeight: 400 }}
+                        />
+                    </Col>
+                    <Col span={8}>
+                        <ReactEChartsCore
+                            echarts={echarts}
+                            option={anlyanisCategoryOption}
                             notMerge={true}
                             lazyUpdate={true}
                             style={{ minHeight: 400 }}

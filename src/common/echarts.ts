@@ -1,11 +1,12 @@
 import * as echarts from 'echarts/core';
+import chiangeo from '@assets/chian-geo.json';
 import {
     LineChart,
     BarChart,
     PieChart,
-    // ScatterChart,
+    ScatterChart,
     RadarChart,
-    // MapChart,
+    MapChart,
     // TreeChart,
     // TreemapChart,
     // GraphChart,
@@ -15,7 +16,7 @@ import {
     // SankeyChart,
     // BoxplotChart,
     // CandlestickChart,
-    // EffectScatterChart,
+    EffectScatterChart,
     // LinesChart,
     // HeatmapChart,
     // PictorialBarChart,
@@ -49,7 +50,7 @@ import {
     // DataZoomComponent,
     // DataZoomInsideComponent,
     // DataZoomSliderComponent,
-    // VisualMapComponent,
+    VisualMapComponent,
     // VisualMapContinuousComponent,
     // VisualMapPiecewiseComponent,
     // AriaComponent,
@@ -70,11 +71,17 @@ echarts.use([
     RadarComponent,
     GridComponent,
     ToolboxComponent,
+    VisualMapComponent,
     BarChart,
     LineChart,
     PieChart,
+    ScatterChart,
+    EffectScatterChart,
+    MapChart,
     RadarChart,
     CanvasRenderer,
 ]);
+
+echarts.registerMap('china', { geoJSON: chiangeo } as any);
 
 export default echarts;
