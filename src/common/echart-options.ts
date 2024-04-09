@@ -151,11 +151,14 @@ export const anlyanisSalesOption = {
 };
 
 export const anlyanisCategoryOption = {
+    title: {
+        text: '文章分类',
+    },
     tooltip: {
         trigger: 'item',
     },
     legend: {
-        top: '5%',
+        bottom: '0%',
         left: 'center',
     },
     series: [
@@ -194,8 +197,63 @@ export const anlyanisCategoryOption = {
     ],
 };
 
+export const anlyanisTagOption = {
+    title: {
+        text: '文章标签',
+        textStyle: {
+            // color: 'var(--semi-color-text-0)',
+        },
+    },
+    tooltip: {
+        trigger: 'item',
+    },
+    legend: {
+        bottom: '0%',
+        left: 'center',
+    },
+    series: [
+        {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2,
+            },
+            label: {
+                show: false,
+                position: 'center',
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 40,
+                    fontWeight: 'bold',
+                },
+            },
+            labelLine: {
+                show: false,
+            },
+            data: [
+                { value: 1048, name: 'Search Engine' },
+                { value: 735, name: 'Direct' },
+                { value: 580, name: 'Email' },
+                { value: 484, name: 'Union Ads' },
+                { value: 300, name: 'Video Ads' },
+            ],
+        },
+    ],
+};
+
+interface DataItem {
+    name: string;
+    value: number;
+}
+
 //城市经纬度
-const scatterGeo = {
+const geoCoordMap: Record<string, number[]> = {
     海门: [121.15, 31.89],
     鄂尔多斯: [109.781327, 39.608266],
     招远: [120.38, 37.35],
@@ -388,7 +446,7 @@ const scatterGeo = {
     大庆: [125.03, 46.58],
 };
 //城市数据
-const scatterVal = [
+const data: DataItem[] = [
     { name: '海门', value: 9 },
     { name: '鄂尔多斯', value: 12 },
     { name: '招远', value: 12 },
@@ -581,10 +639,10 @@ const scatterVal = [
     { name: '大庆', value: 279 },
 ];
 //数据转换，转换后的格式：[{name: 'cityName', value: [lng, lat, val]}, {...}]
-const convertScatterData = function (data: any) {
-    let res = [];
-    for (let i = 0; i < data.length; i++) {
-        let geoCoord = scatterGeo[data[i].name];
+const convertData = function (data: any) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+        var geoCoord = geoCoordMap[data[i].name];
         if (geoCoord) {
             res.push({
                 name: data[i].name,
@@ -600,7 +658,7 @@ export const anlyanisSactterMapOption = {
         text: '访客地图',
     },
     legend: {
-        data: ['PM2.5'], //与series的name属性对应
+        data: ['访问人数'], //与series的name属性对应
         orient: 'vertical',
         y: 'bottom',
         x: 'right',
@@ -654,7 +712,7 @@ export const anlyanisSactterMapOption = {
     },
     series: [
         {
-            name: 'PM2.5',
+            name: '访问人数',
             type: 'scatter',
             coordinateSystem: 'geo',
             symbolSize: 12,
@@ -672,7 +730,7 @@ export const anlyanisSactterMapOption = {
                     borderWidth: 1,
                 },
             },
-            data: convertScatterData(scatterVal),
+            data: convertData(data),
         },
     ],
 };
