@@ -18,7 +18,7 @@ const Friend = lazy(() => import('@src/pages/page/friend'));
 const Moment = lazy(() => import('@src/pages/page/moment'));
 const About = lazy(() => import('@src/pages/page/about'));
 
-const AccessLog = lazy(() => import('@src/pages/logger/access'));
+const AccessLog = lazy(() => import('@src/pages/logger/visit'));
 const SystemLog = lazy(() => import('@src/pages/logger/system'));
 
 const Account = lazy(() => import('@src/pages/system/account'));
@@ -76,7 +76,7 @@ const routeList: RouteObject[] = [
                 element: <WrapperRouteComponent element={<SystemLog />} titleId="系统日志" auth />,
             },
             {
-                path: 'logger/access',
+                path: 'logger/visit',
                 element: <WrapperRouteComponent element={<AccessLog />} titleId="访问日志" auth />,
             },
             {

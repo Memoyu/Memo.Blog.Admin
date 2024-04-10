@@ -100,7 +100,7 @@ const Menus: MenuItem[] = [
             {
                 itemKey: '4-2',
                 text: '访问日志',
-                path: '/logger/access',
+                path: '/logger/visit',
                 icon: IconProgress,
             },
         ],

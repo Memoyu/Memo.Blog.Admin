@@ -10,7 +10,7 @@ import { useTable } from '@src/hooks/useTable';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { AccessLogModel } from '@src/common/model';
 
-import { accessLogPage } from '@src/utils/request';
+import { visitLogPage } from '@src/utils/request';
 
 import './index.scss';
 
@@ -61,8 +61,8 @@ const Index: React.FC = () => {
     const [currentPage, setPage] = useState(1);
     const [data, loading, setData, setLoading] = useTable();
 
-    let getAccessLogList = async () => {
-        accessLogPage()
+    let getVisitLogList = async () => {
+        visitLogPage()
             .then((res) => {
                 if (res.isSuccess) {
                     setData(res.data as any[]);
@@ -72,18 +72,18 @@ const Index: React.FC = () => {
     };
 
     useOnMountUnsafe(() => {
-        getAccessLogList();
+        getVisitLogList();
     });
 
     const handlePageChange = (page: any) => {
-        getAccessLogList();
+        getVisitLogList();
     };
 
     return (
         <Content title="访问日志" icon={<IconProgress />}>
-            <div className="access-log-container">
-                <div className="access-log-list">
-                    <div className="access-log-list-bar">
+            <div className="visit-log-container">
+                <div className="visit-log-list">
+                    <div className="visit-log-list-bar">
                         <Form layout="horizontal">
                             <Form.Input field="UserName" label="访客标识" style={{ width: 190 }} />
                             <Form.DatePicker
@@ -103,7 +103,7 @@ const Index: React.FC = () => {
                             </Space>
                         </Form>
                     </div>
-                    <div className="access-log-list-table">
+                    <div className="visit-log-list-table">
                         <Table
                             showHeader={true}
                             loading={loading}

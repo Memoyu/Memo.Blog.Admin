@@ -242,8 +242,8 @@ export const momentDelete = (id: string) => {
 //#region 日志
 
 // TODO： 待完善模型链接
-export const accessLogPage = () => {
-    return Request.get<Array<AccessLogModel>>('/looger/access/page');
+export const visitLogPage = () => {
+    return Request.get<Array<AccessLogModel>>('/looger/visit/page');
 };
 
 export const systemLogPage = (request: SystemLogPageRequest) => {
