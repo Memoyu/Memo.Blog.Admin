@@ -1,11 +1,12 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { Layout, Nav } from '@douyinfe/semi-ui';
+import { Avatar, Layout, Nav } from '@douyinfe/semi-ui';
 import { IconSemiLogo } from '@douyinfe/semi-icons';
 import configMenus, { MenuItem } from '@src/config/menus';
 
 import './index.scss';
+import logo from '@assets/logo.png';
 
 const { Sider } = Layout;
 
@@ -93,7 +94,16 @@ const Index: FC = () => {
             >
                 <Nav.Header
                     // style={{ paddingBottom: 10, paddingTop: 15 }}
-                    logo={<IconSemiLogo style={{ fontSize: 36 }} />}
+                    logo={
+                        <Avatar
+                            size="small"
+                            color="amber"
+                            border={{ motion: true }}
+                            style={{ marginRight: '2px' }}
+                            contentMotion={true}
+                            src={logo}
+                        />
+                    }
                     text={"memoyu's blog"}
                 />
                 {menus.map((sub: MenuItem) => (
