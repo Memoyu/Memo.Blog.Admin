@@ -39,7 +39,7 @@ import {
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
-    return Request.post<TokenModel>('/tokens/generate', {
+    return Request.post<TokenModel>('tokens/generate', {
         username: username,
         password: password,
     });
@@ -48,7 +48,7 @@ export const login = (username: string, password: string) => {
 //#region 七牛云文件存储
 
 export const qiniuTokenGet = (path: string) => {
-    return Request.get<QiniuUploadTokenModel>('/file-storage/qiniu/generate', { params: { path } });
+    return Request.get<QiniuUploadTokenModel>('file-storage/qiniu/generate', { params: { path } });
 };
 
 export const qiniuUpload = (data: QiniuUploadRequest) => {
@@ -86,27 +86,27 @@ export const qiniuUpload = (data: QiniuUploadRequest) => {
 //#region 文章管理
 
 export const articlePage = (request: ArticlePageRequest) => {
-    return Request.get<PaginationResult<ArticlePageModel>>('/article/page', { params: request });
+    return Request.get<PaginationResult<ArticlePageModel>>('article/page', { params: request });
 };
 
 export const articlePageSummary = (request: ArticlePageRequest) => {
-    return Request.get<ArticlePageSummaryModel>('/article/page/summary', { params: request });
+    return Request.get<ArticlePageSummaryModel>('article/page/summary', { params: request });
 };
 
 export const articleGet = (id: string) => {
-    return Request.get<ArticleModel>('/article/get', { params: { articleId: id } });
+    return Request.get<ArticleModel>('article/get', { params: { articleId: id } });
 };
 
 export const articleCreate = (article: ArticleEditRequest) => {
-    return Request.post<string>('/article/create', article);
+    return Request.post<string>('article/create', article);
 };
 
 export const articleUpdate = (article: ArticleEditRequest) => {
-    return Request.put<string>('/article/update', article);
+    return Request.put<string>('article/update', article);
 };
 
 export const articleDelete = (id: string) => {
-    return Request.delete('/article/delete', { params: { articleId: id } });
+    return Request.delete('article/delete', { params: { articleId: id } });
 };
 
 //#endregion
@@ -114,23 +114,23 @@ export const articleDelete = (id: string) => {
 //#region 文章分类
 
 export const articleCategoryList = (name?: string) => {
-    return Request.get<Array<CategoryModel>>('/category/list', { params: { name: name } });
+    return Request.get<Array<CategoryModel>>('category/list', { params: { name: name } });
 };
 
 export const articleCategoryGet = (id: string) => {
-    return Request.get<CategoryModel>('/category/get', { params: { categoryId: id } });
+    return Request.get<CategoryModel>('category/get', { params: { categoryId: id } });
 };
 
 export const articleCategoryCreate = (name: string) => {
-    return Request.post<string>('/category/create', { name });
+    return Request.post<string>('category/create', { name });
 };
 
 export const articleCategoryUpdate = (categoryId: string, name: string) => {
-    return Request.put<string>('/category/update', { categoryId, name });
+    return Request.put<string>('category/update', { categoryId, name });
 };
 
 export const articleCategoryDelete = (id: string) => {
-    return Request.delete('/category/delete', { params: { categoryId: id } });
+    return Request.delete('category/delete', { params: { categoryId: id } });
 };
 
 //#endregion
@@ -138,23 +138,23 @@ export const articleCategoryDelete = (id: string) => {
 //#region 文章标签
 
 export const articleTagList = (name?: string) => {
-    return Request.get<Array<TagModel>>('/tag/list', { params: { name: name } });
+    return Request.get<Array<TagModel>>('tag/list', { params: { name: name } });
 };
 
 export const articleTagGet = (id: string) => {
-    return Request.get<TagModel>('/tag/get', { params: { tagId: id } });
+    return Request.get<TagModel>('tag/get', { params: { tagId: id } });
 };
 
 export const articleTagCreate = (name: string, color: string) => {
-    return Request.post<string>('/tag/create', { name, color });
+    return Request.post<string>('tag/create', { name, color });
 };
 
 export const articleTagUpdate = (tagId: string, name: string) => {
-    return Request.put<string>('/tag/update', { tagId, name });
+    return Request.put<string>('tag/update', { tagId, name });
 };
 
 export const articleTagDelete = (id: string) => {
-    return Request.delete('/tag/delete', { params: { tagId: id } });
+    return Request.delete('tag/delete', { params: { tagId: id } });
 };
 
 //#endregion
@@ -162,19 +162,19 @@ export const articleTagDelete = (id: string) => {
 //#region 评论
 
 export const commentPage = (request: CommentPageRequest) => {
-    return Request.get<PaginationResult<CommentPageModel>>('/comment/page', { params: request });
+    return Request.get<PaginationResult<CommentPageModel>>('comment/page', { params: request });
 };
 
 export const commentGet = (id: string) => {
-    return Request.get<CommentModel>('/comment/get', { params: { commentId: id } });
+    return Request.get<CommentModel>('comment/get', { params: { commentId: id } });
 };
 
 export const commentUpdate = (comment: CommentEditRequest) => {
-    return Request.put<string>('/comment/update', comment);
+    return Request.put<string>('comment/update', comment);
 };
 
 export const commentDelete = (id: string) => {
-    return Request.delete('/comment/delete', { params: { commentId: id } });
+    return Request.delete('comment/delete', { params: { commentId: id } });
 };
 
 //#endregion
@@ -182,23 +182,23 @@ export const commentDelete = (id: string) => {
 //#region 友链管理
 
 export const friendPage = (request: FriendPageRequest) => {
-    return Request.get<PaginationResult<FriendModel>>('/friend/page', { params: request });
+    return Request.get<PaginationResult<FriendModel>>('friend/page', { params: request });
 };
 
 export const friendGet = (id: string) => {
-    return Request.get<FriendModel>('/friend/get', { params: { friendId: id } });
+    return Request.get<FriendModel>('friend/get', { params: { friendId: id } });
 };
 
 export const friendCreate = (friend: FriendEditRequest) => {
-    return Request.post<string>('/friend/create', friend);
+    return Request.post<string>('friend/create', friend);
 };
 
 export const friendUpdate = (friend: FriendEditRequest) => {
-    return Request.put<string>('/friend/update', friend);
+    return Request.put<string>('friend/update', friend);
 };
 
 export const friendDelete = (id: string) => {
-    return Request.delete('/friend/delete', { params: { friendId: id } });
+    return Request.delete('friend/delete', { params: { friendId: id } });
 };
 
 //#endregion
@@ -206,11 +206,11 @@ export const friendDelete = (id: string) => {
 //#region 关于信息
 
 export const aboutGet = () => {
-    return Request.get<AboutModel>('/about/get');
+    return Request.get<AboutModel>('about/get');
 };
 
 export const aboutUpdate = (about: AboutModel) => {
-    return Request.put<string>('/about/update', about);
+    return Request.put<string>('about/update', about);
 };
 
 //#endregion
@@ -218,23 +218,23 @@ export const aboutUpdate = (about: AboutModel) => {
 //#region 动态
 
 export const momentPage = (request: MomentPageRequest) => {
-    return Request.get<PaginationResult<MomentModel>>('/moment/page', { params: request });
+    return Request.get<PaginationResult<MomentModel>>('moment/page', { params: request });
 };
 
 export const momentGet = (id: string) => {
-    return Request.get<MomentModel>('/moment/get', { params: { momentId: id } });
+    return Request.get<MomentModel>('moment/get', { params: { momentId: id } });
 };
 
 export const momentCreate = (moment: MomentEditRequest) => {
-    return Request.post<string>('/moment/create', moment);
+    return Request.post<string>('moment/create', moment);
 };
 
 export const momentUpdate = (moment: MomentEditRequest) => {
-    return Request.put<string>('/moment/update', moment);
+    return Request.put<string>('moment/update', moment);
 };
 
 export const momentDelete = (id: string) => {
-    return Request.delete('/moment/delete', { params: { momentId: id } });
+    return Request.delete('moment/delete', { params: { momentId: id } });
 };
 
 //#endregion
@@ -243,11 +243,11 @@ export const momentDelete = (id: string) => {
 
 // TODO： 待完善模型链接
 export const visitLogPage = () => {
-    return Request.get<Array<AccessLogModel>>('/looger/visit/page');
+    return Request.get<Array<AccessLogModel>>('looger/visit/page');
 };
 
 export const systemLogPage = (request: SystemLogPageRequest) => {
-    return Request.get<PaginationResult<SystemLogModel>>('/looger/system/page', {
+    return Request.get<PaginationResult<SystemLogModel>>('looger/system/page', {
         params: request,
     });
 };
@@ -257,25 +257,25 @@ export const systemLogPage = (request: SystemLogPageRequest) => {
 //#region 用户
 
 export const userPage = (request: UserPageRequest) => {
-    return Request.get<PaginationResult<UserPageModel>>('/user/page', {
+    return Request.get<PaginationResult<UserPageModel>>('user/page', {
         params: request,
     });
 };
 
 export const userGet = (id?: string) => {
-    return Request.get<UserModel>('/user/get', { params: { userId: id } });
+    return Request.get<UserModel>('user/get', { params: { userId: id } });
 };
 
 export const userCreate = (user: UserEditRequest) => {
-    return Request.post<string>('/user/create', user);
+    return Request.post<string>('user/create', user);
 };
 
 export const userUpdate = (user: UserEditRequest) => {
-    return Request.put<string>('/user/update', user);
+    return Request.put<string>('user/update', user);
 };
 
 export const userDelete = (id: string) => {
-    return Request.delete('/user/delete', { params: { userId: id } });
+    return Request.delete('user/delete', { params: { userId: id } });
 };
 
 //#endregion
@@ -283,23 +283,23 @@ export const userDelete = (id: string) => {
 //#region 用户角色
 
 export const roleList = (name?: string) => {
-    return Request.get<Array<RoleModel>>('/role/list', { params: { name } });
+    return Request.get<Array<RoleModel>>('role/list', { params: { name } });
 };
 
 export const roleGet = (id: string) => {
-    return Request.get<RoleModel>('/role/get', { params: { roleId: id } });
+    return Request.get<RoleModel>('role/get', { params: { roleId: id } });
 };
 
 export const roleCreate = (role: RoleEditRequest) => {
-    return Request.post<string>('/role/create', role);
+    return Request.post<string>('role/create', role);
 };
 
 export const roleUpdate = (role: RoleEditRequest) => {
-    return Request.put<string>('/role/update', role);
+    return Request.put<string>('role/update', role);
 };
 
 export const roleDelete = (id: string) => {
-    return Request.delete('/role/delete', { params: { roleId: id } });
+    return Request.delete('role/delete', { params: { roleId: id } });
 };
 
 //#endregion
@@ -307,11 +307,11 @@ export const roleDelete = (id: string) => {
 //#region 用户权限
 
 export const permissionList = (name?: string, signature?: string) => {
-    return Request.get<Array<PermissionModel>>('/permission/list', { params: { name, signature } });
+    return Request.get<Array<PermissionModel>>('permission/list', { params: { name, signature } });
 };
 
 export const permissionGroup = (name?: string) => {
-    return Request.get<Array<PermissionGroupModel>>('/permission/group', { params: { name } });
+    return Request.get<Array<PermissionGroupModel>>('permission/group', { params: { name } });
 };
 
 //#endregion
