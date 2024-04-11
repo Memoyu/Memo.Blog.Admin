@@ -197,8 +197,8 @@ const Index: React.FC = () => {
             size: pageSize,
         } as CommentPageRequest;
         if (search?.commentTime && search?.commentTime.length) {
-            request.commentTimeBegin = format(search?.commentTime[0], 'yyyy-MM-dd HH:mm:ss');
-            request.commentTimeEnd = format(search?.commentTime[1], 'yyyy-MM-dd HH:mm:ss');
+            request.dateBegin = format(search?.commentTime[0], 'yyyy-MM-dd HH:mm:ss');
+            request.dateEnd = format(search?.commentTime[1], 'yyyy-MM-dd HH:mm:ss');
         }
 
         let res = await commentPage(request);

@@ -128,8 +128,8 @@ const Index: React.FC = () => {
         } as SystemLogPageRequest;
 
         if (search?.time && search?.time.length) {
-            request.timeBegin = format(search?.time[0], 'yyyy-MM-dd HH:mm:ss');
-            request.timeEnd = format(search?.time[1], 'yyyy-MM-dd HH:mm:ss');
+            request.dateBegin = format(search?.time[0], 'yyyy-MM-dd HH:mm:ss');
+            request.dateEnd = format(search?.time[1], 'yyyy-MM-dd HH:mm:ss');
         }
 
         let res = await systemLogPage(request);
@@ -160,7 +160,7 @@ const Index: React.FC = () => {
                         >
                             <Form.Input field="message" showClear label="日志内容" />
 
-                            <Form.Input field="message" showClear label="日志源" />
+                            <Form.Input field="source" showClear label="日志源" />
 
                             <Form.Select label="日志等级" field="level" style={{ width: '250px' }}>
                                 {Object.keys(SystemLogLevel)

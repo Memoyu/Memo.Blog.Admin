@@ -163,8 +163,8 @@ const Index: React.FC = () => {
             size: pageSize,
         } as MomentPageRequest;
         if (search?.momentTime && search?.momentTime.length) {
-            request.timeBegin = format(search?.momentTime[0], 'yyyy-MM-dd 00:00');
-            request.timeEnd = format(search?.momentTime[1], 'yyyy-MM-dd 23:59');
+            request.dateBegin = format(search?.momentTime[0], 'yyyy-MM-dd 00:00');
+            request.dateEnd = format(search?.momentTime[1], 'yyyy-MM-dd 23:59');
         }
 
         let res = await momentPage(request);

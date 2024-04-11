@@ -6,7 +6,7 @@ import {
     CategoryModel,
     TagModel,
     FriendModel,
-    AccessLogModel,
+    VisitLogModel,
     SystemLogModel,
     UserModel,
     RoleModel,
@@ -36,6 +36,7 @@ import {
     QiniuUploadRequest,
     QiniuUploadModel,
     UploadResultModel,
+    VisitLogPageRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -241,9 +242,10 @@ export const momentDelete = (id: string) => {
 
 //#region 日志
 
-// TODO： 待完善模型链接
-export const visitLogPage = () => {
-    return Request.get<Array<AccessLogModel>>('looger/visit/page');
+export const visitLogPage = (request: VisitLogPageRequest) => {
+    return Request.get<PaginationResult<VisitLogModel>>('looger/visit/page', {
+        params: request,
+    });
 };
 
 export const systemLogPage = (request: SystemLogPageRequest) => {

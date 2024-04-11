@@ -143,8 +143,8 @@ export interface CommentPageRequest extends PaginationRequest {
     commentType: CommentType;
     nickname?: string;
     ip?: string;
-    commentTimeBegin?: string;
-    commentTimeEnd?: string;
+    dateBegin?: string;
+    dateEnd?: string;
 }
 
 export interface CommentPageModel {
@@ -243,8 +243,8 @@ export interface AboutModel {
 export interface MomentPageRequest extends PaginationRequest {
     tags: Array<string>;
     content: string;
-    timeBegin: string;
-    timeEnd: string;
+    dateBegin: string;
+    dateEnd: string;
 }
 
 export interface MomentEditRequest {
@@ -269,9 +269,53 @@ export interface MomentModel {
 
 //#region 访问日志
 
-export interface AccessLogModel {
-    logId: string; //
-    visitor: string; //
+export enum VisitLogBehavior {
+    Article = 0,
+    Moment = 1,
+    Friend = 2,
+    Tool = 3,
+    About = 4,
+}
+
+export interface LoggerVisitedModel {
+    Id: string;
+    title: string;
+    link: string;
+}
+
+export interface VisitLogPageRequest extends PaginationRequest {
+    visitId?: string; // 访问日志Id
+    visitorId?: string; // 访客Id
+    behavior?: VisitLogBehavior;
+    visitedId: number; // 被访问信息Id（文章Id、动态Id等）
+    path?: string;
+    ip?: string;
+    country?: string;
+    region?: string;
+    province?: string;
+    city?: string;
+    isp?: string;
+    os?: string;
+    browser?: string;
+    dateBegin?: string;
+    dateEnd?: string;
+}
+
+export interface VisitLogModel {
+    visitId: string; // 访问日志Id
+    visitorId: string; // 访客Id
+    behavior: VisitLogBehavior;
+    path: string;
+    visited: LoggerVisitedModel; // 被访问信息Id（文章Id、动态Id等）
+    ip: string;
+    country: string;
+    region: string;
+    province: string;
+    city: string;
+    isp: string;
+    os: string;
+    browser: string;
+    visitDate: Date;
 }
 
 //#endregion
@@ -288,6 +332,7 @@ export enum SystemLogLevel {
 }
 
 export interface SystemLogPageRequest extends PaginationRequest {
+    id?: string;
     level?: SystemLogLevel;
     message?: string;
     source?: string;
@@ -295,8 +340,8 @@ export interface SystemLogPageRequest extends PaginationRequest {
     requestParamterValue?: string;
     requestId?: string;
     requestPath?: string;
-    timeBegin?: string;
-    timeEnd?: string;
+    dateBegin?: string;
+    dateEnd?: string;
 }
 
 export interface SystemLogModel {
