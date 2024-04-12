@@ -17,7 +17,7 @@ import {
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { CheckboxProps } from '@douyinfe/semi-ui/lib/es/checkbox';
@@ -63,7 +63,7 @@ const Index: React.FC = () => {
         permissionGroupLoading,
         setPermissionGroups,
         setPermissionGroupLoading,
-    ] = useTable();
+    ] = useData();
     let refpermissionModules = useRef<Array<PermissionGroupModel>>();
 
     // 获取角色信息

@@ -18,7 +18,7 @@ import {
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
@@ -199,7 +199,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [userTotal, setUserTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [users, loading, setUsers, setLoading] = useTable();
+    const [users, loading, setUsers, setLoading] = useData<Array<UserPageModel>>();
     const [roles, setRoles] = useState<Array<OptionProps>>();
 
     const [editModalTitle, setEditModalTitle] = useState<string>();
@@ -232,10 +232,11 @@ const Index: React.FC = () => {
 
         userPage(request)
             .then((res) => {
-                if (!res.isSuccess || res.data == undefined) {
+                if (!res.isSuccess || !res.data) {
                     Toast.error(res.message);
                     return;
                 }
+
                 setUsers(res.data.items);
                 setUserTotal(res.data.total);
             })

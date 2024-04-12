@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { IconRadio } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Typography, Form } from '@douyinfe/semi-ui';
+import { Button, Table, Space, Typography, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
@@ -113,7 +113,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [logTotal, setLogTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<SystemLogModel>>();
 
     // 获取日志分页
     let getSytemLogPage = async (page: number = 1) => {
@@ -132,13 +132,17 @@ const Index: React.FC = () => {
             request.dateEnd = format(search?.time[1], 'yyyy-MM-dd HH:mm:ss');
         }
 
-        let res = await systemLogPage(request);
-        if (res.isSuccess) {
-            setData(res.data?.items as any[]);
-            setLogTotal(res.data?.total || 0);
-        }
+        systemLogPage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        setLoading(false);
+                setData(res.data.items);
+                setLogTotal(res.data.total || 0);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {

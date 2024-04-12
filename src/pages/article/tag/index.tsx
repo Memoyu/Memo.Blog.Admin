@@ -6,7 +6,7 @@ import { Button, Table, Popconfirm, Space, Modal, Form, Toast, Tag } from '@douy
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 
 import { TagModel } from '@src/common/model';
@@ -77,7 +77,7 @@ const Index: React.FC = () => {
         },
     ];
 
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<TagModel>>();
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
@@ -89,13 +89,16 @@ const Index: React.FC = () => {
         setLoading(true);
 
         let search = searchForm?.getValues();
-        let res = await articleTagList(search?.name);
+        articleTagList(search?.name)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        if (res.isSuccess) {
-            setData(res.data as any[]);
-        }
-
-        setLoading(false);
+                setData(res.data);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {

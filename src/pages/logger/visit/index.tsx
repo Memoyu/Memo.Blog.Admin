@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { IconProgress } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Form, Typography } from '@douyinfe/semi-ui';
+import { Button, Table, Space, Form, Typography, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -121,7 +121,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [logTotal, setLogTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<VisitLogModel>>();
 
     let getVisitLogPage = async (page: number = 1) => {
         setLoading(true);
@@ -141,10 +141,13 @@ const Index: React.FC = () => {
 
         visitLogPage(request)
             .then((res) => {
-                if (res.isSuccess) {
-                    setData(res.data?.items as any[]);
-                    setLogTotal(res.data?.total || 0);
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
                 }
+
+                setData(res.data.items);
+                setLogTotal(res.data.total || 0);
             })
             .finally(() => setLoading(false));
     };

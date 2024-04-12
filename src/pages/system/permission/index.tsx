@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { IconButton } from '@douyinfe/semi-icons-lab';
-import { Button, Table, Space, Form, TagGroup } from '@douyinfe/semi-ui';
+import { Button, Table, Space, Form, TagGroup, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
@@ -63,18 +63,22 @@ const Index: React.FC = () => {
     ];
 
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<PermissionModel>>([]);
 
     let getPermissionList = async () => {
         setLoading(true);
 
         let search = searchForm?.getValues();
-        let res = await permissionList(search?.name, search?.signature);
-        if (res.isSuccess) {
-            setData(res.data as any[]);
-        }
+        permissionList(search?.name, search?.signature)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        setLoading(false);
+                setData(res.data as any[]);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {
@@ -114,8 +118,8 @@ const Index: React.FC = () => {
                             size="small"
                             rowKey={'signature'}
                             expandAllGroupRows={true}
-                            groupBy={(permission: PermissionModel) =>
-                                permission.moduleName + ' - ' + permission.module
+                            groupBy={(permission: PermissionModel | undefined) =>
+                                permission?.moduleName + ' - ' + permission?.module
                             }
                             columns={columns}
                             renderGroupSection={(groupKey) => <strong>{groupKey}</strong>}

@@ -17,7 +17,7 @@ import {
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
@@ -133,7 +133,7 @@ const Index: React.FC = () => {
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<FriendModel>>();
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
@@ -147,12 +147,17 @@ const Index: React.FC = () => {
 
         let search = searchForm?.getValues();
         let request = { ...search, page, size: pageSize } as FriendPageRequest;
-        let res = await friendPage(request);
-        if (res.isSuccess) {
-            setData(res.data?.items as any[]);
-            setCommentTotal(res.data?.total || 0);
-        }
-        setLoading(false);
+        friendPage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
+
+                setData(res.data.items);
+                setCommentTotal(res.data.total || 0);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {

@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import './index.scss';
+import React from 'react';
+
 import Content from '@src/components/page-content';
 import AnlyanisTop from './components/anlyanis-top';
 import AnlyanisSecond from './components/anlyanis-second';
 import AnlyanisThird from './components/anlyanis-third';
+
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
-const Index: React.FC = () => {
-    const [loading, setLoading] = useState(true);
-    setTimeout(() => setLoading(false), 1000);
+import './index.scss';
 
+const Index: React.FC = () => {
     useOnMountUnsafe(() => {});
 
     return (
         <Content>
             <div className="anlyanis-container">
                 <div className="anlyanis-container-top">
-                    <AnlyanisTop loading={loading} />
+                    <AnlyanisTop />
                 </div>
                 <div className="anlyanis-container-second">
-                    <AnlyanisSecond loading={loading} />
+                    <AnlyanisSecond />
                 </div>
                 <div className="anlyanis-container-third">
-                    <AnlyanisThird loading={loading} />
+                    <AnlyanisThird />
                 </div>
             </div>
         </Content>

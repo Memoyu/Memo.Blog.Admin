@@ -5,7 +5,7 @@ import { Button, Table, Popconfirm, Space, Modal, Form, Toast } from '@douyinfe/
 
 import Content from '@src/components/page-content';
 
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
@@ -73,7 +73,7 @@ const Index: React.FC = () => {
         },
     ];
 
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<CategoryModel>>();
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
@@ -87,11 +87,12 @@ const Index: React.FC = () => {
         let search = searchForm?.getValues();
         articleCategoryList(search?.name)
             .then((res) => {
-                if (!res.isSuccess || res.data == undefined) {
+                if (!res.isSuccess || !res.data) {
                     Toast.error(res.message);
                     return;
                 }
-                setData(res.data as any[]);
+
+                setData(res.data);
             })
             .finally(() => setLoading(false));
     };

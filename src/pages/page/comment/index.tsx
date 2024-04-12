@@ -21,7 +21,7 @@ import MdEditor from '@src/components/md-editor';
 import UploadImage from '@src/components/upload-image';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
@@ -175,7 +175,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<CommentPageModel>>();
 
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
@@ -201,13 +201,17 @@ const Index: React.FC = () => {
             request.dateEnd = format(search?.commentTime[1], 'yyyy-MM-dd HH:mm:ss');
         }
 
-        let res = await commentPage(request);
-        if (res.isSuccess) {
-            setData(res.data?.items as any[]);
-            setCommentTotal(res.data?.total || 0);
-        }
+        commentPage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        setLoading(false);
+                setData(res.data.items);
+                setCommentTotal(res.data?.total || 0);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {

@@ -36,6 +36,47 @@ export interface QiniuUploadRequest {
     key: string;
 }
 
+//#region 概览
+
+export interface MetricItemModel {
+    name: string;
+    value: number;
+}
+
+export interface SummaryAnlyanisModel {
+    weekArticles: number;
+    articles: number;
+    moments: number;
+    friends: number;
+}
+
+export interface UniqueVisitorAnlyanisModel {
+    todayUniqueVisitors: number;
+    weekUniqueVisitors: Array<MetricItemModel>;
+    uniqueVisitors: number;
+}
+
+export interface PageVisitorAnlyanisModel {
+    todayPageVisitors: number;
+    weekPageVisitors: Array<MetricItemModel>;
+    pageVisitors: number;
+}
+
+export interface CommentAnlyanisModel {
+    todayComments: number;
+    weekComments: Array<MetricItemModel>;
+    comments: number;
+}
+
+export interface AnlyanisDashboardModel {
+    summary: SummaryAnlyanisModel;
+    uniqueVisitor: UniqueVisitorAnlyanisModel;
+    pageVisitor: PageVisitorAnlyanisModel;
+    comment: CommentAnlyanisModel;
+}
+
+//#endregion
+
 //#region 文章
 
 export interface ArticleCreateReq {
@@ -55,6 +96,13 @@ export interface ArticlePageSummaryModel {
     viewTotal: number;
 }
 
+export interface ArticleRankingModel {
+    articleId: string; // 文章Id
+    title: string;
+    views: number;
+    likes: number;
+}
+
 export interface ArticlePageRequest extends PaginationRequest {
     title?: string;
     categoryId?: string;
@@ -69,10 +117,12 @@ export interface ArticlePageModel {
     description: string;
     tags: Array<TagModel>;
     status: ArticleStatus;
-    createTime: Date;
+    views: number;
+    likes: number;
     isTop: boolean;
     commentable: boolean;
     publicable: boolean;
+    createTime: Date;
 }
 
 export interface ArticleEditRequest {
@@ -98,6 +148,8 @@ export interface ArticleModel {
     content: string;
     banner: string;
     status: ArticleStatus;
+    views: number;
+    likes: number;
     isTop: boolean;
     commentable: boolean;
     publicable: boolean;

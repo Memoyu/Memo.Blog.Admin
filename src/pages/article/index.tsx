@@ -21,7 +21,7 @@ import {
 import Content from '@src/components/page-content';
 import SummaryCard from './components/summary-card';
 
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -185,7 +185,7 @@ const Index: React.FC = () => {
     ];
 
     const navigate = useNavigate();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<ArticlePageModel>>();
     const [articleSummary, setArticleSummary] = useState<ArticlePageSummaryModel>({
         articleTotal: 0,
         commentTotal: 0,
@@ -201,7 +201,6 @@ const Index: React.FC = () => {
 
     // 获取文章列表
     let getArticlePage = async (page: number = 1) => {
-        setLoading(true);
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
@@ -220,14 +219,19 @@ const Index: React.FC = () => {
             setArticleSummary(summaryRes.data as ArticlePageSummaryModel);
         }
 
+        setLoading(true);
         // 分页
-        let pageRes = await articlePage(request);
-        if (pageRes.isSuccess) {
-            setData(pageRes.data?.items as any[]);
-            setArticleTotal(pageRes.data?.total || 0);
-        }
+        articlePage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        setLoading(false);
+                setData(res.data.items);
+                setArticleTotal(res.data?.total || 0);
+            })
+            .finally(() => setLoading(false));
     };
 
     // 获取分类列表

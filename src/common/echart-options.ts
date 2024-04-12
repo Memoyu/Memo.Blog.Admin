@@ -1,52 +1,6 @@
 import echarts from '@src/common/echarts';
 
-export const workbeachOption = {
-    color: ['#67e0e3', '#ffc0cb', '#b6a2de'],
-    legend: {
-        bottom: 0,
-        data: ['个人', '团队', '部门'],
-    },
-    tooltip: {},
-    radar: {
-        shape: 'circle',
-        splitNumber: 8,
-        indicator: [
-            { text: '热度', max: 6500 },
-            { text: '口碑', max: 16000 },
-            { text: '产量', max: 30000 },
-            { text: '贡献', max: 38000 },
-        ],
-    },
-    series: [
-        {
-            type: 'radar',
-            symbolSize: 0,
-            areaStyle: {
-                shadowBlur: 0,
-                shadowColor: 'rgba(0,0,0,.2)',
-                shadowOffsetX: 0,
-                shadowOffsetY: 10,
-                opacity: 1,
-            },
-            data: [
-                {
-                    value: [4200, 3000, 20000, 35000, 50000, 18000],
-                    name: '个人',
-                },
-                {
-                    value: [5000, 14000, 28000, 26000, 42000, 21000],
-                    name: '团队',
-                },
-                {
-                    value: [4000, 15000, 22000, 17000, 36000, 29000],
-                    name: '部门',
-                },
-            ],
-        },
-    ],
-};
-
-export const anlyanisAccessOption = {
+export const dashboardPvAnlyanisOption = {
     color: ['rgba(166,127,221)'],
     tooltip: {
         trigger: 'axis',
@@ -85,28 +39,95 @@ export const anlyanisAccessOption = {
             emphasis: {
                 focus: 'series',
             },
-            data: [2, 4, 6, 8, 4, 9, 5, 10, 7, 4, 6, 8, 12],
+            data: [] as any[],
         },
     ],
 };
 
-export const anlyanisPayOption = {
-    color: ['rgba(101,178,252,1)'],
+export const dashboardUvAnlyanisOption = {
+    color: ['rgba(166,127,221)'],
     tooltip: {
         trigger: 'axis',
     },
-    xAxis: {
-        type: 'category',
-        show: false,
-    },
-    yAxis: {
-        type: 'value',
-        show: false,
-    },
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            show: false,
+        },
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            show: false,
+        },
+    ],
     series: [
         {
-            data: [2, 3, 5, 7, 8, 9, 5, 6, 3, 7, 9, 3, 4, 8, 4, 6],
-            type: 'bar',
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+            areaStyle: {
+                opacity: 0.8,
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {
+                        offset: 0,
+                        color: 'rgba(166,127,221)',
+                    },
+                    {
+                        offset: 1,
+                        color: 'rgba(226, 209, 224)',
+                    },
+                ]),
+            },
+            emphasis: {
+                focus: 'series',
+            },
+            data: [] as any[],
+        },
+    ],
+};
+
+export const dashboardCommentAnlyanisOption = {
+    color: ['rgba(166,127,221)'],
+    tooltip: {
+        trigger: 'axis',
+    },
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            show: false,
+        },
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            show: false,
+        },
+    ],
+    series: [
+        {
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+            areaStyle: {
+                opacity: 0.8,
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {
+                        offset: 0,
+                        color: 'rgba(166,127,221)',
+                    },
+                    {
+                        offset: 1,
+                        color: 'rgba(226, 209, 224)',
+                    },
+                ]),
+            },
+            emphasis: {
+                focus: 'series',
+            },
+            data: [] as any[],
         },
     ],
 };
@@ -150,9 +171,12 @@ export const anlyanisSalesOption = {
     ],
 };
 
-export const anlyanisCategoryOption = {
+export const dashboardCategoryAnlyanisOption = {
     title: {
         text: '文章分类',
+        textStyle: {
+            // color: 'var(--semi-color-text-0)',
+        },
     },
     tooltip: {
         trigger: 'item',
@@ -163,7 +187,7 @@ export const anlyanisCategoryOption = {
     },
     series: [
         {
-            name: 'Access From',
+            name: '关联文章数',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
@@ -172,32 +196,15 @@ export const anlyanisCategoryOption = {
                 borderColor: '#fff',
                 borderWidth: 2,
             },
-            label: {
-                show: false,
-                position: 'center',
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 40,
-                    fontWeight: 'bold',
-                },
-            },
             labelLine: {
                 show: false,
             },
-            data: [
-                { value: 1048, name: 'Search Engine' },
-                { value: 735, name: 'Direct' },
-                { value: 580, name: 'Email' },
-                { value: 484, name: 'Union Ads' },
-                { value: 300, name: 'Video Ads' },
-            ],
+            data: [] as Array<any>,
         },
     ],
 };
 
-export const anlyanisTagOption = {
+export const dashboardTagAnlyanisOption = {
     title: {
         text: '文章标签',
         textStyle: {
@@ -213,7 +220,7 @@ export const anlyanisTagOption = {
     },
     series: [
         {
-            name: 'Access From',
+            name: '关联文章数',
             type: 'pie',
             radius: ['40%', '70%'],
             avoidLabelOverlap: false,
@@ -222,27 +229,10 @@ export const anlyanisTagOption = {
                 borderColor: '#fff',
                 borderWidth: 2,
             },
-            label: {
-                show: false,
-                position: 'center',
-            },
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 40,
-                    fontWeight: 'bold',
-                },
-            },
             labelLine: {
                 show: false,
             },
-            data: [
-                { value: 1048, name: 'Search Engine' },
-                { value: 735, name: 'Direct' },
-                { value: 580, name: 'Email' },
-                { value: 484, name: 'Union Ads' },
-                { value: 300, name: 'Video Ads' },
-            ],
+            data: [] as Array<any>,
         },
     ],
 };

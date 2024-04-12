@@ -66,6 +66,7 @@ export class Request {
                     Toast.error(message);
                 }
 
+                Toast.error('服务暂不可用，请稍后再试！');
                 return Promise.reject(error);
             }
         );

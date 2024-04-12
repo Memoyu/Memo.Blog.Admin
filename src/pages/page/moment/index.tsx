@@ -19,7 +19,7 @@ import Content from '@src/components/page-content';
 import MdEditor from '@src/components/md-editor';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
@@ -141,7 +141,7 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [momentTotal, setMomentTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<MomentModel>>();
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
@@ -167,13 +167,17 @@ const Index: React.FC = () => {
             request.dateEnd = format(search?.momentTime[1], 'yyyy-MM-dd 23:59');
         }
 
-        let res = await momentPage(request);
-        if (res.isSuccess) {
-            setData(res.data?.items as any[]);
-            setMomentTotal(res.data?.total || 0);
-        }
+        momentPage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
 
-        setLoading(false);
+                setData(res.data?.items as any[]);
+                setMomentTotal(res.data?.total || 0);
+            })
+            .finally(() => setLoading(false));
     };
 
     // bool 转 Badge元素

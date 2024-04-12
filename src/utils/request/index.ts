@@ -12,6 +12,7 @@ import {
     RoleModel,
     PermissionModel,
     PaginationResult,
+    AnlyanisDashboardModel,
     ArticlePageModel,
     ArticlePageRequest,
     ArticlePageSummaryModel,
@@ -37,6 +38,8 @@ import {
     QiniuUploadModel,
     UploadResultModel,
     VisitLogPageRequest,
+    ArticleRankingModel,
+    MetricItemModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -84,6 +87,14 @@ export const qiniuUpload = (data: QiniuUploadRequest) => {
 
 //#endregion
 
+//#region 概览
+
+export const anlyanisDashboard = () => {
+    return Request.get<AnlyanisDashboardModel>('anlyanis/dashboard');
+};
+
+//#endregion
+
 //#region 文章管理
 
 export const articlePage = (request: ArticlePageRequest) => {
@@ -96,6 +107,10 @@ export const articlePageSummary = (request: ArticlePageRequest) => {
 
 export const articleGet = (id: string) => {
     return Request.get<ArticleModel>('article/get', { params: { articleId: id } });
+};
+
+export const articleRanking = (quota: number) => {
+    return Request.get<Array<ArticleRankingModel>>('article/ranking', { params: { quota } });
 };
 
 export const articleCreate = (article: ArticleEditRequest) => {
@@ -122,6 +137,10 @@ export const articleCategoryGet = (id: string) => {
     return Request.get<CategoryModel>('category/get', { params: { categoryId: id } });
 };
 
+export const articleCategoryRelationSummaryGet = () => {
+    return Request.get<Array<MetricItemModel>>('category/relation/summary');
+};
+
 export const articleCategoryCreate = (name: string) => {
     return Request.post<string>('category/create', { name });
 };
@@ -144,6 +163,10 @@ export const articleTagList = (name?: string) => {
 
 export const articleTagGet = (id: string) => {
     return Request.get<TagModel>('tag/get', { params: { tagId: id } });
+};
+
+export const articleTagRelationSummaryGet = () => {
+    return Request.get<Array<MetricItemModel>>('tag/relation/summary');
 };
 
 export const articleTagCreate = (name: string, color: string) => {

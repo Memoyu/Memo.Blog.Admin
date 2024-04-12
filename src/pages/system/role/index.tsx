@@ -7,7 +7,7 @@ import { Button, Table, Typography, Space, Popconfirm, Form, Toast } from '@douy
 import Content from '@src/components/page-content';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useTable } from '@src/hooks/useTable';
+import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
@@ -83,19 +83,22 @@ const Index: React.FC = () => {
 
     const navigate = useNavigate();
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [data, loading, setData, setLoading] = useTable();
+    const [data, loading, setData, setLoading] = useData<Array<RoleListModel>>();
 
     // 获取角色列表
     let getRoleList = async () => {
         setLoading(true);
 
         let search = searchForm?.getValues();
-        let res = await roleList(search?.name);
-        if (res.isSuccess) {
-            setData(res.data as any[]);
-        }
-
-        setLoading(false);
+        roleList(search?.name)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
+                setData(res.data as any[]);
+            })
+            .finally(() => setLoading(false));
     };
 
     useOnMountUnsafe(() => {

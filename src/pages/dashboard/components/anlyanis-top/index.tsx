@@ -1,25 +1,76 @@
-import { FC, useState, useEffect } from 'react';
-import { IconArrowDown, IconArrowUp, IconInfoCircle } from '@douyinfe/semi-icons';
-import { Row, Col, Card, Popover, Progress, Descriptions, Typography } from '@douyinfe/semi-ui';
+import { FC, useState } from 'react';
+import { IconInfoCircle } from '@douyinfe/semi-icons';
+import { Row, Col, Card, Popover, Toast, Descriptions, Typography } from '@douyinfe/semi-ui';
+import { cloneDeep } from 'lodash';
 import echarts from '@src/common/echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
-import { anlyanisAccessOption, anlyanisPayOption } from '@src/common/echart-options';
+import {
+    dashboardPvAnlyanisOption,
+    dashboardUvAnlyanisOption,
+    dashboardCommentAnlyanisOption,
+} from '@src/common/echart-options';
+
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useData } from '@src/hooks/useData';
+
+import { AnlyanisDashboardModel } from '@src/common/model';
+
+import { anlyanisDashboard } from '@src/utils/request';
 
 import './index.scss';
 
 const { Item } = Descriptions;
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
-interface Iprops {
-    loading?: boolean;
-}
+const Index: FC = () => {
+    const [data, loading, setData, setLoading] = useData<AnlyanisDashboardModel>();
 
-const Index: FC<Iprops> = ({ loading }) => {
-    const [load, setLoad] = useState<boolean>();
+    const [pvAnlyanisOption, setPvAnlyanisOption] = useState(dashboardPvAnlyanisOption);
+    const [uvAnlyanisOption, setUvAnlyanisOption] = useState(dashboardUvAnlyanisOption);
+    const [commentAnlyanisOption, setCommentAnlyanisOption] = useState(
+        dashboardCommentAnlyanisOption
+    );
 
-    useEffect(() => {
-        setLoad(loading);
-    }, [loading]);
+    // 获取概览汇总数据
+    let getAnlyanisDashboard = () => {
+        setLoading(true);
+
+        anlyanisDashboard()
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
+
+                // console.log('res', res.data);
+                setData(res.data);
+                let pvOption = cloneDeep(pvAnlyanisOption);
+                pvOption.series[0].data = res.data.pageVisitor.weekPageVisitors.map((u) => [
+                    u.name,
+                    u.value,
+                ]);
+                setPvAnlyanisOption(pvOption);
+
+                let uvOption = cloneDeep(uvAnlyanisOption);
+                uvOption.series[0].data = res.data.uniqueVisitor.weekUniqueVisitors.map((u) => [
+                    u.name,
+                    u.value,
+                ]);
+                setUvAnlyanisOption(uvOption);
+
+                let commentOption = cloneDeep(commentAnlyanisOption);
+                commentOption.series[0].data = res.data.comment.weekComments.map((u) => [
+                    u.name,
+                    u.value,
+                ]);
+                setCommentAnlyanisOption(commentOption);
+            })
+            .finally(() => setLoading(false));
+    };
+
+    useOnMountUnsafe(() => {
+        getAnlyanisDashboard();
+    });
 
     return (
         <div className="anlyanis-top-card-list">
@@ -31,31 +82,32 @@ const Index: FC<Iprops> = ({ loading }) => {
                         style={{ height: 230 }}
                         footer={
                             <span>
-                                文章总数 <span style={{ paddingLeft: 10 }}>1478</span>
+                                文章总数{' '}
+                                <span style={{ paddingLeft: 10 }}>{data?.summary.articles}</span>
                             </span>
                         }
                     >
                         <div className="flex-between">
                             <span>本周文章</span>
-                            <Popover position="top" showArrow content={<article>指标说明</article>}>
+                            <Popover position="top" showArrow content={<article>汇总数据</article>}>
                                 <IconInfoCircle style={{ color: 'var(--semi-color-primary)' }} />
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">1,884,450</Item>
+                            <Item itemKey="">{data?.summary.weekArticles}</Item>
                         </Descriptions>
 
                         <div style={{ marginTop: 15, height: 55 }}>
                             <Text>
                                 动态
                                 <Text strong style={{ paddingLeft: 10 }}>
-                                    12
+                                    {data?.summary.moments}
                                 </Text>
                             </Text>
                             <Text style={{ paddingLeft: 30 }}>
                                 友链
                                 <Text strong style={{ paddingLeft: 10 }}>
-                                    11
+                                    {data?.summary.friends}
                                 </Text>
                             </Text>
                         </div>
@@ -65,25 +117,32 @@ const Index: FC<Iprops> = ({ loading }) => {
                     <Card
                         style={{ height: 230 }}
                         footerLine={true}
-                        loading={load}
+                        loading={loading}
                         footer={
                             <span>
-                                浏览总数 <span style={{ paddingLeft: 10 }}>5,396</span>
+                                浏览总数{' '}
+                                <span style={{ paddingLeft: 10 }}>
+                                    {data?.pageVisitor.pageVisitors}
+                                </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
                             <span>今日PV</span>{' '}
-                            <Popover position="top" showArrow content={<article>指标说明</article>}>
+                            <Popover
+                                position="top"
+                                showArrow
+                                content={<article>PV数据汇总</article>}
+                            >
                                 <IconInfoCircle style={{ color: 'var(--semi-color-primary)' }} />
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">9,384</Item>
+                            <Item itemKey="">{data?.pageVisitor.todayPageVisitors}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
-                            option={anlyanisAccessOption}
+                            option={pvAnlyanisOption}
                             notMerge={true}
                             lazyUpdate={true}
                             style={{ height: 70 }}
@@ -94,25 +153,32 @@ const Index: FC<Iprops> = ({ loading }) => {
                     <Card
                         style={{ height: 230 }}
                         footerLine={true}
-                        loading={load}
+                        loading={loading}
                         footer={
                             <span>
-                                访问总数 <span style={{ paddingLeft: 10 }}>5,396</span>
+                                访问总数{' '}
+                                <span style={{ paddingLeft: 10 }}>
+                                    {data?.uniqueVisitor.uniqueVisitors}
+                                </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
                             <span> 今日UV</span>{' '}
-                            <Popover position="top" showArrow content={<article>指标说明</article>}>
+                            <Popover
+                                position="top"
+                                showArrow
+                                content={<article>UV数据汇总</article>}
+                            >
                                 <IconInfoCircle style={{ color: 'var(--semi-color-primary)' }} />
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">9,384</Item>
+                            <Item itemKey="">{data?.uniqueVisitor.todayUniqueVisitors}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
-                            option={anlyanisAccessOption}
+                            option={uvAnlyanisOption}
                             notMerge={true}
                             lazyUpdate={true}
                             style={{ height: 70 }}
@@ -123,25 +189,30 @@ const Index: FC<Iprops> = ({ loading }) => {
                     <Card
                         style={{ height: 230 }}
                         footerLine={true}
-                        loading={load}
+                        loading={loading}
                         footer={
                             <span>
-                                评论总数<span style={{ paddingLeft: 10 }}>6434</span>
+                                评论总数
+                                <span style={{ paddingLeft: 10 }}>{data?.comment.comments}</span>
                             </span>
                         }
                     >
                         <div className="flex-between">
                             <span>今日评论</span>
-                            <Popover position="top" showArrow content={<article>指标说明</article>}>
+                            <Popover
+                                position="top"
+                                showArrow
+                                content={<article>评论数据汇总</article>}
+                            >
                                 <IconInfoCircle style={{ color: 'var(--semi-color-primary)' }} />
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">9,384</Item>
+                            <Item itemKey="">{data?.comment.todayComments}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
-                            option={anlyanisPayOption}
+                            option={commentAnlyanisOption}
                             notMerge={true}
                             lazyUpdate={true}
                             style={{ height: 70 }}
