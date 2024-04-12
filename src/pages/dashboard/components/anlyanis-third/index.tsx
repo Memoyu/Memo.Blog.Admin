@@ -1,15 +1,18 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { cloneDeep } from 'lodash';
-import { Row, Col, Card, Descriptions, Typography } from '@douyinfe/semi-ui';
+import { Row, Col, Card } from '@douyinfe/semi-ui';
 import echarts from '@src/common/echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import { uniqueVisitorSactterMapOption, ChinaCityGeoCoordMap } from '@src/common/echart-options';
 
-import './index.scss';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
+
 import { MetricItemModel } from '@src/common/model';
+
 import { uniqueVisitorMapList } from '@src/utils/request';
+
+import './index.scss';
 
 const Index: FC = () => {
     const [_data, loading, _setData, setLoading] = useData<Array<MetricItemModel>>();
