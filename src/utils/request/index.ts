@@ -93,6 +93,10 @@ export const anlyanisDashboard = () => {
     return Request.get<AnlyanisDashboardModel>('anlyanis/dashboard');
 };
 
+export const uniqueVisitorMapList = () => {
+    return Request.get<Array<MetricItemModel>>('anlyanis/uv/map');
+};
+
 //#endregion
 
 //#region 文章管理

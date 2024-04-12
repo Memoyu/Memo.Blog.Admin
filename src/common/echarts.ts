@@ -1,5 +1,5 @@
 import * as echarts from 'echarts/core';
-import chiangeo from '@assets/json/chian-geo.json';
+import chiangeo from '@assets/json/china-geo.json';
 import {
     LineChart,
     BarChart,

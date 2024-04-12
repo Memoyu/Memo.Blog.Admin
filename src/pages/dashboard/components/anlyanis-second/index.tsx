@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Row, Col, Card, List, Avatar, Descriptions, Typography } from '@douyinfe/semi-ui';
+import { IconComment, IconLikeHeart } from '@douyinfe/semi-icons';
 import { cloneDeep } from 'lodash';
 import echarts from '@src/common/echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
@@ -13,15 +14,15 @@ import { useData } from '@src/hooks/useData';
 
 import { ArticleRankingModel, CategoryModel, TagModel } from '@src/common/model';
 
-import './index.scss';
 import {
     articleCategoryRelationSummaryGet,
     articleRanking,
     articleTagRelationSummaryGet,
 } from '@src/utils/request';
 
-const { Item } = Descriptions;
-const { Title } = Typography;
+import './index.scss';
+
+const { Title, Text } = Typography;
 
 const Index: FC = () => {
     const [rankingData, rankingLoading, setRankingData, setRankingLoading] =
@@ -38,7 +39,7 @@ const Index: FC = () => {
     // 获取文章排名
     let getArticleRankingList = () => {
         setRankingLoading(true);
-        articleRanking(15)
+        articleRanking(10)
             .then((res) => {
                 if (!res.isSuccess || !res.data) return;
                 setRankingData(res.data);
@@ -85,7 +86,7 @@ const Index: FC = () => {
     return (
         <div className="anlyanis-second-card-list">
             <Card>
-                <Row gutter={20}>
+                <Row gutter={8}>
                     <Col span={8}>
                         <Card loading={rankingLoading}>
                             <List
@@ -97,23 +98,49 @@ const Index: FC = () => {
                                 dataSource={rankingData}
                                 renderItem={(item, index) => (
                                     <List.Item>
-                                        <div className="flex-between">
-                                            <div>
-                                                <Avatar
-                                                    size="extra-extra-small"
+                                        <Row>
+                                            <Col span={18}>
+                                                <Text ellipsis={{ showTooltip: true }}>
+                                                    <Avatar
+                                                        size="extra-extra-small"
+                                                        style={{
+                                                            marginRight: 10,
+                                                            backgroundColor:
+                                                                index <= 2 ? '#000' : '',
+                                                        }}
+                                                    >
+                                                        {index + 1}
+                                                    </Avatar>
+                                                    {item.title}
+                                                </Text>
+                                            </Col>
+                                            <Col span={3}>
+                                                <div
                                                     style={{
-                                                        backgroundColor: index <= 2 ? '#000' : '',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        width: '100%',
                                                     }}
                                                 >
-                                                    {index + 1}
-                                                </Avatar>
-                                                <span style={{ paddingLeft: 10 }}>
-                                                    {item.title}
-                                                </span>
-                                            </div>
-                                            <div>{item.views}</div>
-                                            <div>{item.likes}</div>
-                                        </div>
+                                                    <IconComment
+                                                        size="small"
+                                                        style={{ marginRight: 3 }}
+                                                    />
+                                                    {item.views}
+                                                </div>
+                                            </Col>
+                                            <Col span={3}>
+                                                {' '}
+                                                <div style={{ textAlign: 'center', width: '100%' }}>
+                                                    {' '}
+                                                    <IconLikeHeart
+                                                        size="small"
+                                                        style={{ marginRight: 3 }}
+                                                    />
+                                                    {item.likes}
+                                                </div>
+                                            </Col>
+                                        </Row>
                                     </List.Item>
                                 )}
                             />
@@ -126,7 +153,7 @@ const Index: FC = () => {
                                 option={categoryAnlyanisOption}
                                 notMerge={true}
                                 lazyUpdate={true}
-                                style={{ minHeight: 400 }}
+                                style={{ minHeight: 492 }}
                             />
                         </Card>
                     </Col>
@@ -137,7 +164,7 @@ const Index: FC = () => {
                                 option={tagAnlyanisOption}
                                 notMerge={true}
                                 lazyUpdate={true}
-                                style={{ minHeight: 400 }}
+                                style={{ minHeight: 492 }}
                             />
                         </Card>
                     </Col>
