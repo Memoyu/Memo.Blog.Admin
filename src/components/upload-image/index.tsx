@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, useRef } from 'react';
-import { Image } from '@douyinfe/semi-ui';
+import { Image, Toast } from '@douyinfe/semi-ui';
 import { Upload } from '@douyinfe/semi-ui';
 import { IconPlus } from '@douyinfe/semi-icons';
 import { qiniuTokenGet } from '@src/utils/request';
@@ -46,7 +46,8 @@ const Index: FC<Iprops> = ({
         setFileFullPath(fullPath);
         let res = await qiniuTokenGet(fullPath);
         if (!res.isSuccess || !res.data) {
-            return;
+            Toast.error(res.message);
+            return undefined;
         }
         // console.log('qiniu', res);
         return res.data;
@@ -73,12 +74,9 @@ const Index: FC<Iprops> = ({
         } as BeforeUploadObjectResult;
 
         let tokenRes = await getQiniuUploadToken(getFileName(file));
-        if (!tokenRes) return result;
-        let token = tokenRes.token;
-        qiniuTokenRef.current = token;
-        setHost(tokenRes.host);
 
-        if (!token || token.length <= 0) {
+        if (!tokenRes || tokenRes?.token?.length <= 0) {
+            // console.log('uploadFail');
             result = {
                 autoRemove: false,
                 status: 'uploadFail',
@@ -86,7 +84,12 @@ const Index: FC<Iprops> = ({
                 validateMessage: '无法上传附件',
                 shouldUpload: false,
             };
+        } else {
+            let token = tokenRes.token;
+            qiniuTokenRef.current = token;
+            setHost(tokenRes.host);
         }
+
         // console.log('beforeUpload', result, upProps);
         return result;
     };

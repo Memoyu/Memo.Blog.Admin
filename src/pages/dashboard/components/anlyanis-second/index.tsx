@@ -95,6 +95,7 @@ const Index: FC = () => {
                                         <Title heading={4}>文章排行</Title>
                                     </div>
                                 }
+                                style={{ minHeight: 490 }}
                                 dataSource={rankingData}
                                 renderItem={(item, index) => (
                                     <List.Item>
@@ -153,7 +154,7 @@ const Index: FC = () => {
                                 option={categoryAnlyanisOption}
                                 notMerge={true}
                                 lazyUpdate={true}
-                                style={{ minHeight: 492 }}
+                                style={{ minHeight: 490 }}
                             />
                         </Card>
                     </Col>
@@ -164,7 +165,7 @@ const Index: FC = () => {
                                 option={tagAnlyanisOption}
                                 notMerge={true}
                                 lazyUpdate={true}
-                                style={{ minHeight: 492 }}
+                                style={{ minHeight: 490 }}
                             />
                         </Card>
                     </Col>

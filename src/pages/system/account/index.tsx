@@ -10,6 +10,8 @@ import {
     Typography,
     Modal,
     Form,
+    Row,
+    Col,
     Popconfirm,
     TagGroup,
     Toast,
@@ -39,6 +41,7 @@ import {
     userDelete,
     userUpdate,
     roleList,
+    userChangePassword,
 } from '@src/utils/request';
 
 import './index.scss';
@@ -141,7 +144,7 @@ const Index: React.FC = () => {
         {
             title: '操作',
             align: 'center',
-            width: 150,
+            width: 250,
             fixed: 'right',
             render: (_text, user: UserPageModel) => {
                 return (
@@ -156,6 +159,14 @@ const Index: React.FC = () => {
                             }}
                         >
                             编辑
+                        </Button>
+                        <Button
+                            theme="borderless"
+                            type="warning"
+                            size="small"
+                            onClick={() => handleUserChangePassword(user.userId)}
+                        >
+                            修改密码
                         </Button>
                         <Popconfirm
                             position="left"
@@ -195,6 +206,8 @@ const Index: React.FC = () => {
         },
     ];
 
+    const initEditModalHeight = 300;
+
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
     const [userTotal, setUserTotal] = useState(1);
@@ -203,9 +216,17 @@ const Index: React.FC = () => {
     const [roles, setRoles] = useState<Array<OptionProps>>();
 
     const [editModalTitle, setEditModalTitle] = useState<string>();
-    const [editModalHeight, setEditModalHeight] = useState<number>(430);
-    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
+    const [editModalHeight, setEditModalHeight] = useState<number>(initEditModalHeight);
+    const [_key, _setKey, editVisible, setEditVisible, _setEditModal] = useModal();
+    const [
+        _changePasswordKey,
+        _setChangePasswordKey,
+        changePasswordVisible,
+        setChangePasswordVisible,
+        _setChangePasswordModal,
+    ] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
+    const [changePasswordForm, setChangePasswordForm] = useState<FormApi>();
     const [editUser, setEditUser] = useState<UserEditRequest>();
     const [userIdentityType, setUserIdentityType] = useState<UserIdentityType>(
         UserIdentityType.Password
@@ -293,7 +314,27 @@ const Index: React.FC = () => {
         });
     };
 
-    // 触发编辑
+    // 变更密码
+    const handleChangePasswordModalOk = async () => {
+        changePasswordForm?.validate().then(async (form) => {
+            let pw = form.password;
+            let cpw = form.confirmPassword;
+            if (pw != cpw) {
+                Toast.error('输入两次密码不一致，请确认后再提交');
+                return;
+            }
+            let userId = editUser?.userId;
+            if (userId) {
+                let res = await userChangePassword(userId, pw);
+                if (res.isSuccess) {
+                    Toast.success('变更用户密码成功');
+                    setChangePasswordVisible(false);
+                }
+            }
+        });
+    };
+
+    // 触发编辑用户信息
     const handleEditUser = async (userId?: string) => {
         getRoleList();
 
@@ -305,11 +346,11 @@ const Index: React.FC = () => {
             identifier: '',
             credential: '',
         };
-        setEditModalHeight(430);
+        setEditModalHeight(initEditModalHeight);
 
         if (userId) {
             let res = await userGet(userId);
-            if (!res.isSuccess || res.data == undefined) {
+            if (!res.isSuccess || !res.data) {
                 Toast.error(res.message);
                 return;
             }
@@ -329,13 +370,31 @@ const Index: React.FC = () => {
                 identifier: res.data.userIdentity.identifier,
                 credential: res.data.userIdentity.credential,
             } as UserEditRequest;
-            setEditModalHeight(340);
+            setEditModalHeight(200);
         }
 
         // console.log(user);
         setUserIdentityType(user.userIdentityType);
         setEditUser(user);
         setEditVisible(true);
+    };
+
+    // 触发变更用户密码
+    const handleUserChangePassword = async (userId?: string) => {
+        let res = await userGet(userId);
+        if (!res.isSuccess || !res.data) {
+            Toast.error(res.message);
+            return;
+        }
+
+        var user = res.data;
+        if (user.userIdentity.identityType != UserIdentityType.Password) {
+            Toast.warning('用户并非使用密码认证，无法变更密码');
+            return;
+        }
+
+        setEditUser({ userId: user.userId } as UserEditRequest);
+        setChangePasswordVisible(true);
     };
 
     // 触发删除
@@ -350,36 +409,43 @@ const Index: React.FC = () => {
         getUserPage();
     };
 
+    // 根据选择用户认证方式渲染内容
     const getIdentityRender = () => {
         return editUser?.userId == undefined ? (
-            <>
-                <Form.Select
-                    field="userIdentityType"
-                    label={{ text: '认证方式' }}
-                    optionList={userIdentityOpts}
-                    style={{ width: 270 }}
-                    onChange={(val) => setUserIdentityType(val as UserIdentityType)}
-                    rules={[{ required: true, message: '用户认证类型必填' }]}
-                ></Form.Select>
-                {userIdentityType == UserIdentityType.Password ? (
-                    <Form.Input
-                        field="credential"
-                        mode="password"
-                        label={{ text: <span>密码</span>, required: true }}
-                        required
-                        validate={validatePassword}
+            <Row gutter={20}>
+                <Col span={12}>
+                    {' '}
+                    <Form.Select
+                        field="userIdentityType"
+                        label={{ text: '认证方式' }}
+                        optionList={userIdentityOpts}
+                        style={{ width: 270 }}
+                        onChange={(val) => setUserIdentityType(val as UserIdentityType)}
+                        rules={[{ required: true, message: '用户认证类型必填' }]}
                     />
-                ) : (
-                    <Form.Input
-                        field="credential"
-                        label="凭证"
-                        rules={[
-                            { required: true, message: '凭证必填' },
-                            { min: 5, message: '凭证长度不能小于5个字符' },
-                        ]}
-                    />
-                )}
-            </>
+                </Col>
+                <Col span={12}>
+                    {' '}
+                    {userIdentityType == UserIdentityType.Password ? (
+                        <Form.Input
+                            field="credential"
+                            mode="password"
+                            label={{ text: <span>密码</span>, required: true }}
+                            required
+                            validate={validatePassword}
+                        />
+                    ) : (
+                        <Form.Input
+                            field="credential"
+                            label="凭证"
+                            rules={[
+                                { required: true, message: '凭证必填' },
+                                { min: 5, message: '凭证长度不能小于5个字符' },
+                            ]}
+                        />
+                    )}
+                </Col>
+            </Row>
         ) : (
             <></>
         );
@@ -405,36 +471,11 @@ const Index: React.FC = () => {
                             layout="horizontal"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
-                            <Form.Input
-                                field="userId"
-                                showClear
-                                label="用户ID"
-                                style={{ width: 190 }}
-                            />
-                            <Form.Input
-                                field="username"
-                                showClear
-                                label="用户名"
-                                style={{ width: 190 }}
-                            />
-                            <Form.Input
-                                field="nickname"
-                                showClear
-                                label="昵称"
-                                style={{ width: 190 }}
-                            />
-                            <Form.Input
-                                field="email"
-                                showClear
-                                label="邮箱"
-                                style={{ width: 190 }}
-                            />
-                            <Form.Input
-                                field="phoneNumber"
-                                showClear
-                                label="电话"
-                                style={{ width: 190 }}
-                            />
+                            <Form.Input field="userId" showClear label="用户ID" />
+                            <Form.Input field="username" showClear label="用户名" />
+                            <Form.Input field="nickname" showClear label="昵称" />
+                            <Form.Input field="email" showClear label="邮箱" />
+                            <Form.Input field="phoneNumber" showClear label="电话" />
                             <Form.Select
                                 multiple
                                 field="roles"
@@ -442,7 +483,7 @@ const Index: React.FC = () => {
                                 style={{ width: 290 }}
                                 optionList={roles}
                                 showClear
-                            ></Form.Select>
+                            />
                             <Space
                                 spacing="loose"
                                 style={{ alignItems: 'flex-end', marginTop: 10 }}
@@ -484,6 +525,8 @@ const Index: React.FC = () => {
                         />
                     </div>
                 </div>
+
+                {/* 编辑用户信息 */}
                 <Modal
                     title={editModalTitle}
                     visible={editVisible}
@@ -491,53 +534,102 @@ const Index: React.FC = () => {
                     onCancel={() => setEditVisible(false)}
                     centered
                     bodyStyle={{ height: editModalHeight }}
-                    style={{ width: 450 }}
+                    style={{ width: 650 }}
                     okText={'保存'}
                 >
                     <Form
                         labelPosition="left"
                         labelAlign="left"
-                        labelWidth={90}
+                        // labelWidth={70}
                         initValues={editUser}
                         getFormApi={(formData) => setEditForm(formData)}
                     >
-                        <Form.Input
-                            field="username"
-                            label="用户名"
-                            rules={[
-                                { required: true, message: '用户名必填' },
-                                { max: 20, message: '用户名长度不能超20个字符' },
-                            ]}
-                        />
-                        <Form.Input
-                            field="nickname"
-                            label="昵称"
-                            rules={[
-                                { required: true, message: '用户昵称必填' },
-                                { max: 20, message: '用户昵称长度不能超20个字符' },
-                            ]}
-                        />
-                        <Form.Input field="email" label="邮箱" />
-                        <Form.Input field="phoneNumber" label="电话" />
+                        <Row gutter={20}>
+                            <Col span={12}>
+                                <Form.Input
+                                    field="username"
+                                    label="用户名"
+                                    rules={[
+                                        { required: true, message: '用户名必填' },
+                                        { max: 20, message: '用户名长度不能超20个字符' },
+                                    ]}
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <Form.Input
+                                    field="nickname"
+                                    label="昵称"
+                                    rules={[
+                                        { required: true, message: '用户昵称必填' },
+                                        { max: 20, message: '用户昵称长度不能超20个字符' },
+                                    ]}
+                                />
+                            </Col>
+                        </Row>
+
+                        <Row gutter={20}>
+                            <Col span={12}>
+                                <Form.Input field="email" label="邮箱" />
+                            </Col>
+                            <Col span={12}>
+                                <Form.Input field="phoneNumber" label="电话" />
+                            </Col>
+                        </Row>
 
                         {getIdentityRender()}
 
-                        <Form.Select
-                            multiple
-                            field="roles"
-                            label={{ text: '角色' }}
-                            optionList={roles}
-                            showClear
-                            style={{ width: 270 }}
-                            rules={[
-                                { required: true, message: '用户角色必填' },
-                                {
-                                    validator: (rule, value) =>
-                                        value != undefined && value.length > 0,
-                                    message: '用户角色至少选一个',
-                                },
-                            ]}
-                        ></Form.Select>
+                        <Row gutter={20}>
+                            <Col span={12}>
+                                <Form.Select
+                                    multiple
+                                    field="roles"
+                                    label={{ text: '角色' }}
+                                    optionList={roles}
+                                    showClear
+                                    style={{ width: 270 }}
+                                    rules={[
+                                        { required: true, message: '用户角色必填' },
+                                        {
+                                            validator: (rule, value) =>
+                                                value != undefined && value.length > 0,
+                                            message: '用户角色至少选一个',
+                                        },
+                                    ]}
+                                />
+                            </Col>
+                        </Row>
+                    </Form>
+                </Modal>
+
+                {/* 变更密码 */}
+                <Modal
+                    title={'修改密码'}
+                    visible={changePasswordVisible}
+                    onOk={handleChangePasswordModalOk}
+                    onCancel={() => setChangePasswordVisible(false)}
+                    centered
+                    okText={'变更'}
+                >
+                    <Form
+                        labelPosition="left"
+                        labelAlign="left"
+                        getFormApi={(formData) => setChangePasswordForm(formData)}
+                    >
+                        <Form.Input
+                            field="password"
+                            mode="password"
+                            label={{ text: <span>密码</span>, required: true }}
+                            required
+                            validate={validatePassword}
+                        />
+
+                        <Form.Input
+                            field="confirmPassword"
+                            mode="password"
+                            label={{ text: <span>确认密码</span>, required: true }}
+                            required
+                            validate={validatePassword}
+                        />
                     </Form>
                 </Modal>
             </div>

@@ -52,7 +52,7 @@ export const login = (username: string, password: string) => {
 //#region 七牛云文件存储
 
 export const qiniuTokenGet = (path: string) => {
-    return Request.get<QiniuUploadTokenModel>('file-storage/qiniu/generate', { params: { path } });
+    return Request.get<QiniuUploadTokenModel>('filestorage/qiniu/generate', { params: { path } });
 };
 
 export const qiniuUpload = (data: QiniuUploadRequest) => {
@@ -301,6 +301,10 @@ export const userCreate = (user: UserEditRequest) => {
 
 export const userUpdate = (user: UserEditRequest) => {
     return Request.put<string>('user/update', user);
+};
+
+export const userChangePassword = (userId: string, password: string) => {
+    return Request.put('user/change-password', { userId, password });
 };
 
 export const userDelete = (id: string) => {
