@@ -19,6 +19,7 @@ const Index = () => {
     const dispatch = useDispatch();
 
     const nickname = useTypedSelector((state) => state.userInfo.nickname);
+    const avatar = useTypedSelector((state) => state.userInfo.avatar);
     const [isLight, setIsLight] = useState<boolean>(false);
     const [mode, setMode] = useState<string>(getLocalStorage(THEME_MODE) || 'light');
 
@@ -65,9 +66,7 @@ const Index = () => {
                     </Dropdown.Menu>
                 }
             >
-                <Avatar className="avatar" color="orange" size="small">
-                    semi
-                </Avatar>
+                <Avatar className="avatar" color="orange" size="small" src={avatar} />
             </Dropdown>
 
             <Tooltip content={`${isLight ? '暗色' : '亮色'}`}>

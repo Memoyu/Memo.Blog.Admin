@@ -270,13 +270,13 @@ export const momentDelete = (id: string) => {
 //#region 日志
 
 export const visitLogPage = (request: VisitLogPageRequest) => {
-    return Request.get<PaginationResult<VisitLogModel>>('looger/visit/page', {
+    return Request.get<PaginationResult<VisitLogModel>>('logger/visit/page', {
         params: request,
     });
 };
 
 export const systemLogPage = (request: SystemLogPageRequest) => {
-    return Request.get<PaginationResult<SystemLogModel>>('looger/system/page', {
+    return Request.get<PaginationResult<SystemLogModel>>('logger/system/page', {
         params: request,
     });
 };

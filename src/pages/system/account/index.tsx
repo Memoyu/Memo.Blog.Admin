@@ -18,6 +18,7 @@ import {
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
+import UploadImage from '@src/components/upload-image';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
@@ -59,7 +60,7 @@ const Index: React.FC = () => {
         {
             title: '头像',
             align: 'center',
-            dataIndex: 'name',
+            dataIndex: 'avatar',
             width: 70,
             render: (text) => {
                 return <Avatar alt="cute cat" size="small" src={text} />;
@@ -206,7 +207,7 @@ const Index: React.FC = () => {
         },
     ];
 
-    const initEditModalHeight = 300;
+    const initEditModalHeight = 380;
 
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
@@ -228,6 +229,8 @@ const Index: React.FC = () => {
     const [editForm, setEditForm] = useState<FormApi>();
     const [changePasswordForm, setChangePasswordForm] = useState<FormApi>();
     const [editUser, setEditUser] = useState<UserEditRequest>();
+    const [userAvatar, setUserAvatar] = useState<string>();
+
     const [userIdentityType, setUserIdentityType] = useState<UserIdentityType>(
         UserIdentityType.Password
     );
@@ -291,6 +294,7 @@ const Index: React.FC = () => {
         editForm?.validate().then(async (form) => {
             let user = {
                 ...form,
+                avatar: userAvatar,
             } as UserEditRequest;
 
             var msg = '';
@@ -341,6 +345,7 @@ const Index: React.FC = () => {
         let user: UserEditRequest = {
             username: '',
             nickname: '',
+            avatar: undefined,
             roles: [],
             userIdentityType: UserIdentityType.Password,
             identifier: '',
@@ -363,6 +368,7 @@ const Index: React.FC = () => {
                 userId: res.data.userId,
                 username: res.data.username,
                 nickname: res.data.nickname,
+                avatar: res.data.avatar,
                 email: res.data.email,
                 phoneNumber: res.data.phoneNumber,
                 roles: roleIds,
@@ -370,10 +376,11 @@ const Index: React.FC = () => {
                 identifier: res.data.userIdentity.identifier,
                 credential: res.data.userIdentity.credential,
             } as UserEditRequest;
-            setEditModalHeight(200);
+            setEditModalHeight(280);
         }
 
         // console.log(user);
+        setUserAvatar(user.avatar);
         setUserIdentityType(user.userIdentityType);
         setEditUser(user);
         setEditVisible(true);
@@ -417,7 +424,7 @@ const Index: React.FC = () => {
                     {' '}
                     <Form.Select
                         field="userIdentityType"
-                        label={{ text: '认证方式' }}
+                        label={{ text: '认证' }}
                         optionList={userIdentityOpts}
                         style={{ width: 270 }}
                         onChange={(val) => setUserIdentityType(val as UserIdentityType)}
@@ -544,6 +551,23 @@ const Index: React.FC = () => {
                         initValues={editUser}
                         getFormApi={(formData) => setEditForm(formData)}
                     >
+                        <Row>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    marginBottom: 20,
+                                }}
+                            >
+                                <UploadImage
+                                    type="avatar"
+                                    url={userAvatar}
+                                    path="page/about/banner"
+                                    onSuccess={setUserAvatar}
+                                />
+                            </div>
+                        </Row>
                         <Row gutter={20}>
                             <Col span={12}>
                                 <Form.Input

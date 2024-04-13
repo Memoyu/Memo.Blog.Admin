@@ -26,12 +26,7 @@ import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import {
-    CommentEditRequest,
-    CommentPageModel,
-    CommentPageRequest,
-    CommentModel,
-} from '@src/common/model';
+import { CommentEditRequest, CommentPageModel, CommentPageRequest } from '@src/common/model';
 
 import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 
@@ -179,7 +174,7 @@ const Index: React.FC = () => {
 
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
-    const [editComment, setEditComment] = useState<CommentEditRequest | null>();
+    const [editComment, setEditComment] = useState<CommentEditRequest>();
     const [commentContent, setCommentContent] = useState<string>('');
     const [avatar, setAvatar] = useState<string>('');
 
@@ -189,7 +184,7 @@ const Index: React.FC = () => {
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
-        console.log(search);
+        // console.log(search);
         let request = {
             nickname: search?.nickname,
             ip: search?.ip,
@@ -221,13 +216,22 @@ const Index: React.FC = () => {
     // 编辑评论
     const handleEditComment = async (commentId: string) => {
         let res = await commentGet(commentId);
-        if (!res.isSuccess) {
+        if (!res.isSuccess || !res.data) {
             Toast.error(res.message);
             return;
         }
-        let comment = res.data as CommentModel;
+        let comment = res.data;
 
-        setEditComment(comment);
+        setEditComment({
+            commentId: comment.commentId,
+            nickname: comment.nickname,
+            email: comment.email,
+            content: comment.content,
+            avatar: comment.avatar,
+            showable: comment.showable,
+        });
+
+        setAvatar(comment.avatar);
         setCommentContent(comment.content);
         setEditVisible(true);
     };
@@ -251,22 +255,21 @@ const Index: React.FC = () => {
     // 确认编辑
     const handleEditModalOk = () => {
         editForm?.validate().then(async (form) => {
-            var msg = '';
+            console.log('form', form, avatar);
+
             let comment = {
+                ...form,
                 commentId: editComment?.commentId,
                 avatar: avatar,
                 content: commentContent,
-                ...form,
             } as CommentEditRequest;
             let res = await commentUpdate(comment);
-            msg = '更新成功';
-
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
             setEditVisible(false);
-            Toast.success(msg);
+            Toast.success('更新成功');
             getArticleCommentPage(currentPage);
         });
     };
@@ -341,16 +344,23 @@ const Index: React.FC = () => {
                             labelWidth={60}
                             getFormApi={(formData) => setEditForm(formData)}
                         >
-                            <Row gutter={16}>
-                                <Col span={4}>
-                                    <Form.Slot label={{ text: '头像' }}>
-                                        <UploadImage
-                                            height={66}
-                                            width={66}
-                                            url={avatar}
-                                            path="page/about/banner"
-                                            onSuccess={setAvatar}
-                                        />
+                            <Row gutter={16} type="flex" justify="space-around" align="middle">
+                                <Col span={3}>
+                                    <Form.Slot noLabel>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <UploadImage
+                                                type="avatar"
+                                                url={avatar}
+                                                path="page/about/banner"
+                                                onSuccess={setAvatar}
+                                            />
+                                        </div>
                                     </Form.Slot>
                                 </Col>
                                 <Col span={10}>

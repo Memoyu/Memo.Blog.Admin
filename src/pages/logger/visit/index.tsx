@@ -73,31 +73,40 @@ const Index: React.FC = () => {
             title: 'IP',
             align: 'center',
             dataIndex: 'ip',
+            width: 100,
+            render: (text) => {
+                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            },
         },
         {
             title: '国家',
             align: 'center',
             dataIndex: 'country',
+            width: 80,
         },
         {
             title: '区域',
             align: 'center',
             dataIndex: 'region',
+            width: 100,
         },
         {
             title: '省市',
             align: 'center',
             dataIndex: 'province',
+            width: 100,
         },
         {
             title: '城市',
             align: 'center',
             dataIndex: 'city',
+            width: 100,
         },
         {
-            title: '网络服务商',
+            title: '服务商',
             align: 'center',
             dataIndex: 'isp',
+            width: 80,
         },
         {
             title: '设备/浏览器',
@@ -201,7 +210,7 @@ const Index: React.FC = () => {
 
                             <Form.Input field="city" showClear label="访问城市" />
 
-                            <Form.Input field="isp" showClear label="访问网络服务商" />
+                            <Form.Input field="isp" showClear label="服务商" />
 
                             <Form.Select
                                 label="操作系统"

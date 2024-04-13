@@ -83,6 +83,7 @@ const Index: React.FC = () => {
                             <Col span={8}>
                                 <Form.Slot label={{ text: '头图' }}>
                                     <UploadImage
+                                        type="banner"
                                         url={banner}
                                         path="page/about/banner"
                                         onSuccess={setBanner}

@@ -1,8 +1,10 @@
 import { FC, useEffect, useState, useRef } from 'react';
-import { Image, Toast } from '@douyinfe/semi-ui';
+import { Image, Avatar, Toast } from '@douyinfe/semi-ui';
 import { Upload } from '@douyinfe/semi-ui';
-import { IconPlus } from '@douyinfe/semi-icons';
+import { IconPlus, IconCamera } from '@douyinfe/semi-icons';
+import { getFileExt } from '@src/utils/file';
 import { qiniuTokenGet } from '@src/utils/request';
+
 import {
     BeforeUploadObjectResult,
     BeforeUploadProps,
@@ -12,7 +14,6 @@ import {
 import { QiniuUploadModel } from '@src/common/model';
 
 import './index.scss';
-import { getFileExt } from '@src/utils/file';
 
 interface Iprops {
     width?: number;
@@ -21,22 +22,24 @@ interface Iprops {
     path: string;
     url?: string;
     title?: string;
+    type?: 'avatar' | 'banner' | 'image';
     onSuccess: (url: string) => void;
 }
 
 // 上传单个图片组件
 const Index: FC<Iprops> = ({
-    width = 120,
-    height = 300,
+    width,
+    height,
     limit = 1,
     path,
     url,
     title = '',
+    type = 'image',
     onSuccess,
 }) => {
     const [filePath, setFilePath] = useState<string>('');
     const [fileFullPath, setFileFullPath] = useState<string>('');
-    const [images, setImages] = useState<Array<FileItem>>([]);
+    const [images, setImages] = useState<Array<FileItem>>();
     const qiniuTokenRef = useRef<string>('');
     const [host, setHost] = useState<string>('');
 
@@ -59,8 +62,58 @@ const Index: FC<Iprops> = ({
         return uid + getFileExt(file.name);
     };
 
+    // 获取上传组件宽高
+    let getSize = () => {
+        let h = height ? height : type == 'avatar' ? 55 : type == 'banner' ? 120 : 88;
+        let w = width ? width : type == 'avatar' ? 55 : type == 'banner' ? 300 : 88;
+        return [h, w];
+    };
+
+    // 上传个数限制
+    let getLimit = () => {
+        return type == 'avatar' ? undefined : limit;
+    };
+
+    // 是否展示上传集合
+    let getShowUploadList = () => {
+        return type == 'avatar' ? false : true;
+    };
+
+    // 获取上传占位元素
+    let getChildren = () => {
+        if (type != 'avatar') {
+            return (
+                <>
+                    <IconPlus size="extra-large" style={{ margin: 4 }} />
+                    {title}
+                </>
+            );
+        } else {
+            return (
+                <Avatar
+                    src={url}
+                    hoverMask={
+                        <div
+                            style={{
+                                backgroundColor: 'var(--semi-color-overlay-bg)',
+                                height: '100%',
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--semi-color-white)',
+                            }}
+                        >
+                            <IconCamera />
+                        </div>
+                    }
+                />
+            );
+        }
+    };
+
     useEffect(() => {
-        if (url && url?.length > 0) setImages([{ url: url } as FileItem]);
+        if (type != 'avatar' && url && url?.length > 0) setImages([{ url: url } as FileItem]);
         setFilePath(path.replace(new RegExp('\\/+$', 'g'), '') + '/');
     }, [url]);
 
@@ -109,32 +162,35 @@ const Index: FC<Iprops> = ({
     };
 
     return (
-        <Upload
-            className="blog-upload-image"
-            style={{ margin: '0px 5px' }}
-            defaultFileList={images}
-            fileList={images}
-            picHeight={width}
-            picWidth={height}
-            accept="image/*"
-            listType="picture"
-            name="file"
-            limit={limit}
-            data={() => {
-                return {
-                    key: fileFullPath,
-                    token: qiniuTokenRef.current,
-                };
-            }}
-            action="https://up-z2.qiniup.com"
-            renderThumbnail={(file) => <Image src={file.url} />}
-            beforeUpload={(upProps) => handleBeforeUpload(upProps)}
-            onSuccess={(responseBody) => handleUploadSuccess(responseBody)}
-            onChange={(ocProps) => handleUploadChange(ocProps)}
-        >
-            <IconPlus size="extra-large" style={{ margin: 4 }} />
-            {title}
-        </Upload>
+        <div className={type == 'avatar' ? 'blog-avatar-upload' : 'blog-image-upload'}>
+            <Upload
+                style={{ margin: '0px 5px' }} // 解决报错时，红色边框被遮住问题
+                defaultFileList={images}
+                fileList={images}
+                showUploadList={getShowUploadList()}
+                picHeight={getSize()[0]}
+                picWidth={getSize()[1]}
+                accept="image/*"
+                listType="picture"
+                name="file"
+                limit={getLimit()}
+                data={() => {
+                    return {
+                        key: fileFullPath,
+                        token: qiniuTokenRef.current,
+                    };
+                }}
+                action="https://up-z2.qiniup.com"
+                renderThumbnail={(file) =>
+                    type != 'avatar' ? <Image src={file.url} /> : undefined
+                }
+                beforeUpload={(upProps) => handleBeforeUpload(upProps)}
+                onSuccess={(responseBody) => handleUploadSuccess(responseBody)}
+                onChange={(ocProps) => handleUploadChange(ocProps)}
+            >
+                {getChildren()}
+            </Upload>
+        </div>
     );
 };
 

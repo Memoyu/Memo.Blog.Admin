@@ -63,7 +63,7 @@ const Index: React.FC = () => {
         permissionGroupLoading,
         setPermissionGroups,
         setPermissionGroupLoading,
-    ] = useData();
+    ] = useData<Array<PermissionGroupModel>>();
     let refpermissionModules = useRef<Array<PermissionGroupModel>>();
 
     // 获取角色信息
@@ -160,19 +160,22 @@ const Index: React.FC = () => {
     };
 
     // 行展开后渲染的内容
-    const expandRowRender = (module: PermissionGroupModel) => {
-        return (
-            <CheckboxGroup
-                key={module.module}
-                style={{ margin: '0px 0px 20px 30px' }}
-                options={module.permissions.map((p) => {
-                    return { label: p.name, value: p.permissionId };
-                })}
-                direction="horizontal"
-                value={module.permissions.filter((mp) => mp.checked)?.map((mp) => mp.permissionId)}
-                onChange={(vals) => handleCheckboxGroupChange(module, vals)}
-            />
-        );
+    const expandRowRender = (module?: PermissionGroupModel) => {
+        if (module)
+            return (
+                <CheckboxGroup
+                    key={module.module}
+                    style={{ margin: '0px 0px 20px 30px' }}
+                    options={module.permissions.map((p) => {
+                        return { label: p.name, value: p.permissionId };
+                    })}
+                    direction="horizontal"
+                    value={module.permissions
+                        .filter((mp) => mp.checked)
+                        ?.map((mp) => mp.permissionId)}
+                    onChange={(vals) => handleCheckboxGroupChange(module, vals)}
+                />
+            );
     };
 
     // 行行为属性配置

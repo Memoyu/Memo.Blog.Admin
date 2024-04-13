@@ -1,8 +1,15 @@
-.blog-upload-image {
+.blog-image-upload {
+    // 填充图片后再或移除图片闪动问题
     .semi-upload-picture-file-card img {
         width: 100%;
     }
     .semi-upload-file-list-main {
         margin-bottom: 0;
+    }
+}
+
+.blog-avatar-upload {
+    .semi-upload-add {
+        border-radius: 50%; // 确保只有圆是点击热区
     }
 }
