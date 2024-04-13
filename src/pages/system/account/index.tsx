@@ -330,10 +330,12 @@ const Index: React.FC = () => {
             let userId = editUser?.userId;
             if (userId) {
                 let res = await userChangePassword(userId, pw);
-                if (res.isSuccess) {
-                    Toast.success('变更用户密码成功');
-                    setChangePasswordVisible(false);
+                if (!res.isSuccess) {
+                    Toast.error(res.message);
+                    return;
                 }
+                Toast.success('变更用户密码成功');
+                setChangePasswordVisible(false);
             }
         });
     };
