@@ -1,4 +1,5 @@
-import { Modal, Card, Typography, Avatar } from '@douyinfe/semi-ui';
+import { IconMail, IconPhone } from '@douyinfe/semi-icons';
+import { Modal, Space, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
 
 import { useDispatch } from 'react-redux';
 import { toggleUserShow } from '@redux/slices/userSlice';
@@ -6,8 +7,7 @@ import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 import './index.scss';
 
-const { Meta } = Card;
-const { Text } = Typography;
+const { Title, Text } = Typography;
 
 const Index = () => {
     const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const Index = () => {
     return (
         <>
             <Modal
+                className="user-info-modal"
                 header={null}
                 footer={null}
                 maskClosable={true}
@@ -29,17 +30,41 @@ const Index = () => {
                 centered
             >
                 <div>
-                    <Meta
-                        title={user.nickname}
-                        description={user.username}
-                        avatar={<Avatar alt="Card meta img" size="default" src={user.avatar} />}
-                        style={{ marginBottom: 30, justifyContent: 'center' }}
+                    <Avatar
+                        className="user-info-avatar"
+                        alt="Card meta img"
+                        size="large"
+                        src={user.avatar}
                     />
-                    <Text strong>邮箱：</Text>
-                    <Text>{user.email}</Text>
-                    <br />
-                    <Text strong>电话：</Text>
-                    <Text>{user.phoneNumber}</Text>
+                    <div
+                        style={{
+                            marginTop: 10,
+                            marginBottom: 30,
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                        }}
+                    >
+                        <Title heading={3}>{user.nickname}</Title>
+                        <Title heading={6}>{user.username}</Title>
+                        <Space style={{ marginTop: 30 }}>
+                            <Tag
+                                color="light-blue"
+                                prefixIcon={<IconMail />}
+                                size="large"
+                                shape="circle"
+                            >
+                                {user.email}
+                            </Tag>
+                            <Tag
+                                color="cyan"
+                                size="large"
+                                shape="circle"
+                                prefixIcon={<IconPhone />}
+                            >
+                                {user.phoneNumber}
+                            </Tag>
+                        </Space>
+                    </div>
                 </div>
             </Modal>
         </>

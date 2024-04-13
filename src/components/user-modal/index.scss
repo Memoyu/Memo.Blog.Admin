@@ -1,2 +1,11 @@
 .user-info-modal {
+    .semi-modal-content {
+        overflow: unset !important;
+    }
+    .user-info-avatar {
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
 }
