@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
-import { Button, Card, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
+import { Layout, Button, Card, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
 
 import { useDispatch } from 'react-redux';
 import { login, setUserInfo } from '@redux/slices/userSlice';
@@ -12,6 +12,7 @@ import { login as ToLogin, userGet } from '@utils/request';
 
 import './index.scss';
 
+const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
 interface UserLogin {
@@ -41,7 +42,7 @@ const Index: React.FC = () => {
         }
 
         let user = loginForm.getValues();
-        console.log(user);
+        // console.log(user);
         if (
             !user.username ||
             user.username?.length <= 0 ||
@@ -77,8 +78,17 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Row type="flex" justify="space-around" align="middle" className={'login-form'}>
-            <Col span={6}>
+        <Layout>
+            <Content
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // backgroundImage: 'url(http://oss.blog.memoyu.com/statics/login-bg.jpg)',
+                    // backgroundSize: '100%',
+                    // backgroundAttachment: 'fixed',
+                }}
+            >
                 <Card
                     title={<Title heading={3}>登录</Title>}
                     headerLine={false}
@@ -92,6 +102,7 @@ const Index: React.FC = () => {
                             游客登录
                         </Button>
                     }
+                    style={{ minWidth: 380 }}
                 >
                     <Form
                         labelPosition="left"
@@ -121,8 +132,19 @@ const Index: React.FC = () => {
                         </Button>
                     </Form>
                 </Card>
-            </Col>
-        </Row>
+            </Content>
+            <Footer
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    paddingBottom: 10,
+                }}
+            >
+                <Text type="quaternary" strong>
+                    Copyright © 2024 Memoyu. Blog Admin
+                </Text>
+            </Footer>
+        </Layout>
     );
 };
 

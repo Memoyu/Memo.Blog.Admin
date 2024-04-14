@@ -98,7 +98,7 @@ const Index: React.FC = () => {
             article.commentable = commentable;
             article.publicable = publicable;
             article.banner = articleBanner ?? '';
-            console.log(article);
+            // console.log(article);
 
             let res;
             if (articleId) {

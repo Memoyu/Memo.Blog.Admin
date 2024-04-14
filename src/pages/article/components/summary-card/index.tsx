@@ -75,7 +75,7 @@ const Index: FC<SummaryCardProps> = ({ type, value, img, tip }: SummaryCardProps
                         </Title>
                     </div>
                 </div>
-                <Image src={img} alt={'air'} width={80} height={80} />
+                <Image src={img} alt={'air'} width={80} height={80} preview={false} />
             </div>
         </Card>
     );

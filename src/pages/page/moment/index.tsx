@@ -154,7 +154,7 @@ const Index: React.FC = () => {
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
-        console.log(search);
+        // console.log(search);
 
         let request = {
             tags: search?.tags,

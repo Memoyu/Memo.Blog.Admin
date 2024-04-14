@@ -292,7 +292,7 @@ const Index: React.FC = () => {
             <div className="article-container">
                 <div className="article-list">
                     <div className="article-list-summary">
-                        <Row gutter={8}>
+                        <Row gutter={100}>
                             <Col span={8}>
                                 <SummaryCard
                                     type={'文章总数'}
