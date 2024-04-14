@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { format } from 'date-fns';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import { IconChangelog } from '@douyinfe/semi-icons-lab';
+import { IconChangelog, IconDescriptions } from '@douyinfe/semi-icons-lab';
 import {
     Button,
     Table,
@@ -19,7 +19,7 @@ import {
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
-import SummaryCard from './components/summary-card';
+import ArticlAnlyanis from './components/article-anlyanis';
 
 import { useData } from '@src/hooks/useData';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
@@ -28,19 +28,13 @@ import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { TagProps } from '@douyinfe/semi-ui/lib/es/tag';
-import {
-    ArticlePageModel,
-    ArticlePageRequest,
-    ArticlePageSummaryModel,
-    ArticleStatus,
-} from '@src/common/model';
+import { ArticlePageModel, ArticlePageRequest, ArticleStatus } from '@src/common/model';
 
 import {
     articlePage,
     articleDelete,
     articleCategoryList,
     articleTagList,
-    articlePageSummary,
 } from '@src/utils/request';
 
 import './index.scss';
@@ -186,11 +180,6 @@ const Index: React.FC = () => {
 
     const navigate = useNavigate();
     const [data, loading, setData, setLoading] = useData<Array<ArticlePageModel>>();
-    const [articleSummary, setArticleSummary] = useState<ArticlePageSummaryModel>({
-        articleTotal: 0,
-        commentTotal: 0,
-        viewTotal: 0,
-    });
 
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
@@ -202,6 +191,7 @@ const Index: React.FC = () => {
     // 获取文章列表
     let getArticlePage = async (page: number = 1) => {
         setCurrentPage(page);
+        setLoading(true);
 
         let search = searchForm?.getValues();
         let request = {
@@ -213,13 +203,6 @@ const Index: React.FC = () => {
             size: pageSize,
         } as ArticlePageRequest;
 
-        // 汇总
-        let summaryRes = await articlePageSummary(request);
-        if (summaryRes.isSuccess) {
-            setArticleSummary(summaryRes.data as ArticlePageSummaryModel);
-        }
-
-        setLoading(true);
         // 分页
         articlePage(request)
             .then((res) => {
@@ -292,34 +275,7 @@ const Index: React.FC = () => {
             <div className="article-container">
                 <div className="article-list">
                     <div className="article-list-summary">
-                        <Row gutter={100}>
-                            <Col span={8}>
-                                <SummaryCard
-                                    type={'文章总数'}
-                                    value={articleSummary.articleTotal}
-                                    img={'src/assets/air.png'}
-                                    tip="所有状态文章总数，随查询条件汇总"
-                                />
-                            </Col>
-
-                            <Col span={8}>
-                                <SummaryCard
-                                    type={'评论总数'}
-                                    value={articleSummary.commentTotal}
-                                    img={'src/assets/air.png'}
-                                    tip="所有文章评论总数，随查询条件汇总"
-                                />
-                            </Col>
-
-                            <Col span={8}>
-                                <SummaryCard
-                                    type={'阅读量'}
-                                    value={articleSummary.viewTotal}
-                                    img={'src/assets/air.png'}
-                                    tip="所有文章阅读总数，随查询条件汇总"
-                                />
-                            </Col>
-                        </Row>
+                        <ArticlAnlyanis />
                     </div>
                     <div className="article-list-bar">
                         <Form

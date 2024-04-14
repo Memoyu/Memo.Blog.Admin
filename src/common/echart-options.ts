@@ -198,10 +198,49 @@ export const dashboardTagAnlyanisOption = {
     ],
 };
 
-interface DataItem {
-    name: string;
-    value: number;
-}
+export const articleSummaryAnlyanisOption = {
+    color: ['rgba(166,127,221)'],
+    tooltip: {
+        trigger: 'axis',
+    },
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            show: false,
+        },
+    ],
+    yAxis: [
+        {
+            type: 'value',
+            show: false,
+        },
+    ],
+    series: [
+        {
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+            areaStyle: {
+                opacity: 0.8,
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {
+                        offset: 0,
+                        color: 'rgba(166,127,221)',
+                    },
+                    {
+                        offset: 1,
+                        color: 'rgba(226, 209, 224)',
+                    },
+                ]),
+            },
+            emphasis: {
+                focus: 'series',
+            },
+            data: [] as any[],
+        },
+    ],
+};
 
 //城市经纬度
 export const ChinaCityGeoCoordMap: Record<string, number[]> = {

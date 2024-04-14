@@ -1,5 +1,6 @@
-import { FC } from 'react';
-import { Card, Badge, Image, Typography, Tooltip } from '@douyinfe/semi-ui';
+import { FC, ReactNode } from 'react';
+import { Card, Badge, Typography, Tooltip, Row, Col } from '@douyinfe/semi-ui';
+
 import './index.scss';
 
 const { Title } = Typography;
@@ -7,76 +8,67 @@ const { Title } = Typography;
 interface SummaryCardProps {
     type: string;
     value: number | string;
-    img: string;
     tip?: string;
+    children?: ReactNode;
 }
 
-const Index: FC<SummaryCardProps> = ({ type, value, img, tip }: SummaryCardProps) => {
+const Index: FC<SummaryCardProps> = ({ type, value, tip, children }: SummaryCardProps) => {
     return (
-        <Card
-            style={{
-                flex: 1,
-                minWidth: '100px',
-                borderRadius: '20px',
-                background: 'rgba(var(--semi-green-0), 1)',
-            }}
-        >
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'start',
-                    }}
-                >
+        <Card className="article-summary-card" style={{ overflow: 'unset' }}>
+            <Row type="flex" justify="space-around" align="middle">
+                <Col span={14}>
                     <div
                         style={{
                             display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'start',
                         }}
                     >
-                        <Title
-                            heading={6}
+                        <div
                             style={{
-                                color: 'rgba(var(--semi-grey-9), 1)',
-                                marginRight: 10,
+                                display: 'flex',
                             }}
                         >
-                            {type}
-                        </Title>
-                        {tip && tip.length > 0 ? (
-                            <Tooltip content={tip} arrowPointAtCenter={false} position="right">
-                                <Badge count={'?'} />
-                            </Tooltip>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                    <br />
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'baseline',
-                        }}
-                    >
-                        <Title
-                            heading={2}
+                            <Title
+                                heading={6}
+                                style={{
+                                    color: 'rgba(var(--semi-grey-9), 1)',
+                                    marginRight: 10,
+                                }}
+                            >
+                                {type}
+                            </Title>
+                            {tip && tip.length > 0 ? (
+                                <Tooltip content={tip} arrowPointAtCenter={false} position="right">
+                                    <Badge count={'?'} />
+                                </Tooltip>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                        <br />
+                        <div
                             style={{
-                                color: 'rgba(var(--semi-grey-9), 1)',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'baseline',
                             }}
                         >
-                            {value}
-                        </Title>
+                            <Title
+                                heading={2}
+                                style={{
+                                    color: 'rgba(var(--semi-grey-9), 1)',
+                                }}
+                            >
+                                {value}
+                            </Title>
+                        </div>
                     </div>
-                </div>
-                <Image src={img} alt={'air'} width={80} height={80} preview={false} />
-            </div>
+                </Col>
+                <Col span={10}>
+                    <div style={{ display: 'block' }}>{children}</div>
+                </Col>
+            </Row>
         </Card>
     );
 };

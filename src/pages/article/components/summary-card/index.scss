@@ -1,0 +1,8 @@
+.article-summary-card {
+    min-width: 200px;
+    border-radius: 20px;
+    background: rgba(var(--semi-green-0), 1);
+    .semi-modal-content {
+        overflow: unset !important;
+    }
+}
