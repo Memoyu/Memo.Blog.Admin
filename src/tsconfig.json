@@ -19,7 +19,6 @@
             "@common/*": ["src/common/*"],
             "@components/*": ["src/components/*"],
             "@config/*": ["src/config/*"],
-            "@model/*": ["src/model/*"],
             "@utils/*": ["src/utils/*"],
             "@redux/*": ["src/redux/*"],
             "@pages/*": ["src/pages/*"]

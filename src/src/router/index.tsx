@@ -1,9 +1,9 @@
-import React, { lazy, FC } from 'react';
+import { lazy, FC } from 'react';
 import { RouteObject } from 'react-router';
 import { useRoutes } from 'react-router-dom';
 import { WrapperRouteComponent, WrapperRouteWithOutLayoutComponent } from './config';
 import Login from '@pages/login';
-import Layout from '@pages/layout';
+import Layout from '@components/layout';
 import Empty from '@components/empty';
 
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
