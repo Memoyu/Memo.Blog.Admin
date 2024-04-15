@@ -42,6 +42,7 @@ const Index: React.FC = () => {
             width: '15%',
             render: (_text, category: CategoryModel) => {
                 return (
+                    // 非初始化的未分类才显示操作
                     category.categoryId != '1' && (
                         <Space>
                             <Button

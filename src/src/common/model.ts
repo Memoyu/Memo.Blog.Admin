@@ -90,10 +90,13 @@ export interface ArticleCommentModel {
     content: string;
 }
 
-export interface ArticlePageSummaryModel {
-    articleTotal: number;
-    commentTotal: number;
-    viewTotal: number;
+export interface ArticleSummaryModel {
+    articles: number;
+    comments: number;
+    views: number;
+    WeekArticles: Array<MetricItemModel>;
+    WeekComments: Array<MetricItemModel>;
+    WeekViews: Array<MetricItemModel>;
 }
 
 export interface ArticleRankingModel {

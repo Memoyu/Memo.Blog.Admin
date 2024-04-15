@@ -15,7 +15,6 @@ import {
     AnlyanisDashboardModel,
     ArticlePageModel,
     ArticlePageRequest,
-    ArticlePageSummaryModel,
     CommentPageModel,
     CommentPageRequest,
     CommentEditRequest,
@@ -40,6 +39,7 @@ import {
     VisitLogPageRequest,
     ArticleRankingModel,
     MetricItemModel,
+    ArticleSummaryModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -105,8 +105,8 @@ export const articlePage = (request: ArticlePageRequest) => {
     return Request.get<PaginationResult<ArticlePageModel>>('article/page', { params: request });
 };
 
-export const articlePageSummary = () => {
-    return Request.get<ArticlePageSummaryModel>('article/page/summary');
+export const articleSummary = () => {
+    return Request.get<ArticleSummaryModel>('article/page/summary');
 };
 
 export const articleGet = (id: string) => {

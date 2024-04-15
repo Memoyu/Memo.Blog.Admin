@@ -169,15 +169,18 @@ const Index: React.FC = () => {
                         >
                             修改密码
                         </Button>
-                        <Popconfirm
-                            position="left"
-                            title="确定是否要删除此用户？"
-                            onConfirm={() => handleDeleteUser(user.userId)}
-                        >
-                            <Button theme="borderless" type="danger" size="small">
-                                删除
-                            </Button>
-                        </Popconfirm>
+                        {/* 非初始化的管理员才展示删除 */}
+                        {user.userId != '1' && (
+                            <Popconfirm
+                                position="left"
+                                title="确定是否要删除此用户？"
+                                onConfirm={() => handleDeleteUser(user.userId)}
+                            >
+                                <Button theme="borderless" type="danger" size="small">
+                                    删除
+                                </Button>
+                            </Popconfirm>
+                        )}
                     </Space>
                 );
             },
@@ -565,7 +568,7 @@ const Index: React.FC = () => {
                                 <UploadImage
                                     type="avatar"
                                     url={userAvatar}
-                                    path="page/about/banner"
+                                    path="account/avatar"
                                     onSuccess={setUserAvatar}
                                 />
                             </div>
