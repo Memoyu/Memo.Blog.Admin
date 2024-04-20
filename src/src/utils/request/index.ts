@@ -40,6 +40,11 @@ import {
     ArticleRankingModel,
     MetricItemModel,
     ArticleSummaryModel,
+    GitHubRepoPageModel,
+    GitHubRepoPageRequest,
+    OpenSourceListRequest,
+    OpenSourceModel,
+    OpenSourceEditRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -227,6 +232,40 @@ export const friendUpdate = (friend: FriendEditRequest) => {
 
 export const friendDelete = (id: string) => {
     return Request.delete('friend/delete', { params: { friendId: id } });
+};
+
+//#endregion
+
+//#region 开源管理
+
+export const openSourceList = (request: OpenSourceListRequest) => {
+    return Request.get<Array<OpenSourceModel>>('opensource/list', {
+        params: request,
+    });
+};
+
+export const openSourceGet = (id: string) => {
+    return Request.get<OpenSourceModel>('opensource/get', {
+        params: { projectId: id },
+    });
+};
+
+export const openSourceCreate = (project: OpenSourceEditRequest) => {
+    return Request.post<string>('opensource/create', project);
+};
+
+export const openSourceUpdate = (project: OpenSourceEditRequest) => {
+    return Request.put<string>('opensource/update', project);
+};
+
+export const openSourceDelete = (id: string) => {
+    return Request.delete('opensource/delete', { params: { projectId: id } });
+};
+
+export const githubRepoPage = (request: GitHubRepoPageRequest) => {
+    return Request.get<PaginationResult<GitHubRepoPageModel>>('opensource/page/repos/github', {
+        params: request,
+    });
 };
 
 //#endregion

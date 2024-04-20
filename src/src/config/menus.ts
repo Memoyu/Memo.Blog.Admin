@@ -12,6 +12,7 @@ import {
     IconRating,
     IconProgress,
     IconRadio,
+    IconToken,
 } from '@douyinfe/semi-icons-lab';
 
 import { IconProps } from '@douyinfe/semi-ui/lib/es/icons';
@@ -68,18 +69,24 @@ const Menus: MenuItem[] = [
             },
             {
                 itemKey: '3-2',
+                text: '开源管理',
+                path: '/page/open-source',
+                icon: IconToken,
+            },
+            {
+                itemKey: '3-3',
                 text: '友链管理',
                 path: '/page/friend',
                 icon: IconSpin,
             },
             {
-                itemKey: '3-3',
+                itemKey: '3-4',
                 text: '动态管理',
                 path: '/page/moment',
                 icon: IconNotification,
             },
             {
-                itemKey: '3-4',
+                itemKey: '3-5',
                 text: '关于信息',
                 path: '/page/about',
                 icon: IconRating,

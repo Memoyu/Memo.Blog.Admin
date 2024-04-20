@@ -281,6 +281,58 @@ export interface FriendModel {
 
 //#endregion
 
+//#region 开源项目
+
+export interface OpenSourceEditRequest {
+    projectId: string;
+    repoId?: number;
+    title: string;
+    description: string;
+    imageUrl: string;
+    readmeUrl: string;
+}
+
+export interface OpenSourceListRequest {
+    title: string;
+    description: string;
+    dateBegin?: string;
+    dateEnd?: string;
+}
+
+export interface OpenSourceModel {
+    projectId: string;
+    repoId?: number;
+    repoFullName: string;
+    title: string;
+    description: string;
+    imageUrl: string;
+    readmeUrl: string;
+    htmlUrl: string;
+    star: number;
+    fork: number;
+    createTime: Date;
+}
+
+export interface GitHubRepoPageRequest extends PaginationRequest {
+    keyword?: string; // 关键字
+}
+
+export interface GitHubRepoPageModel {
+    id: number;
+    private: boolean;
+    name: string;
+    fullName: string;
+    description: string;
+    readmeUrl: string;
+    htmlUrl: string;
+    topics: Array<string>;
+    star: number;
+    fork: number;
+    createdAt: Date;
+}
+
+//#endregion
+
 //#region 关于信息
 
 export interface AboutModel {

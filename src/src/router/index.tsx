@@ -17,6 +17,7 @@ const Comment = lazy(() => import('@src/pages/page/comment'));
 const Friend = lazy(() => import('@src/pages/page/friend'));
 const Moment = lazy(() => import('@src/pages/page/moment'));
 const About = lazy(() => import('@src/pages/page/about'));
+const OpenSource = lazy(() => import('@src/pages/page/open-source'));
 
 const AccessLog = lazy(() => import('@src/pages/logger/visit'));
 const SystemLog = lazy(() => import('@src/pages/logger/system'));
@@ -58,6 +59,10 @@ const routeList: RouteObject[] = [
             {
                 path: 'page/comment',
                 element: <WrapperRouteComponent element={<Comment />} titleId="评论管理" auth />,
+            },
+            {
+                path: 'page/open-source',
+                element: <WrapperRouteComponent element={<OpenSource />} titleId="开源管理" auth />,
             },
             {
                 path: 'page/friend',

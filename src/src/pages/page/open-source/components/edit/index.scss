@@ -1,0 +1,10 @@
+.open-source-edit-modal {
+}
+.github-repo-modal-list {
+    overflow-y: auto;
+    height: 420px;
+    .semi-list-item-body {
+        width: 100%;
+        display: unset;
+    }
+}
