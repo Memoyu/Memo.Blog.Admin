@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { format } from 'date-fns';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import { IconChangelog, IconDescriptions } from '@douyinfe/semi-icons-lab';
+import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import {
     Button,
     Table,
@@ -14,8 +14,6 @@ import {
     Toast,
     Tag,
     TagGroup,
-    Row,
-    Col,
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';

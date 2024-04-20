@@ -94,9 +94,9 @@ export interface ArticleSummaryModel {
     articles: number;
     comments: number;
     views: number;
-    WeekArticles: Array<MetricItemModel>;
-    WeekComments: Array<MetricItemModel>;
-    WeekViews: Array<MetricItemModel>;
+    weekArticles: Array<MetricItemModel>;
+    weekComments: Array<MetricItemModel>;
+    weekViews: Array<MetricItemModel>;
 }
 
 export interface ArticleRankingModel {

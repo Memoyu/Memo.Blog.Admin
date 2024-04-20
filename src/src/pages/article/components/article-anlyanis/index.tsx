@@ -34,15 +34,21 @@ const Index: FC = () => {
                 setData(res.data);
 
                 let newArticlesOption = cloneDeep(articlesOption);
-                newArticlesOption.series[0].data = res.data.WeekArticles;
+                newArticlesOption.series[0].data = res.data.weekArticles.map((u) => [
+                    u.name,
+                    u.value,
+                ]);
                 setArticlesOption(newArticlesOption);
 
                 let newCommentsOption = cloneDeep(commentsOption);
-                newCommentsOption.series[0].data = res.data.WeekComments;
+                newCommentsOption.series[0].data = res.data.weekComments.map((u) => [
+                    u.name,
+                    u.value,
+                ]);
                 setCommentsOption(newCommentsOption);
 
                 let newViewsOption = cloneDeep(viewsOption);
-                newViewsOption.series[0].data = res.data.WeekViews;
+                newViewsOption.series[0].data = res.data.weekViews.map((u) => [u.name, u.value]);
                 setViewsOption(newViewsOption);
             })
             .finally(() => setLoading(false));
