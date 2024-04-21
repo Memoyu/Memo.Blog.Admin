@@ -91,6 +91,7 @@ const Index: FC<Iprops> = ({ projectId, visible, title, onVisibleChange, onOk })
             setImageUrl('');
             setRepoId(undefined);
             setRepoFullName('');
+            searchKeyWordRef.current = '';
         };
     }, [projectId, visible, title]);
 
@@ -148,11 +149,13 @@ const Index: FC<Iprops> = ({ projectId, visible, title, onVisibleChange, onOk })
         });
     };
 
+    // modal显示/隐藏
     const handleChangeModalVisible = (visible: boolean = false) => {
         setModalVisible(visible);
         onVisibleChange && onVisibleChange(visible);
     };
 
+    // 选中开源项目
     const handleSelectedGitHubRepo = (item: GitHubRepoPageModel) => {
         let formApi = formRef.current?.formApi;
 
@@ -167,7 +170,7 @@ const Index: FC<Iprops> = ({ projectId, visible, title, onVisibleChange, onOk })
         setRepoFullName(item.fullName);
     };
 
-    const loadMore =
+    const loadMoreRender =
         !gitHubRepoLoading && !gitHubRepoNoMoreRef.current ? (
             <div
                 style={{
@@ -277,7 +280,7 @@ const Index: FC<Iprops> = ({ projectId, visible, title, onVisibleChange, onOk })
                             <List
                                 split={false}
                                 loading={gitHubRepoLoading}
-                                loadMore={loadMore}
+                                loadMore={loadMoreRender}
                                 dataSource={gitHubRepos}
                                 renderItem={(item: GitHubRepoPageModel) => (
                                     <List.Item
