@@ -45,7 +45,7 @@ const Index: React.FC = () => {
     // 获取文章详情
     let getArticleDetail = async (id: string) => {
         let res = await articleGet(id);
-        if (!res.isSuccess) {
+        if (!res.isSuccess || !res.data) {
             Toast.error(res.message);
             return;
         }

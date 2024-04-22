@@ -6,7 +6,7 @@ import {
     Button,
     Table,
     Space,
-    Avatar,
+    Image,
     Typography,
     Popconfirm,
     Form,
@@ -45,7 +45,17 @@ const Index: React.FC = () => {
             dataIndex: 'imageUrl',
             width: 160,
             render: (text) => {
-                return <Avatar alt="cute cat" size="small" src={text} />;
+                return (
+                    <div
+                        style={{
+                            width: 100,
+                            background: 'no-repeat center center #f4f1ec',
+                            backgroundSize: 'auto 100%',
+                            height: 150,
+                            backgroundImage: `url(${text})`,
+                        }}
+                    />
+                );
             },
         },
         {

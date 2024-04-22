@@ -326,6 +326,7 @@ export interface GitHubRepoPageModel {
     readmeUrl: string;
     htmlUrl: string;
     topics: Array<string>;
+    defaultBranch: string;
     star: number;
     fork: number;
     createdAt: Date;

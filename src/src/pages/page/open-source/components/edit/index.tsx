@@ -163,7 +163,7 @@ const Index: FC<Iprops> = ({ projectId, visible, title, onVisibleChange, onOk })
         formApi?.setValue('description', item.description);
         formApi?.setValue(
             'readmeUrl',
-            `https://raw.githubusercontent.com/${item.fullName}/main/README.md`
+            `https://raw.githubusercontent.com/${item.fullName}/${item.defaultBranch}/README.md`
         );
 
         setRepoId(item.id);
