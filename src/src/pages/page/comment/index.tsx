@@ -26,7 +26,12 @@ import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { CommentEditRequest, CommentPageModel, CommentPageRequest } from '@src/common/model';
+import {
+    CommentEditRequest,
+    CommentPageModel,
+    CommentPageRequest,
+    CommentTypeOpts,
+} from '@src/common/model';
 
 import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 
@@ -186,6 +191,7 @@ const Index: React.FC = () => {
         let search = searchForm?.getValues();
         // console.log(search);
         let request = {
+            commentType: search?.commentType,
             nickname: search?.nickname,
             ip: search?.ip,
             page: page,
@@ -283,6 +289,13 @@ const Index: React.FC = () => {
                             layout="horizontal"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
+                            <Form.Select
+                                label="评论类型"
+                                field="commentType"
+                                initValue={''}
+                                style={{ width: '250px' }}
+                                optionList={CommentTypeOpts}
+                            ></Form.Select>
                             <Form.Input
                                 field="nickname"
                                 showClear

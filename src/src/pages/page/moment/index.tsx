@@ -191,7 +191,7 @@ const Index: React.FC = () => {
 
     // 编辑动态
     const handleEditMoment = async (momentId?: string) => {
-        let moment;
+        let moment: MomentEditRequest = { content: '', showable: true, commentable: false };
         let content = '';
         if (momentId) {
             let res = await momentGet(momentId);

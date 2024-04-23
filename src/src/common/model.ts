@@ -1,3 +1,5 @@
+import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
+
 export interface PaginationRequest {
     size: number;
     page: number;
@@ -188,6 +190,25 @@ export interface TagModel {
 
 //#region 评论
 
+export const CommentTypeOpts: Array<OptionProps> = [
+    {
+        value: '',
+        label: '全部',
+    },
+    {
+        value: 0,
+        label: '文章',
+    },
+    {
+        value: 1,
+        label: '动态',
+    },
+    {
+        value: 2,
+        label: '关于',
+    },
+];
+
 export enum CommentType {
     Article = 0,
     Moment = 1,
@@ -356,10 +377,10 @@ export interface MomentPageRequest extends PaginationRequest {
 }
 
 export interface MomentEditRequest {
-    momentId: string;
-    tags: Array<string>;
+    momentId?: string;
+    tags?: Array<string>;
     content: string;
-    Showable: boolean;
+    showable: boolean;
     commentable: boolean;
 }
 
