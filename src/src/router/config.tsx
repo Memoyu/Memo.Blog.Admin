@@ -5,8 +5,8 @@ import Empty from '@components/empty';
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 export interface WrapperRouteProps extends PathRouteProps {
-    /** document title id */
-    titleId: string;
+    /** document title*/
+    title: string;
     /** authorization？ */
     auth?: boolean;
 }
@@ -20,6 +20,8 @@ const PrivateRoute = (props: PathRouteProps) => {
     const { logged } = useTypedSelector((state) => state.userLogin);
     const { pathname } = location;
 
+    console.log('测试');
+
     return logged ? (
         pathname === '/' ? (
             <Navigate to={{ pathname: `/dashboard` }} replace />
@@ -31,17 +33,17 @@ const PrivateRoute = (props: PathRouteProps) => {
     );
 };
 
-const WrapperRouteComponent: FC<WrapperRouteProps> = ({ titleId, auth, ...props }) => {
+const WrapperRouteComponent: FC<WrapperRouteProps> = ({ title, auth, ...props }) => {
     const WitchRoute = auth ? PrivateRoute : PublicRoute;
-    if (titleId) {
-        document.title = titleId;
+    if (title) {
+        document.title = title;
     }
     return <WitchRoute {...props} />;
 };
 
-const WrapperRouteWithOutLayoutComponent: FC<WrapperRouteProps> = ({ titleId, ...props }) => {
-    if (titleId) {
-        document.title = titleId;
+const WrapperRouteWithOutLayoutComponent: FC<WrapperRouteProps> = ({ title, ...props }) => {
+    if (title) {
+        document.title = title;
     }
 
     return <Suspense>{props.element}</Suspense>;

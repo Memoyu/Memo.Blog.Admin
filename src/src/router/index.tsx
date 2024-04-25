@@ -30,88 +30,86 @@ const Permission = lazy(() => import('@src/pages/system/permission'));
 const routeList: RouteObject[] = [
     {
         path: '/',
-        element: <WrapperRouteComponent element={<Layout />} titleId="" auth />,
+        element: <WrapperRouteComponent element={<Layout />} title="" auth />,
         children: [
             {
                 path: 'dashboard',
-                element: <WrapperRouteComponent element={<Dashboard />} titleId="概览" auth />,
+                element: <WrapperRouteComponent element={<Dashboard />} title="概览" auth />,
             },
             {
                 path: 'article',
-                element: <WrapperRouteComponent element={<Article />} titleId="文章管理" auth />,
+                element: <WrapperRouteComponent element={<Article />} title="文章管理" auth />,
             },
             {
                 path: 'article/edit/:id?',
-                element: (
-                    <WrapperRouteComponent element={<ArticleEdit />} titleId="文章编辑" auth />
-                ),
+                element: <WrapperRouteComponent element={<ArticleEdit />} title="文章编辑" auth />,
             },
             {
                 path: 'article/category',
                 element: (
-                    <WrapperRouteComponent element={<ArticleCategory />} titleId="文章分类" auth />
+                    <WrapperRouteComponent element={<ArticleCategory />} title="文章分类" auth />
                 ),
             },
             {
                 path: 'article/tag',
-                element: <WrapperRouteComponent element={<ArticleTag />} titleId="文章标签" auth />,
+                element: <WrapperRouteComponent element={<ArticleTag />} title="文章标签" auth />,
             },
             {
                 path: 'page/comment',
-                element: <WrapperRouteComponent element={<Comment />} titleId="评论管理" auth />,
+                element: <WrapperRouteComponent element={<Comment />} title="评论管理" auth />,
             },
             {
                 path: 'page/open-source',
-                element: <WrapperRouteComponent element={<OpenSource />} titleId="开源管理" auth />,
+                element: <WrapperRouteComponent element={<OpenSource />} title="开源管理" auth />,
             },
             {
                 path: 'page/friend',
-                element: <WrapperRouteComponent element={<Friend />} titleId="友链管理" auth />,
+                element: <WrapperRouteComponent element={<Friend />} title="友链管理" auth />,
             },
             {
                 path: 'page/moment',
-                element: <WrapperRouteComponent element={<Moment />} titleId="动态管理" auth />,
+                element: <WrapperRouteComponent element={<Moment />} title="动态管理" auth />,
             },
             {
                 path: 'page/about',
-                element: <WrapperRouteComponent element={<About />} titleId="关于信息" auth />,
+                element: <WrapperRouteComponent element={<About />} title="关于信息" auth />,
             },
             {
                 path: 'logger/system',
-                element: <WrapperRouteComponent element={<SystemLog />} titleId="系统日志" auth />,
+                element: <WrapperRouteComponent element={<SystemLog />} title="系统日志" auth />,
             },
             {
                 path: 'logger/visit',
-                element: <WrapperRouteComponent element={<AccessLog />} titleId="访问日志" auth />,
+                element: <WrapperRouteComponent element={<AccessLog />} title="访问日志" auth />,
             },
             {
                 path: 'system/account',
-                element: <WrapperRouteComponent element={<Account />} titleId="账户管理" auth />,
+                element: <WrapperRouteComponent element={<Account />} title="账户管理" auth />,
             },
             {
                 path: 'system/role',
-                element: <WrapperRouteComponent element={<Role />} titleId="角色管理" auth />,
+                element: <WrapperRouteComponent element={<Role />} title="角色管理" auth />,
             },
             {
                 path: 'system/role/edit/:id?',
-                element: <WrapperRouteComponent element={<RoleEdit />} titleId="角色编辑" auth />,
+                element: <WrapperRouteComponent element={<RoleEdit />} title="角色编辑" auth />,
             },
             {
                 path: 'system/permission',
-                element: <WrapperRouteComponent element={<Permission />} titleId="权限管理" auth />,
+                element: <WrapperRouteComponent element={<Permission />} title="权限管理" auth />,
             },
         ],
     },
     {
         path: 'login',
-        element: <WrapperRouteWithOutLayoutComponent element={<Login />} titleId="登录" />,
+        element: <WrapperRouteWithOutLayoutComponent element={<Login />} title="登录" />,
     },
     {
         path: '*',
         element: (
             <WrapperRouteWithOutLayoutComponent
                 element={<Empty title="找不到咯" description="这里什么也没有~" type="404" />}
-                titleId="404"
+                title="404"
             />
         ),
     },
