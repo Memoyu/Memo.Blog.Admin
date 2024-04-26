@@ -218,6 +218,7 @@ export enum CommentType {
 export interface CommentPageRequest extends PaginationRequest {
     commentType: CommentType;
     nickname?: string;
+    content?: string;
     ip?: string;
     dateBegin?: string;
     dateEnd?: string;
@@ -227,28 +228,37 @@ export interface CommentPageModel {
     commentId: string;
     belong: CommentBelongModel;
     commentType: number;
-    nickname: string;
-    email: string;
     content: string;
-    avatar: string;
-    avatarOriginType: number;
-    avatarOrigin: string;
+    visitor: CommentVisitorModel;
+    reply?: CommentReplyModel;
+    children?: Array<CommentPageModel>;
+    floor: number;
+    floorString: string;
     ip: string;
     region: string;
     showable: boolean;
     createTime: Date;
 }
 
+export interface CommentReplyModel {
+    commentId: string;
+    nickname: string;
+    content: string;
+    createTime: Date;
+    floor: number;
+    floorString: string;
+}
+
 export interface CommentModel {
     commentId: string;
     belong: CommentBelongModel;
     commentType: number;
-    nickname: string;
-    email: string;
     content: string;
-    avatar: string;
-    avatarOriginType: number;
-    avatarOrigin: string;
+    visitor: CommentVisitorModel;
+    reply?: CommentReplyModel;
+    children?: Array<CommentModel>;
+    floor: number;
+    floorString: string;
     ip: string;
     region: string;
     showable: boolean;
@@ -257,10 +267,7 @@ export interface CommentModel {
 
 export interface CommentEditRequest {
     commentId: string;
-    nickname: string;
-    email?: string;
     content: string;
-    avatar?: string;
     showable: boolean;
 }
 
@@ -483,6 +490,26 @@ export interface SystemLogModel {
     requestPath: string;
     exMessage: string;
     time: Date;
+}
+
+//#endregion
+
+//#region 访客管理
+
+export enum AvatarOriginType {
+    Unknown = 0,
+    Qq = 1,
+    Github = 2,
+    Upload = 3,
+}
+
+export interface CommentVisitorModel {
+    visitorId: string;
+    nickname: string;
+    email?: string;
+    avatar?: string;
+    avatarOriginType?: AvatarOriginType;
+    avatarOrigin?: string;
 }
 
 //#endregion

@@ -145,7 +145,7 @@ const Index: React.FC = () => {
     const [editModalTitle, setEditModalTitle] = useState<string>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
-    const [editMoment, setEditMoment] = useState<MomentEditRequest | null>();
+    const [editMoment, setEditMoment] = useState<MomentModel>();
     const [content, setContent] = useState<string>('');
 
     // 获取动态分页列表
@@ -191,16 +191,16 @@ const Index: React.FC = () => {
 
     // 编辑动态
     const handleEditMoment = async (momentId?: string) => {
-        let moment: MomentEditRequest = { content: '', showable: true, commentable: false };
+        let moment = { content: '', showable: true, commentable: true } as MomentModel;
         let content = '';
         if (momentId) {
             let res = await momentGet(momentId);
-            if (!res.isSuccess) {
+            if (!res.isSuccess || !res.data) {
                 Toast.error(res.message);
                 return;
             }
 
-            moment = { ...res.data } as MomentEditRequest;
+            moment = res.data;
             content = moment.content;
         }
 
@@ -235,7 +235,7 @@ const Index: React.FC = () => {
 
             var msg = '';
             var res;
-            if (editMoment) {
+            if (editMoment && editMoment.momentId) {
                 res = await momentUpdate(moment);
                 msg = '更新成功';
             } else {

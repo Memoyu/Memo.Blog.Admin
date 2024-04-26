@@ -20,8 +20,6 @@ const PrivateRoute = (props: PathRouteProps) => {
     const { logged } = useTypedSelector((state) => state.userLogin);
     const { pathname } = location;
 
-    console.log('测试');
-
     return logged ? (
         pathname === '/' ? (
             <Navigate to={{ pathname: `/dashboard` }} replace />

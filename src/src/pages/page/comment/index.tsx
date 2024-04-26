@@ -14,6 +14,7 @@ import {
     Toast,
     Row,
     Col,
+    Highlight,
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
@@ -28,6 +29,7 @@ import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import {
     CommentEditRequest,
+    CommentModel,
     CommentPageModel,
     CommentPageRequest,
     CommentTypeOpts,
@@ -46,14 +48,18 @@ const Index: React.FC = () => {
             align: 'center',
             width: 160,
             dataIndex: 'commentId',
+            // ellipsis: { showTitle: false },
+            // render: (text) => {
+            //     return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            // },
         },
         {
             title: '头像',
             align: 'center',
             dataIndex: 'avatar',
             width: 70,
-            render: (text) => {
-                return <Avatar alt="cute cat" size="small" src={text} />;
+            render: (_, comment: CommentPageModel) => {
+                return <Avatar alt="cute cat" size="small" src={comment.visitor.avatar} />;
             },
         },
         {
@@ -62,8 +68,14 @@ const Index: React.FC = () => {
             dataIndex: 'nickname',
             width: 100,
             ellipsis: { showTitle: false },
-            render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            render: (_, comment: CommentPageModel) => {
+                return (
+                    <Highlight
+                        sourceString={comment.visitor.nickname}
+                        searchWords={searchNicknames}
+                    />
+                );
+                // return <Text ellipsis={{ showTooltip: true }}>{comment.visitor.nickname}</Text>;
             },
         },
         {
@@ -83,7 +95,8 @@ const Index: React.FC = () => {
             width: 170,
             ellipsis: { showTitle: false },
             render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+                return <Highlight sourceString={text} searchWords={searchContents} />;
+                // return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
             },
         },
         {
@@ -92,8 +105,8 @@ const Index: React.FC = () => {
             dataIndex: 'email',
             width: 130,
             ellipsis: { showTitle: false },
-            render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            render: (_, comment: CommentPageModel) => {
+                return <Text ellipsis={{ showTooltip: true }}>{comment.visitor.email}</Text>;
             },
         },
         {
@@ -175,13 +188,14 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
+    const [searchNicknames, setSearchNicknames] = useState<Array<string>>([]);
+    const [searchContents, setSearchContents] = useState<Array<string>>([]);
     const [data, loading, setData, setLoading] = useData<Array<CommentPageModel>>();
 
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
-    const [editComment, setEditComment] = useState<CommentEditRequest>();
+    const [editComment, setEditComment] = useState<CommentModel>();
     const [commentContent, setCommentContent] = useState<string>('');
-    const [avatar, setAvatar] = useState<string>('');
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {
@@ -189,10 +203,13 @@ const Index: React.FC = () => {
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
+        setSearchNicknames([search?.nickname]);
+        setSearchContents([search?.content]);
         // console.log(search);
         let request = {
             commentType: search?.commentType,
             nickname: search?.nickname,
+            content: search?.content,
             ip: search?.ip,
             page: page,
             size: pageSize,
@@ -226,19 +243,8 @@ const Index: React.FC = () => {
             Toast.error(res.message);
             return;
         }
-        let comment = res.data;
-
-        setEditComment({
-            commentId: comment.commentId,
-            nickname: comment.nickname,
-            email: comment.email,
-            content: comment.content,
-            avatar: comment.avatar,
-            showable: comment.showable,
-        });
-
-        setAvatar(comment.avatar);
-        setCommentContent(comment.content);
+        setEditComment(res.data);
+        setCommentContent(res.data.content);
         setEditVisible(true);
     };
 
@@ -261,12 +267,11 @@ const Index: React.FC = () => {
     // 确认编辑
     const handleEditModalOk = () => {
         editForm?.validate().then(async (form) => {
-            console.log('form', form, avatar);
+            console.log('form', form);
 
             let comment = {
                 ...form,
                 commentId: editComment?.commentId,
-                avatar: avatar,
                 content: commentContent,
             } as CommentEditRequest;
             let res = await commentUpdate(comment);
@@ -302,6 +307,12 @@ const Index: React.FC = () => {
                                 label="昵称"
                                 style={{ width: 190 }}
                             />
+                            <Form.Input
+                                field="content"
+                                showClear
+                                label="评论内容"
+                                style={{ width: 190 }}
+                            />
                             <Form.Input field="ip" showClear label="IP" style={{ width: 190 }} />
                             <Form.DatePicker
                                 label="评论时间"
@@ -331,6 +342,7 @@ const Index: React.FC = () => {
                             size="small"
                             columns={columns}
                             dataSource={data}
+                            rowKey={'commentId'}
                             pagination={{
                                 currentPage,
                                 pageSize: pageSize,
@@ -367,22 +379,21 @@ const Index: React.FC = () => {
                                                 alignItems: 'center',
                                             }}
                                         >
-                                            <UploadImage
-                                                type="avatar"
-                                                url={avatar}
-                                                path="page/about/banner"
-                                                onSuccess={setAvatar}
-                                            />
+                                            <Avatar src={editComment?.visitor.avatar} />
                                         </div>
                                     </Form.Slot>
                                 </Col>
                                 <Col span={10}>
                                     <Form.Input
-                                        field="nickname"
+                                        field="visitor.nickname"
                                         label="昵称"
-                                        rules={[{ required: true, message: '昵称必填' }]}
+                                        disabled={true}
                                     />
-                                    <Form.Input field="email" label="邮箱" />
+                                    <Form.Input
+                                        field="visitor.email"
+                                        label="邮箱"
+                                        disabled={true}
+                                    />
                                 </Col>
                                 <Col span={10}>
                                     <div style={{ display: 'flex' }}>
