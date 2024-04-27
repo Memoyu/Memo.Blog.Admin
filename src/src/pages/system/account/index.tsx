@@ -46,6 +46,7 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
+import { userIdentityOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 
@@ -184,29 +185,6 @@ const Index: React.FC = () => {
                     </Space>
                 );
             },
-        },
-    ];
-
-    const userIdentityOpts: Array<OptionProps> = [
-        {
-            value: 0,
-            label: '密码',
-        },
-        {
-            value: 1,
-            label: '微信',
-        },
-        {
-            value: 2,
-            label: 'QQ',
-        },
-        {
-            value: 3,
-            label: 'Github',
-        },
-        {
-            value: 4,
-            label: 'Gitee',
         },
     ];
 

@@ -150,6 +150,7 @@ const Index: React.FC = () => {
                             </Col>
                             <Col span={6}>
                                 <Select
+                                    showClear
                                     style={{ width: '100%' }}
                                     maxTagCount={3}
                                     multiple

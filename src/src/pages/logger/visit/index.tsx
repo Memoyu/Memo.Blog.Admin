@@ -15,6 +15,7 @@ import { VisitLogBehavior, VisitLogModel, VisitLogPageRequest } from '@src/commo
 import { visitLogPage } from '@src/utils/request';
 
 import './index.scss';
+import { visitLogBehaviorOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 
@@ -41,13 +42,8 @@ const Index: React.FC = () => {
         {
             title: '访问行为',
             align: 'center',
-            dataIndex: 'behavior',
+            dataIndex: 'behaviorName',
             width: 90,
-            render: (_, log: VisitLogModel) => {
-                return (
-                    <Text ellipsis={{ showTooltip: true }}>{VisitLogBehavior[log.behavior]}</Text>
-                );
-            },
         },
         {
             title: '访问路径',
@@ -183,18 +179,12 @@ const Index: React.FC = () => {
                             <Form.Input field="visitorId" showClear label="访客标识" />
 
                             <Form.Select
+                                showClear
                                 label="访问行为"
                                 field="behavior"
                                 style={{ width: '250px' }}
-                            >
-                                {Object.keys(VisitLogBehavior)
-                                    .filter((key) => Number.isNaN(Number(key)))
-                                    .map((l, i) => {
-                                        return (
-                                            <Form.Select.Option value={i}>{l}</Form.Select.Option>
-                                        );
-                                    })}
-                            </Form.Select>
+                                optionList={visitLogBehaviorOpts}
+                            />
 
                             <Form.Input field="path" showClear label="访问路径" />
 
@@ -213,16 +203,18 @@ const Index: React.FC = () => {
                             <Form.Input field="isp" showClear label="服务商" />
 
                             <Form.Select
+                                showClear
                                 label="操作系统"
                                 field="os"
                                 style={{ width: '250px' }}
-                            ></Form.Select>
+                            />
 
                             <Form.Select
+                                showClear
                                 label="浏览器"
                                 field="browser"
                                 style={{ width: '250px' }}
-                            ></Form.Select>
+                            />
 
                             <Form.DatePicker label="日志时间" type="dateTimeRange" field="time" />
 

@@ -1,5 +1,3 @@
-import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
-
 export interface PaginationRequest {
     size: number;
     page: number;
@@ -189,25 +187,6 @@ export interface TagModel {
 //#endregion
 
 //#region 评论
-
-export const CommentTypeOpts: Array<OptionProps> = [
-    {
-        value: '',
-        label: '全部',
-    },
-    {
-        value: 0,
-        label: '文章',
-    },
-    {
-        value: 1,
-        label: '动态',
-    },
-    {
-        value: 2,
-        label: '关于',
-    },
-];
 
 export enum CommentType {
     Article = 0,
@@ -406,10 +385,12 @@ export interface MomentModel {
 //#region 访问日志
 
 export enum VisitLogBehavior {
-    Article = 0,
-    Moment = 1,
-    Friend = 2,
-    Tool = 3,
+    Unknown = -1,
+    Home = 0,
+    Article = 1,
+    ArticleDetail = 11,
+    Labs = 2,
+    Moment = 3,
     About = 4,
 }
 
@@ -423,6 +404,7 @@ export interface VisitLogPageRequest extends PaginationRequest {
     visitId?: string; // 访问日志Id
     visitorId?: string; // 访客Id
     behavior?: VisitLogBehavior;
+    behaviorName?: string;
     visitedId: number; // 被访问信息Id（文章Id、动态Id等）
     path?: string;
     ip?: string;
@@ -459,7 +441,6 @@ export interface VisitLogModel {
 //#region 系统日志
 
 export enum SystemLogLevel {
-    Verbose = 0,
     Debug = 1,
     Info = 2,
     Warning = 3,

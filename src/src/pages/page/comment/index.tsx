@@ -32,12 +32,12 @@ import {
     CommentModel,
     CommentPageModel,
     CommentPageRequest,
-    CommentTypeOpts,
 } from '@src/common/model';
 
 import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
 
 import './index.scss';
+import { commentTypeOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 
@@ -295,12 +295,12 @@ const Index: React.FC = () => {
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
                             <Form.Select
+                                showClear
                                 label="评论类型"
                                 field="commentType"
-                                initValue={''}
                                 style={{ width: '250px' }}
-                                optionList={CommentTypeOpts}
-                            ></Form.Select>
+                                optionList={commentTypeOpts}
+                            />
                             <Form.Input
                                 field="nickname"
                                 showClear

@@ -36,6 +36,7 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
+import { articleStatusOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 const { Input, Select } = Form;
@@ -221,7 +222,6 @@ const Index: React.FC = () => {
         var opts = res.data?.map((c) => {
             return { value: c.categoryId, label: c.name };
         });
-        (opts || []).unshift({ value: '0', label: '全部' });
         setCategories(opts);
     };
 
@@ -282,12 +282,12 @@ const Index: React.FC = () => {
                         >
                             <Input field="title" showClear label="标题" style={{ width: 190 }} />
                             <Select
-                                initValue={'0'}
+                                showClear
                                 field="category"
                                 label={{ text: '分类' }}
                                 style={{ width: 176 }}
                                 optionList={categories}
-                            ></Select>
+                            />
                             <Select
                                 multiple
                                 field="tags"
@@ -295,20 +295,14 @@ const Index: React.FC = () => {
                                 style={{ width: 290 }}
                                 optionList={tags}
                                 showClear
-                            ></Select>
+                            />
                             <Select
-                                initValue={undefined}
+                                showClear
                                 field="status"
                                 label={{ text: '状态' }}
                                 style={{ width: 176 }}
-                            >
-                                <Select.Option value={undefined}>全部</Select.Option>
-                                <Select.Option value={ArticleStatus.Draft}>草稿</Select.Option>
-                                <Select.Option value={ArticleStatus.Published}>
-                                    已发布
-                                </Select.Option>
-                                <Select.Option value={ArticleStatus.Offline}>下线</Select.Option>
-                            </Select>
+                                optionList={articleStatusOpts}
+                            />
                             <Space
                                 spacing="loose"
                                 style={{ alignItems: 'flex-end', marginTop: 10 }}

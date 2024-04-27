@@ -15,6 +15,7 @@ import { SystemLogLevel, SystemLogModel, SystemLogPageRequest } from '@src/commo
 import { systemLogPage } from '@src/utils/request';
 
 import './index.scss';
+import { systemLogLevelOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 
@@ -166,15 +167,13 @@ const Index: React.FC = () => {
 
                             <Form.Input field="source" showClear label="日志源" />
 
-                            <Form.Select label="日志等级" field="level" style={{ width: '250px' }}>
-                                {Object.keys(SystemLogLevel)
-                                    .filter((key) => Number.isNaN(Number(key)))
-                                    .map((l, i) => {
-                                        return (
-                                            <Form.Select.Option value={i}>{l}</Form.Select.Option>
-                                        );
-                                    })}
-                            </Form.Select>
+                            <Form.Select
+                                showClear
+                                label="日志等级"
+                                field="level"
+                                style={{ width: '250px' }}
+                                optionList={systemLogLevelOpts}
+                            />
 
                             <Form.DatePicker label="日志时间" type="dateTimeRange" field="time" />
 
