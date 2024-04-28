@@ -85,7 +85,7 @@ const Index: FC = () => {
 
     return (
         <div className="anlyanis-second-card-list">
-            <Card>
+            <Card bodyStyle={{ padding: 10 }}>
                 <Row gutter={8}>
                     <Col span={8}>
                         <Card loading={rankingLoading}>
@@ -98,9 +98,9 @@ const Index: FC = () => {
                                 style={{ minHeight: 490 }}
                                 dataSource={rankingData}
                                 renderItem={(item, index) => (
-                                    <List.Item>
+                                    <List.Item style={{ padding: '11px 5px' }}>
                                         <Row>
-                                            <Col span={18}>
+                                            <Col span={14}>
                                                 <Text ellipsis={{ showTooltip: true }}>
                                                     <Avatar
                                                         size="extra-extra-small"
@@ -115,7 +115,7 @@ const Index: FC = () => {
                                                     {item.title}
                                                 </Text>
                                             </Col>
-                                            <Col span={2}>
+                                            <Col span={4}>
                                                 <div
                                                     style={{
                                                         display: 'flex',
@@ -130,7 +130,7 @@ const Index: FC = () => {
                                                     {item.views}
                                                 </div>
                                             </Col>
-                                            <Col span={2}>
+                                            <Col span={3}>
                                                 <div
                                                     style={{
                                                         display: 'flex',
@@ -145,7 +145,7 @@ const Index: FC = () => {
                                                     {item.comments}
                                                 </div>
                                             </Col>
-                                            <Col span={2}>
+                                            <Col span={3}>
                                                 <div style={{ textAlign: 'center', width: '100%' }}>
                                                     <IconLikeHeart
                                                         size="small"

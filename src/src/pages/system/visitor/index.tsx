@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IconSpin } from '@douyinfe/semi-icons-lab';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
+import { IconAccessibility } from '@douyinfe/semi-icons-lab';
+import { format } from 'date-fns';
 import {
     Button,
     Table,
@@ -24,7 +24,7 @@ import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { FriendEditRequest, FriendModel, FriendPageRequest } from '@src/common/model';
+import { FriendEditRequest, FriendModel, FriendPageRequest, VisitorModel } from '@src/common/model';
 
 import {
     friendPage,
@@ -44,7 +44,7 @@ const Index: React.FC = () => {
         {
             title: 'ID',
             align: 'center',
-            dataIndex: 'friendId',
+            dataIndex: 'visitorId',
             width: 160,
         },
         {
@@ -53,7 +53,7 @@ const Index: React.FC = () => {
             dataIndex: 'avatar',
             width: 70,
             render: (text) => {
-                return <Avatar alt="cute cat" size="small" src={text} />;
+                return <Avatar size="small" src={text} />;
             },
         },
         {
@@ -67,7 +67,7 @@ const Index: React.FC = () => {
             },
         },
         {
-            title: '描述',
+            title: '头像来源',
             align: 'center',
             dataIndex: 'description',
             width: 170,
@@ -77,7 +77,7 @@ const Index: React.FC = () => {
             },
         },
         {
-            title: '站点',
+            title: '访客归属',
             align: 'center',
             dataIndex: 'site',
             width: 170,
@@ -87,17 +87,13 @@ const Index: React.FC = () => {
             },
         },
         {
-            title: '浏览次数',
+            title: '创建时间',
             align: 'center',
-            dataIndex: 'views',
-            width: 90,
-        },
-        {
-            title: '公开',
-            align: 'center',
-            width: 60,
-            render: (_, comment: FriendModel) =>
-                comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
+            dataIndex: 'name',
+            width: 150,
+            render: (_, visitor: VisitorModel) => (
+                <Text>{format(new Date(visitor.createTime), 'yyyy-MM-dd HH:mm')}</Text>
+            ),
         },
         {
             title: '操作',
@@ -231,7 +227,7 @@ const Index: React.FC = () => {
     };
 
     return (
-        <Content title="友链管理" icon={<IconSpin />}>
+        <Content title="访客管理" icon={<IconAccessibility />}>
             <div className="friend-container">
                 <div className="friend-list">
                     <div className="friend-list-bar">
@@ -255,17 +251,6 @@ const Index: React.FC = () => {
                                 </Button>
 
                                 <Button htmlType="reset">重置</Button>
-
-                                <Button
-                                    icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
-                                    onClick={() => {
-                                        handleEditFriend();
-                                        setEditModalTitle('新增友链');
-                                    }}
-                                >
-                                    新增
-                                </Button>
                             </Space>
                         </Form>
                     </div>

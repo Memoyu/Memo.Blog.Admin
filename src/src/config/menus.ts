@@ -13,9 +13,8 @@ import {
     IconProgress,
     IconRadio,
     IconToken,
+    IconAccessibility,
 } from '@douyinfe/semi-icons-lab';
-
-import { IconProps } from '@douyinfe/semi-ui/lib/es/icons';
 
 export interface MenuItem {
     itemKey: string;
@@ -124,12 +123,18 @@ const Menus: MenuItem[] = [
             },
             {
                 itemKey: '5-2',
+                text: '访客管理',
+                path: '/system/visitor',
+                icon: IconAccessibility,
+            },
+            {
+                itemKey: '5-3',
                 text: '角色管理',
                 path: '/system/role',
                 icon: IconToast,
             },
             {
-                itemKey: '5-3',
+                itemKey: '5-4',
                 text: '权限管理',
                 path: '/system/permission',
                 icon: IconButton,

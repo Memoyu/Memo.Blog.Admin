@@ -495,6 +495,17 @@ export interface CommentVisitorModel {
     avatarOrigin?: string;
 }
 
+export interface VisitorModel {
+    visitorId: string;
+    nickname: string;
+    email?: string;
+    avatar?: string;
+    avatarOriginType?: AvatarOriginType;
+    avatarOrigin?: string;
+    region: string;
+    createTime: Date;
+}
+
 //#endregion
 
 //#region 用户管理
