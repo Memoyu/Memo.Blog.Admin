@@ -82,7 +82,7 @@ const Index: FC = () => {
                         style={{ height: 230 }}
                         footer={
                             <span>
-                                文章总数{' '}
+                                文章总数
                                 <span style={{ paddingLeft: 10 }}>{data?.summary.articles}</span>
                             </span>
                         }
@@ -120,7 +120,7 @@ const Index: FC = () => {
                         loading={loading}
                         footer={
                             <span>
-                                浏览总数{' '}
+                                浏览总数
                                 <span style={{ paddingLeft: 10 }}>
                                     {data?.pageVisitor.pageVisitors}
                                 </span>
@@ -128,7 +128,7 @@ const Index: FC = () => {
                         }
                     >
                         <div className="flex-between">
-                            <span>今日PV</span>{' '}
+                            <span>今日PV</span>
                             <Popover
                                 position="top"
                                 showArrow
@@ -156,7 +156,7 @@ const Index: FC = () => {
                         loading={loading}
                         footer={
                             <span>
-                                访问总数{' '}
+                                访问总数
                                 <span style={{ paddingLeft: 10 }}>
                                     {data?.uniqueVisitor.uniqueVisitors}
                                 </span>
@@ -164,7 +164,7 @@ const Index: FC = () => {
                         }
                     >
                         <div className="flex-between">
-                            <span> 今日UV</span>{' '}
+                            <span> 今日UV</span>
                             <Popover
                                 position="top"
                                 showArrow

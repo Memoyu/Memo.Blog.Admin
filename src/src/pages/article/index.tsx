@@ -123,6 +123,18 @@ const Index: React.FC = () => {
             ),
         },
         {
+            title: '浏览/评论/点赞',
+            align: 'center',
+            width: 130,
+            render: (_, article: ArticlePageModel) => {
+                return (
+                    <Text ellipsis={{ showTooltip: true }}>
+                        {article.views} / {article.comments} / {article.likes}
+                    </Text>
+                );
+            },
+        },
+        {
             title: '创建时间',
             align: 'center',
             width: 150,

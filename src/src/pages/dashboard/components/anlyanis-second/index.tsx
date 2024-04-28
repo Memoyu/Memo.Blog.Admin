@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Row, Col, Card, List, Avatar, Descriptions, Typography } from '@douyinfe/semi-ui';
-import { IconComment, IconLikeHeart } from '@douyinfe/semi-icons';
+import { IconEyeOpened, IconComment, IconLikeHeart } from '@douyinfe/semi-icons';
 import { cloneDeep } from 'lodash';
 import echarts from '@src/common/echarts';
 import ReactEChartsCore from 'echarts-for-react/lib/core';
@@ -115,7 +115,22 @@ const Index: FC = () => {
                                                     {item.title}
                                                 </Text>
                                             </Col>
-                                            <Col span={3}>
+                                            <Col span={2}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        width: '100%',
+                                                    }}
+                                                >
+                                                    <IconEyeOpened
+                                                        size="small"
+                                                        style={{ marginRight: 3 }}
+                                                    />
+                                                    {item.views}
+                                                </div>
+                                            </Col>
+                                            <Col span={2}>
                                                 <div
                                                     style={{
                                                         display: 'flex',
@@ -127,13 +142,11 @@ const Index: FC = () => {
                                                         size="small"
                                                         style={{ marginRight: 3 }}
                                                     />
-                                                    {item.views}
+                                                    {item.comments}
                                                 </div>
                                             </Col>
-                                            <Col span={3}>
-                                                {' '}
+                                            <Col span={2}>
                                                 <div style={{ textAlign: 'center', width: '100%' }}>
-                                                    {' '}
                                                     <IconLikeHeart
                                                         size="small"
                                                         style={{ marginRight: 3 }}

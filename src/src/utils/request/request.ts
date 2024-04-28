@@ -5,6 +5,8 @@ import { resultCode } from './resultCode';
 import { store } from '@redux/store';
 import { logout } from '@redux/slices/userSlice';
 
+const baseURL = import.meta.env.VITE_BASE_API;
+
 type Result<T> = {
     isSuccess: boolean; // 是否成功
     code: number; // 响应编码
@@ -17,7 +19,7 @@ export class Request {
     // axios 实例
     instance: AxiosInstance;
     // 基础配置，url和超时时间
-    baseConfig: AxiosRequestConfig = { baseURL: '/api/admin/', timeout: 10_000 };
+    baseConfig: AxiosRequestConfig = { baseURL: baseURL + 'api/admin/', timeout: 10_000 };
 
     constructor(config: AxiosRequestConfig) {
         // 使用axios.create创建axios实例

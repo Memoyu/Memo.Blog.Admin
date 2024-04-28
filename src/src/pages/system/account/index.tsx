@@ -404,7 +404,6 @@ const Index: React.FC = () => {
         return editUser?.userId == undefined ? (
             <Row gutter={20}>
                 <Col span={12}>
-                    {' '}
                     <Form.Select
                         field="userIdentityType"
                         label={{ text: '认证' }}
@@ -415,7 +414,6 @@ const Index: React.FC = () => {
                     />
                 </Col>
                 <Col span={12}>
-                    {' '}
                     {userIdentityType == UserIdentityType.Password ? (
                         <Form.Input
                             field="credential"

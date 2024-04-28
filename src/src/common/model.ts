@@ -103,6 +103,7 @@ export interface ArticleRankingModel {
     articleId: string; // 文章Id
     title: string;
     views: number;
+    comments: number;
     likes: number;
 }
 
@@ -120,6 +121,7 @@ export interface ArticlePageModel {
     description: string;
     tags: Array<TagModel>;
     status: ArticleStatus;
+    comments: number;
     views: number;
     likes: number;
     isTop: boolean;
