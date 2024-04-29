@@ -103,7 +103,6 @@ const Index: React.FC = () => {
         {
             title: '创建时间',
             align: 'center',
-            dataIndex: 'name',
             width: 150,
             render: (_, project: OpenSourceModel) => (
                 <Text>{format(project.createTime, 'yyyy-MM-dd HH:mm')}</Text>

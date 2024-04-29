@@ -24,15 +24,15 @@ import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { FriendEditRequest, FriendModel, FriendPageRequest, VisitorModel } from '@src/common/model';
-
 import {
-    friendPage,
-    friendCreate,
-    friendDelete,
-    friendUpdate,
-    friendGet,
-} from '@src/utils/request';
+    AvatarOriginType,
+    AvatarOriginType,
+    VisitorEditRequest,
+    VisitorModel,
+    VisitorPageRequest,
+} from '@src/common/model';
+
+import { visitorPage, visitorDelete, visitorUpdate, visitorGet } from '@src/utils/request';
 
 import './index.scss';
 import UploadImage from '@src/components/upload-image';
@@ -89,7 +89,6 @@ const Index: React.FC = () => {
         {
             title: '创建时间',
             align: 'center',
-            dataIndex: 'name',
             width: 150,
             render: (_, visitor: VisitorModel) => (
                 <Text>{format(new Date(visitor.createTime), 'yyyy-MM-dd HH:mm')}</Text>
@@ -99,7 +98,7 @@ const Index: React.FC = () => {
             title: '操作',
             align: 'center',
             width: 150,
-            render: (_text, friend: FriendModel) => {
+            render: (_text, visitor: VisitorModel) => {
                 return (
                     <Space>
                         <Button
@@ -107,8 +106,7 @@ const Index: React.FC = () => {
                             type="primary"
                             size="small"
                             onClick={() => {
-                                handleEditFriend(friend.friendId);
-                                setEditModalTitle('编辑友链');
+                                handleeditVisitor(visitor.visitorId);
                             }}
                         >
                             编辑
@@ -116,8 +114,8 @@ const Index: React.FC = () => {
 
                         <Popconfirm
                             position="left"
-                            title="确定是否要删除此友链？"
-                            onConfirm={() => handleDeleteFriend(friend)}
+                            title="确定是否要删除此访客？"
+                            onConfirm={() => handleDeleteVisitor(visitor)}
                         >
                             <Button theme="borderless" type="danger" size="small">
                                 删除
@@ -132,22 +130,21 @@ const Index: React.FC = () => {
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
-    const [data, loading, setData, setLoading] = useData<Array<FriendModel>>();
-    const [editModalTitle, setEditModalTitle] = useState<string>();
+    const [data, loading, setData, setLoading] = useData<Array<VisitorModel>>();
     const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [editFriend, setEditFriend] = useState<FriendModel>();
+    const [editVisitor, setEditVisitor] = useState<VisitorModel>();
     const [linkAvatar, setLinkAvatar] = useState<string>();
 
-    // 获取友链分页
-    let getFriendPage = async (page: number = 1) => {
+    // 获取访客分页
+    let getVisitorPage = async (page: number = 1) => {
         setLoading(true);
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
-        let request = { ...search, page, size: pageSize } as FriendPageRequest;
-        friendPage(request)
+        let request = { ...search, page, size: pageSize } as VisitorPageRequest;
+        visitorPage(request)
             .then((res) => {
                 if (!res.isSuccess || !res.data) {
                     Toast.error(res.message);
@@ -161,69 +158,58 @@ const Index: React.FC = () => {
     };
 
     useOnMountUnsafe(() => {
-        getFriendPage();
+        getVisitorPage();
     });
 
     // 页数变更
     const handlePageChange = (page: number) => {
-        getFriendPage(page);
+        getVisitorPage(page);
     };
 
-    // 保存编辑/新增友链
+    // 保存编辑访客
     const handleEditModalOk = () => {
         editForm?.validate().then(async (form) => {
-            let friend = {
+            let visitor = {
                 ...form,
                 avatar: linkAvatar,
-            } as FriendEditRequest;
+                avatarOriginType: editVisitor?.avatar ==  AvatarOriginType.Upload,
+            } as VisitorEditRequest;
 
-            var msg = '';
-            var res;
-            if (editFriend?.friendId) {
-                res = await friendUpdate(friend);
-                msg = '更新成功';
-            } else {
-                res = await friendCreate(friend);
-                msg = '添加成功';
-            }
+            let res = await visitorUpdate(visitor);
 
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
             setEditVisible(false);
-            Toast.success(msg);
-            getFriendPage();
+            Toast.success('更新成功');
+            getVisitorPage();
         });
     };
 
-    // 编辑/新增友链
-    const handleEditFriend = async (friendId?: string) => {
-        let friend = { showable: true } as FriendModel;
-        if (friendId) {
-            let res = await friendGet(friendId);
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            friend = res.data as FriendModel;
+    // 编辑访客
+    const handleeditVisitor = async (visitorId: string) => {
+        let res = await visitorGet(visitorId);
+        if (!res.isSuccess || !res.data) {
+            Toast.error(res.message);
+            return;
         }
 
-        setLinkAvatar(friend.avatar);
-        setEditFriend(friend);
+        setLinkAvatar(res.data.avatar);
+        setEditVisitor(res.data);
         setEditVisible(true);
     };
 
     // 删除友链
-    const handleDeleteFriend = async (data: FriendModel) => {
-        let res = await friendDelete(data.friendId);
+    const handleDeleteVisitor = async (data: VisitorModel) => {
+        let res = await visitorDelete(data.visitorId);
         if (!res.isSuccess) {
             Toast.error(res.message);
             return;
         }
 
         Toast.success('删除成功');
-        getFriendPage();
+        getVisitorPage();
     };
 
     return (
@@ -245,7 +231,7 @@ const Index: React.FC = () => {
                                 <Button
                                     type="primary"
                                     htmlType="submit"
-                                    onClick={() => getFriendPage(1)}
+                                    onClick={() => getVisitorPage(1)}
                                 >
                                     查询
                                 </Button>
@@ -271,7 +257,7 @@ const Index: React.FC = () => {
                     </div>
                 </div>
                 <Modal
-                    title={editModalTitle}
+                    title="编辑访客"
                     visible={editVisible}
                     onOk={handleEditModalOk}
                     onCancel={() => setEditVisible(false)}
@@ -283,7 +269,7 @@ const Index: React.FC = () => {
                         labelPosition="left"
                         labelAlign="left"
                         labelWidth={60}
-                        initValues={editFriend}
+                        initValues={editVisitor}
                         getFormApi={(formData) => setEditForm(formData)}
                     >
                         <Row gutter={12}>
@@ -299,7 +285,7 @@ const Index: React.FC = () => {
                                         <UploadImage
                                             type="avatar"
                                             url={linkAvatar}
-                                            path="friend/avatar"
+                                            path="visitor/avatar"
                                             onSuccess={setLinkAvatar}
                                         />
                                     </div>
@@ -308,26 +294,16 @@ const Index: React.FC = () => {
                             <Col span={20}>
                                 <Form.Input
                                     field="nickname"
-                                    placeholder="友链昵称不超20个字符"
+                                    placeholder="访客昵称不超20个字符"
                                     label="昵称"
                                     rules={[
-                                        { required: true, message: '友链昵称必填' },
+                                        { required: true, message: '访客昵称必填' },
                                         { max: 20, message: '长度不能超20个字符' },
                                     ]}
                                 />
-                                <Form.Input
-                                    field="site"
-                                    label="站点"
-                                    rules={[{ required: true, message: '友链站点必填' }]}
-                                />
+                                <Form.Input field="email" label="邮箱" />
                             </Col>
                         </Row>
-                        <Form.TextArea
-                            field="description"
-                            label="描述"
-                            rules={[{ required: true, message: '友链描述必填' }]}
-                        />
-                        <Form.Switch field="showable" label={{ text: '公开' }} aria-label="公开" />
                     </Form>
                 </Modal>
             </div>

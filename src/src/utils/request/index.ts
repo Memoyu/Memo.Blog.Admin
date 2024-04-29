@@ -45,6 +45,9 @@ import {
     OpenSourceListRequest,
     OpenSourceModel,
     OpenSourceEditRequest,
+    VisitorModel,
+    VisitorPageRequest,
+    VisitorEditRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -348,6 +351,28 @@ export const userChangePassword = (userId: string, password: string) => {
 
 export const userDelete = (id: string) => {
     return Request.delete('user/delete', { params: { userId: id } });
+};
+
+//#endregion
+
+//#region 访客
+
+export const visitorPage = (request: VisitorPageRequest) => {
+    return Request.get<PaginationResult<VisitorModel>>('visitor/page', {
+        params: request,
+    });
+};
+
+export const visitorGet = (id?: string) => {
+    return Request.get<VisitorModel>('visitor/get', { params: { visitorId: id } });
+};
+
+export const visitorUpdate = (user: VisitorEditRequest) => {
+    return Request.put<string>('visitor/update', user);
+};
+
+export const visitorDelete = (id: string) => {
+    return Request.delete('visitor/delete', { params: { visitorId: id } });
 };
 
 //#endregion

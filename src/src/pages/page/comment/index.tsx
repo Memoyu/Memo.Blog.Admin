@@ -142,7 +142,6 @@ const Index: React.FC = () => {
         {
             title: '评论时间',
             align: 'center',
-            dataIndex: 'name',
             width: 150,
             render: (_, comment: CommentPageModel) => (
                 <Text>{format(comment.createTime, 'yyyy-MM-dd HH:mm')}</Text>

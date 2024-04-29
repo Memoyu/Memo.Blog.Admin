@@ -477,37 +477,6 @@ export interface SystemLogModel {
 
 //#endregion
 
-//#region 访客管理
-
-export enum AvatarOriginType {
-    Unknown = 0,
-    Qq = 1,
-    Github = 2,
-    Upload = 3,
-}
-
-export interface CommentVisitorModel {
-    visitorId: string;
-    nickname: string;
-    email?: string;
-    avatar?: string;
-    avatarOriginType?: AvatarOriginType;
-    avatarOrigin?: string;
-}
-
-export interface VisitorModel {
-    visitorId: string;
-    nickname: string;
-    email?: string;
-    avatar?: string;
-    avatarOriginType?: AvatarOriginType;
-    avatarOrigin?: string;
-    region: string;
-    createTime: Date;
-}
-
-//#endregion
-
 //#region 用户管理
 
 export interface UserPageRequest extends PaginationRequest {
@@ -571,6 +540,53 @@ export interface UserEditRequest {
     phoneNumber?: string;
     email?: string;
     roles: Array<string>;
+}
+
+//#endregion
+
+//#region 访客管理
+
+export enum AvatarOriginType {
+    Unknown = 0,
+    Qq = 1,
+    Github = 2,
+    Upload = 3,
+}
+
+export interface CommentVisitorModel {
+    visitorId: string;
+    nickname: string;
+    email?: string;
+    avatar?: string;
+    avatarOriginType?: AvatarOriginType;
+    avatarOrigin?: string;
+}
+
+export interface VisitorPageRequest extends PaginationRequest {
+    nickname?: string;
+    region?: string;
+    dateBegin?: string;
+    dateEnd?: string;
+}
+
+export interface VisitorModel {
+    visitorId: string;
+    nickname: string;
+    email?: string;
+    avatar?: string;
+    avatarOriginType?: AvatarOriginType;
+    avatarOrigin?: string;
+    region: string;
+    createTime: Date;
+}
+
+export interface VisitorEditRequest {
+    visitorId: string;
+    nickname: string;
+    email?: string;
+    avatar?: string;
+    avatarOriginType?: AvatarOriginType;
+    avatarOrigin?: string;
 }
 
 //#endregion

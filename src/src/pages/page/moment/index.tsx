@@ -87,7 +87,6 @@ const Index: React.FC = () => {
         {
             title: '动态时间',
             align: 'center',
-            dataIndex: 'name',
             width: 150,
             render: (_, moment: MomentModel) => (
                 <Text>{format(new Date(moment.createTime), 'yyyy-MM-dd HH:mm')}</Text>
