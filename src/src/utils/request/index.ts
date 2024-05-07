@@ -114,7 +114,7 @@ export const articlePage = (request: ArticlePageRequest) => {
 };
 
 export const articleSummary = () => {
-    return Request.get<ArticleSummaryModel>('article/page/summary');
+    return Request.get<ArticleSummaryModel>('article/summary');
 };
 
 export const articleGet = (id: string) => {
