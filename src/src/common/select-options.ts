@@ -84,6 +84,25 @@ export const visitLogBehaviorOpts: Array<OptionProps> = [
     },
 ];
 
+export const AvatarOriginTypeOpts: Array<OptionProps> = [
+    {
+        value: 0,
+        label: '未知',
+    },
+    {
+        value: 1,
+        label: 'QQ',
+    },
+    {
+        value: 2,
+        label: 'GitHub',
+    },
+    {
+        value: 3,
+        label: '链接',
+    },
+];
+
 export const systemLogLevelOpts: Array<OptionProps> = [
     {
         label: 'Debug',

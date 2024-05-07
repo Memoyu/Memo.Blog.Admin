@@ -26,7 +26,6 @@ import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import {
     AvatarOriginType,
-    AvatarOriginType,
     VisitorEditRequest,
     VisitorModel,
     VisitorPageRequest,
@@ -36,6 +35,7 @@ import { visitorPage, visitorDelete, visitorUpdate, visitorGet } from '@src/util
 
 import './index.scss';
 import UploadImage from '@src/components/upload-image';
+import { AvatarOriginTypeOpts } from '@src/common/select-options';
 
 const { Text } = Typography;
 
@@ -69,11 +69,14 @@ const Index: React.FC = () => {
         {
             title: '头像来源',
             align: 'center',
-            dataIndex: 'description',
             width: 170,
             ellipsis: { showTitle: false },
-            render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+            render: (_, visitor: VisitorModel) => {
+                return (
+                    <Text ellipsis={{ showTooltip: true }}>
+                        {AvatarOriginTypeOpts[visitor.avatarOriginType || 0].label}
+                    </Text>
+                );
             },
         },
         {
@@ -135,7 +138,7 @@ const Index: React.FC = () => {
     const [editForm, setEditForm] = useState<FormApi>();
     const [searchForm, setSearchForm] = useState<FormApi>();
     const [editVisitor, setEditVisitor] = useState<VisitorModel>();
-    const [linkAvatar, setLinkAvatar] = useState<string>();
+    const [avatar, setAvatar] = useState<string>();
 
     // 获取访客分页
     let getVisitorPage = async (page: number = 1) => {
@@ -169,10 +172,14 @@ const Index: React.FC = () => {
     // 保存编辑访客
     const handleEditModalOk = () => {
         editForm?.validate().then(async (form) => {
+            // 变更了头像，则变更来源类型
+            let avatarOriginType = editVisitor?.avatarOriginType;
+            if (avatar != editVisitor?.avatar) avatarOriginType = AvatarOriginType.Upload;
             let visitor = {
                 ...form,
-                avatar: linkAvatar,
-                avatarOriginType: editVisitor?.avatar ==  AvatarOriginType.Upload,
+                visitorId: editVisitor?.visitorId,
+                avatar: avatar,
+                avatarOriginType: avatarOriginType,
             } as VisitorEditRequest;
 
             let res = await visitorUpdate(visitor);
@@ -195,7 +202,7 @@ const Index: React.FC = () => {
             return;
         }
 
-        setLinkAvatar(res.data.avatar);
+        setAvatar(res.data.avatar);
         setEditVisitor(res.data);
         setEditVisible(true);
     };
@@ -284,9 +291,9 @@ const Index: React.FC = () => {
                                     >
                                         <UploadImage
                                             type="avatar"
-                                            url={linkAvatar}
+                                            url={avatar}
                                             path="visitor/avatar"
-                                            onSuccess={setLinkAvatar}
+                                            onSuccess={setAvatar}
                                         />
                                     </div>
                                 </Form.Slot>
