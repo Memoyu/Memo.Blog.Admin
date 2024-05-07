@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Row, Col, Card, List, Avatar, Descriptions, Typography } from '@douyinfe/semi-ui';
+import { Row, Col, Card, List, Avatar, Typography } from '@douyinfe/semi-ui';
 import { IconEyeOpened, IconComment, IconLikeHeart } from '@douyinfe/semi-icons';
 import { cloneDeep } from 'lodash';
 import echarts from '@src/common/echarts';

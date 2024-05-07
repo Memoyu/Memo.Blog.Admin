@@ -10,7 +10,7 @@ import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { VisitLogBehavior, VisitLogModel, VisitLogPageRequest } from '@src/common/model';
+import { VisitLogModel, VisitLogPageRequest } from '@src/common/model';
 
 import { visitLogPage } from '@src/utils/request';
 

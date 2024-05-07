@@ -19,7 +19,6 @@ import {
 
 import Content from '@src/components/page-content';
 import MdEditor from '@src/components/md-editor';
-import UploadImage from '@src/components/upload-image';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';

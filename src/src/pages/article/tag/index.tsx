@@ -107,7 +107,7 @@ const Index: React.FC = () => {
 
     // 确认编辑/新增标签
     const handleEditModalOk = () => {
-        editForm?.validate().then(async ({ name, color }) => {
+        editForm?.validate().then(async ({ name }) => {
             var msg = '';
             var res;
             if (editTag) {

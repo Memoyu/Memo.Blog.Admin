@@ -14,7 +14,7 @@ import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
 
 const Index: FC = () => {
-    const [data, loading, setData, setLoading] = useData<ArticleSummaryModel>();
+    const [data, _loading, setData, setLoading] = useData<ArticleSummaryModel>();
 
     const [articlesOption, setArticlesOption] = useState(articleSummaryAnlyanisOption);
     const [commentsOption, setCommentsOption] = useState(articleSummaryAnlyanisOption);

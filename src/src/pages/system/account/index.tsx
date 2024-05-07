@@ -595,7 +595,7 @@ const Index: React.FC = () => {
                                     rules={[
                                         { required: true, message: '用户角色必填' },
                                         {
-                                            validator: (rule, value) =>
+                                            validator: (_rule, value) =>
                                                 value != undefined && value.length > 0,
                                             message: '用户角色至少选一个',
                                         },

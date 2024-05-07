@@ -48,7 +48,7 @@ const userShowSlice = createSlice({
     name: 'user-show',
     initialState: false,
     reducers: {
-        toggleUserShow: (state: boolean, action: PayloadAction<boolean>) => {
+        toggleUserShow: (_state: boolean, action: PayloadAction<boolean>) => {
             if (action.payload) {
                 userGet().then((res) => {
                     if (res.isSuccess && res.data) {

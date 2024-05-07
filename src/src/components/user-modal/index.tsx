@@ -7,7 +7,7 @@ import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 import './index.scss';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const Index = () => {
     const dispatch = useDispatch();

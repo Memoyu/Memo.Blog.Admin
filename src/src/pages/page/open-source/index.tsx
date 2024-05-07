@@ -2,16 +2,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { IconToken } from '@douyinfe/semi-icons-lab';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import {
-    Button,
-    Table,
-    Space,
-    Image,
-    Typography,
-    Popconfirm,
-    Form,
-    Toast,
-} from '@douyinfe/semi-ui';
+import { Button, Table, Space, Typography, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 import OpenSourceEdit from './components/edit';

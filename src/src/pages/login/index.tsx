@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
-import { Layout, Button, Card, Col, Form, Row, Toast, Typography } from '@douyinfe/semi-ui';
+import { Layout, Button, Card, Form, Toast, Typography } from '@douyinfe/semi-ui';
 
 import { useDispatch } from 'react-redux';
 import { login, setUserInfo } from '@redux/slices/userSlice';
