@@ -171,7 +171,7 @@ const Index: React.FC = () => {
                             修改密码
                         </Button>
                         {/* 非初始化的管理员才展示删除 */}
-                        {user.userId != '1' && (
+                        {
                             <Popconfirm
                                 position="left"
                                 title="确定是否要删除此用户？"
@@ -181,7 +181,7 @@ const Index: React.FC = () => {
                                     删除
                                 </Button>
                             </Popconfirm>
-                        )}
+                        }
                     </Space>
                 );
             },

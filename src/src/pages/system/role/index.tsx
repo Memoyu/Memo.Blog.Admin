@@ -67,7 +67,7 @@ const Index: React.FC = () => {
                             编辑
                         </Button>
                         {/* 非初始化的管理员才展示删除 */}
-                        {role.roleId != '1' && (
+                        {
                             <Popconfirm
                                 position="left"
                                 title="确定是否要删除此角色？"
@@ -77,7 +77,7 @@ const Index: React.FC = () => {
                                     删除
                                 </Button>
                             </Popconfirm>
-                        )}
+                        }
                     </Space>
                 );
             },
