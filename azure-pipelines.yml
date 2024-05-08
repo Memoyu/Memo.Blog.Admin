@@ -76,7 +76,7 @@ steps:
       docker pull registry.cn-shenzhen.aliyuncs.com/$(imageName)
 
       echo "================= to run container ===================="
-      docker run --restart=always --name $(containerName) -d -p 11011:80 registry.cn-shenzhen.aliyuncs.com/$(imageName)
-
+      # 设置时区: 设置环境变量 -e "TZ=Asia/Shanghai"
+      docker run --restart=always --name $(containerName) -d -p 11011:80 -e "TZ=Asia/Shanghai" registry.cn-shenzhen.aliyuncs.com/$(imageName)
       echo "================= publish success ===================="
     readyTimeout: '20000'
