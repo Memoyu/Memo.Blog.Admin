@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IconGithubLogo, IconMoon, IconSun } from '@douyinfe/semi-icons';
+import { IconGithubLogo, IconKanban, IconMoon, IconSun } from '@douyinfe/semi-icons';
 import { Tooltip, Button, Dropdown, Avatar } from '@douyinfe/semi-ui';
 
 import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
@@ -79,9 +79,20 @@ const Index = () => {
                 />
             </Tooltip>
 
+            <Tooltip content="客户端">
+                <Avatar
+                    className="other"
+                    color="purple"
+                    size="small"
+                    onClick={() => window.open('http://blog.memoyu.com', '_blank')}
+                >
+                    <IconKanban />
+                </Avatar>
+            </Tooltip>
+
             <Tooltip content="开源">
                 <Avatar
-                    className="github"
+                    className="other"
                     color="orange"
                     size="small"
                     onClick={() =>
