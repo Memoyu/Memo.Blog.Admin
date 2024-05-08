@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { useParams } from 'react-router-dom';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
@@ -26,7 +26,7 @@ const { Section, Input, Select, TextArea } = Form;
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const formRef = useRef<Form>(null);
     const params = useParams();
@@ -115,7 +115,8 @@ const Index: React.FC = () => {
             }
             Toast.success(saveBtnText + '文章成功');
 
-            navigate('/article');
+            // 停留在编辑页面
+            // navigate('/article');
         });
     };
 
