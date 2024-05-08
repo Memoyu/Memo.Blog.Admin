@@ -14,3 +14,21 @@ body,
         align-items: center;
     }
 }
+
+::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 7px;
+    background-color: var(--semi-color-primary);
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--semi-color-primary-hover);
+}
+::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    border-radius: 7px;
+    background: rgba(0, 0, 0, 0);
+}

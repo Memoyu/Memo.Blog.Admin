@@ -92,7 +92,7 @@ const Index: FC = () => {
                 style={{ maxWidth: 200, height: '100%' }}
             >
                 <Nav.Header
-                    // style={{ paddingBottom: 10, paddingTop: 15 }}
+                    className="layout-sider-header"
                     logo={
                         <Avatar
                             size="small"
@@ -105,19 +105,22 @@ const Index: FC = () => {
                     }
                     text={"memoyu's blog"}
                 />
-                {menus.map((sub: MenuItem) => (
-                    <div key={sub.itemKey}>
-                        {sub.path ? (
-                            getNavItem(sub)
-                        ) : isCollapsed ? (
-                            <></>
-                        ) : (
-                            <div className="nav-sub">{sub.text}</div>
-                        )}
-                        {sub?.items?.map((item: MenuItem) => getNavItem(item))}
-                    </div>
-                ))}
+                <div className="layout-sider-nav-content">
+                    {menus.map((sub: MenuItem) => (
+                        <div key={sub.itemKey}>
+                            {sub.path ? (
+                                getNavItem(sub)
+                            ) : isCollapsed ? (
+                                <></>
+                            ) : (
+                                <div className="nav-sub">{sub.text}</div>
+                            )}
+                            {sub?.items?.map((item: MenuItem) => getNavItem(item))}
+                        </div>
+                    ))}
+                </div>
                 <Nav.Footer
+                    className="layout-sider-footer"
                     collapseButton={true}
                     collapseText={(isCollapsed) => <span>{isCollapsed ? '展开' : '收起'}</span>}
                 />

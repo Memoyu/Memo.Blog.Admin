@@ -1,6 +1,7 @@
 import { FC, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import { PathRouteProps, useLocation } from 'react-router';
+
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
 
 export interface WrapperRouteProps extends PathRouteProps {
