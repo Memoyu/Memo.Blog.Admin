@@ -110,15 +110,15 @@ const Index: React.FC = () => {
                         getFormApi={(formData) => setLoginForm(formData)}
                     >
                         <Form.Input
-                            field={'username'}
+                            field="username"
                             label={<IconUser />}
                             placeholder={'请输入用户名'}
                         />
                         <Form.Input
-                            field={'password'}
+                            field="password"
                             label={<IconKey />}
                             placeholder={'请输入密码'}
-                            type={'password'}
+                            mode="password"
                         />
                         <Button
                             style={{ marginTop: 20 }}
