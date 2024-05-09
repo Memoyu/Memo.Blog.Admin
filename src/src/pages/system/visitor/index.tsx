@@ -81,7 +81,7 @@ const Index: React.FC = () => {
         {
             title: '访客归属',
             align: 'center',
-            dataIndex: 'site',
+            dataIndex: 'region',
             width: 170,
             ellipsis: { showTitle: false },
             render: (text) => {
@@ -229,7 +229,7 @@ const Index: React.FC = () => {
                         >
                             <Form.Input field="nickname" showClear label="昵称" />
                             <Form.Input field="description" showClear label="描述" />
-                            <Form.Input field="site" showClear label="站点" />
+                            <Form.Input field="region" showClear label="访客归属" />
                             <Space
                                 spacing="loose"
                                 style={{ alignItems: 'flex-end', marginTop: 10 }}

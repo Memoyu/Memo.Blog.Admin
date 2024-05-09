@@ -40,7 +40,7 @@ export interface QiniuUploadRequest {
 
 export interface MetricItemModel {
     name: string;
-    value: number;
+    value?: number;
 }
 
 export interface SummaryAnlyanisModel {
@@ -128,6 +128,7 @@ export interface ArticlePageModel {
     commentable: boolean;
     publicable: boolean;
     createTime: Date;
+    updateTime?: Date;
 }
 
 export interface ArticleEditRequest {

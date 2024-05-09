@@ -135,14 +135,6 @@ const Index: React.FC = () => {
             },
         },
         {
-            title: '创建时间',
-            align: 'center',
-            width: 150,
-            render: (_, article: ArticlePageModel) => (
-                <Text>{format(new Date(article.createTime), 'yyyy-MM-dd HH:mm')}</Text>
-            ),
-        },
-        {
             title: '置顶',
             align: 'center',
             width: 60,
@@ -159,6 +151,24 @@ const Index: React.FC = () => {
             align: 'center',
             width: 60,
             render: (_, article: ArticlePageModel) => getBoolTag(article.publicable),
+        },
+        {
+            title: '最近修改',
+            align: 'center',
+            width: 150,
+            render: (_, article: ArticlePageModel) => (
+                <Text>
+                    {article.updateTime && format(new Date(article.updateTime), 'yyyy-MM-dd HH:mm')}
+                </Text>
+            ),
+        },
+        {
+            title: '创建时间',
+            align: 'center',
+            width: 150,
+            render: (_, article: ArticlePageModel) => (
+                <Text>{format(new Date(article.createTime), 'yyyy-MM-dd HH:mm')}</Text>
+            ),
         },
         {
             title: '操作',

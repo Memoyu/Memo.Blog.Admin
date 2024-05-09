@@ -141,6 +141,9 @@ export const dashboardCategoryAnlyanisOption = {
     },
     tooltip: {
         trigger: 'item',
+        formatter: function (params: any) {
+            return `${params.marker}${params.data.title}<span style="float: right; margin-left: 20px"><b>${params.value}篇</span>`;
+        },
     },
     legend: {
         bottom: '0%',
@@ -150,15 +153,15 @@ export const dashboardCategoryAnlyanisOption = {
         {
             name: '关联文章数',
             type: 'pie',
-            radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
+            radius: ['20%', '50%'],
+            minShowLabelAngle: 1,
             itemStyle: {
                 borderRadius: 10,
                 borderColor: '#fff',
                 borderWidth: 2,
             },
             labelLine: {
-                show: false,
+                show: true,
             },
             data: [] as Array<any>,
         },
@@ -174,6 +177,9 @@ export const dashboardTagAnlyanisOption = {
     },
     tooltip: {
         trigger: 'item',
+        formatter: function (params: any) {
+            return `${params.marker}${params.data.title}<span style="float: right; margin-left: 20px"><b>${params.value}篇</span>`;
+        },
     },
     legend: {
         bottom: '0%',
@@ -183,15 +189,15 @@ export const dashboardTagAnlyanisOption = {
         {
             name: '关联文章数',
             type: 'pie',
-            radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
+            radius: ['20%', '50%'],
+            minShowLabelAngle: 1,
             itemStyle: {
                 borderRadius: 10,
                 borderColor: '#fff',
                 borderWidth: 2,
             },
             labelLine: {
-                show: false,
+                show: true,
             },
             data: [] as Array<any>,
         },

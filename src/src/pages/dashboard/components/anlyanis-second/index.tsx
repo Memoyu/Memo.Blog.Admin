@@ -54,9 +54,14 @@ const Index: FC = () => {
             .then((res) => {
                 if (!res.isSuccess || !res.data) return;
                 // setCategoryData(res.data);
-
+                let items = res.data.map((r) => {
+                    let title = r.name;
+                    r.name = r.name + `(${r.value})`;
+                    return { ...r, title };
+                });
                 let categoryOption = cloneDeep(categoryAnlyanisOption);
-                categoryOption.series[0].data = res.data;
+
+                categoryOption.series[0].data = items;
                 setCategoryAnlyanisOption(categoryOption);
             })
             .finally(() => setCategoryLoading(false));
@@ -69,9 +74,14 @@ const Index: FC = () => {
             .then((res) => {
                 if (!res.isSuccess || !res.data) return;
                 // setTagData(res.data);
+                let items = res.data.map((r) => {
+                    let title = r.name;
+                    r.name = r.name + `(${r.value})`;
+                    return { ...r, title };
+                });
 
                 let tagOption = cloneDeep(tagAnlyanisOption);
-                tagOption.series[0].data = res.data;
+                tagOption.series[0].data = items;
                 setTagAnlyanisOption(tagOption);
             })
             .finally(() => setTagLoading(false));
