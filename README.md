@@ -49,19 +49,21 @@
 | :---------------------------------: | :----------------------------------------------------------: |
 |React|[facebook/react](https://github.com/facebook/react)|
 |UI组件|[DouyinFE/semi-design](https://github.com/DouyinFE/semi-design)|
+|状态管理|[reduxjs/react-redux](https://github.com/reduxjs/react-redux)|
+|路由管理|[remix-run/react-router](https://github.com/remix-run/react-router)|
 |图表可视化|[apache/echarts](https://github.com/apache/echarts)|
 |日期处理|[date-fns/date-fns](https://github.com/date-fns/date-fns)|
 |markdown转换|[imzbf/md-editor-rt](https://github.com/imzbf/md-editor-rt)|
 |http请求|[axios/axios](https://github.com/axios/axios)|
+|工具库|[lodash/lodash](https://github.com/lodash/lodash)|
 
 
 
 ## 参考项目
-
-- [小剧客栈](https://bh-lay.com/)
-- [飞鸟小站](https://lzxjack.top/)
-- [Naccl's Blog](https://naccl.top/)
-- [Lin CMS By .NET](https://github.com/luoyunchong/lin-cms-dotnetcore)
+- [Hamster's Home](https://github.com/hamster1963/HomeDash)
+- [Naccl's Blog](https://admin.naccl.top/)
+- [飞鸟小站](https://github.com/lzxjack/react-blog-admin)
+- [xieyezi/semi-design-pro](https://github.com/xieyezi/semi-design-pro)
 
 **在此，感谢各位大佬的开源**
 
