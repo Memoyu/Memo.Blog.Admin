@@ -18,9 +18,9 @@
 
 |  |  |
 | :------------------------------: | :-------------------------------: |
-| ![dashboard](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/dashboard.png) |![articles](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/articles.png) |
-| ![article-edit](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/article-edit.png) |![open-source](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/open-source.png) |
-| ![users](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/users.png) |![permissions](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Client/main/docs/images/permissions.png) |
+| ![dashboard](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/dashboard.png) |![articles](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/articles.png) |
+| ![article-edit](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/article-edit.png) |![open-source](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/open-source.png) |
+| ![users](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/users.png) |![permissions](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/permissions.png) |
 
 **线上地址：**
 
