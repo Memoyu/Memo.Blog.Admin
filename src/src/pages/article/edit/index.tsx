@@ -108,6 +108,7 @@ const Index: React.FC = () => {
             } else {
                 // 新增
                 res = await articleCreate(article);
+                setArticleId(res.data);
             }
             if (!res.isSuccess) {
                 Toast.error(res.message);
