@@ -47,6 +47,11 @@ const Index: React.FC = () => {
             ),
         },
         {
+            title: '关联文章',
+            align: 'center',
+            dataIndex: 'articles',
+        },
+        {
             title: '操作',
             align: 'center',
             width: '15%',

@@ -69,22 +69,43 @@ const Index: React.FC = () => {
 
     // 获取分类列表
     let getCategories = async () => {
+        let formApi = formRef.current?.formApi;
+        let selCategoryId: string = formApi?.getValue('categoryId');
+        // console.log('已选中', selCategoryId);
+
         let res = await articleCategoryList();
         setCategories(
             res.data?.map((c) => {
                 return { value: c.categoryId, label: c.name };
             })
         );
+        let index = res.data?.findIndex((c) => selCategoryId == c.categoryId);
+
+        if (!index || index < 0) {
+            formApi?.setValue('categoryId', '');
+        }
     };
 
     // 获取标签列表
     let getTags = async () => {
+        let formApi = formRef.current?.formApi;
+        let selTags: Array<string> = formApi?.getValue('tags');
+        // console.log('已选中', selTags);
+
         let res = await articleTagList();
+        let filterIds: Array<string> = [];
         setTags(
             res.data?.map((c) => {
+                if (selTags && selTags.length > 0) {
+                    let index = selTags.findIndex((p) => p == c.tagId);
+                    index > -1 && filterIds.push(c.tagId);
+                }
+
                 return { value: c.tagId, label: c.name };
             })
         );
+
+        formApi?.setValue('tags', filterIds);
     };
 
     // 点击保存/发布
@@ -119,6 +140,15 @@ const Index: React.FC = () => {
             // 停留在编辑页面
             // navigate('/article');
         });
+    };
+
+    const handleCategoryFocus = () => {
+        // console.log('选中');
+        getCategories();
+    };
+
+    const handleTagFocus = () => {
+        getTags();
     };
 
     useOnMountUnsafe(() => {
@@ -161,6 +191,7 @@ const Index: React.FC = () => {
                                     placeholder="请选文章标签"
                                     optionList={tags}
                                     rules={[{ required: true, message: '文章标签必填' }]}
+                                    onFocus={() => handleTagFocus()}
                                 />
                             </Col>
                             <Col span={6}>
@@ -171,6 +202,7 @@ const Index: React.FC = () => {
                                     placeholder="请选文章分类"
                                     optionList={categories}
                                     rules={[{ required: true, message: '文章分类必填' }]}
+                                    onFocus={() => handleCategoryFocus()}
                                 />
                             </Col>
                         </Row>

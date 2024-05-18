@@ -25,10 +25,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'id',
-            width: 100,
-            render: (text) => {
-                return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
-            },
+            width: 210,
         },
         {
             title: '日志等级',

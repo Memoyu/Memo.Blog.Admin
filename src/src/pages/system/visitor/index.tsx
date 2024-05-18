@@ -227,6 +227,7 @@ const Index: React.FC = () => {
                             layout="horizontal"
                             getFormApi={(formData) => setSearchForm(formData)}
                         >
+                            <Form.Input field="visitorId" showClear label="访客标识" />
                             <Form.Input field="nickname" showClear label="昵称" />
                             <Form.Input field="description" showClear label="描述" />
                             <Form.Input field="region" showClear label="访客归属" />

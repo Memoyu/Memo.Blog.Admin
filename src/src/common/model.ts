@@ -175,6 +175,7 @@ export enum ArticleStatus {
 export interface CategoryModel {
     categoryId: string; // 分类Id
     name: string; // 分类名称
+    articles: number;
 }
 
 //#endregion
@@ -185,6 +186,7 @@ export interface TagModel {
     tagId: string; // 标签Id
     name: string; // 标签名称
     color: string; // 标签颜色
+    articles: number;
 }
 
 //#endregion
