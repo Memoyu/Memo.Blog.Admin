@@ -21,23 +21,17 @@ const { Text } = Typography;
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
-        // {
-        //     title: 'ID',
-        //     align: 'center',
-        //     dataIndex: 'visitId',
-        //     width: 100,
-        //     render: (text) => {
-        //         return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
-        //     },
-        // },
+        {
+            title: 'ID',
+            align: 'center',
+            dataIndex: 'visitId',
+            width: 160,
+        },
         {
             title: '访客标识',
             align: 'center',
             dataIndex: 'visitorId',
             width: 160,
-            // render: (text) => {
-            //     return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
-            // },
         },
         {
             title: '访问行为',
