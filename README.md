@@ -9,7 +9,8 @@
  <a href="https://react.dev/"><img src="https://img.shields.io/badge/web-react-blue"/></a>
  <a href="https://semi.design/zh-CN"><img src="https://img.shields.io/badge/ui-semi.design-blue"/></a>
  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3963bc.svg"/></a>
-  <a href="https://github.com/Memoyu"><img src="https://img.shields.io/badge/developer-memoyu-blue"/></a>
+ <a href="https://github.com/Memoyu"><img src="https://img.shields.io/badge/developer-memoyu-blue"/></a>
+ <img src="https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/admin-ld.png"/>
 </div>
 
 
