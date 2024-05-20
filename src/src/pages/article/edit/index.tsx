@@ -144,12 +144,14 @@ const Index: React.FC = () => {
         let formApi = formRef.current?.formApi;
         let selTags: Array<string> = formApi?.getValue('tags');
         // console.log('已选中', selTags);
-        tags?.map((c) => {
-            if (selTags && selTags.length > 0) {
-                let index = selTags.findIndex((p) => p == c.tagId);
-                index > -1 && filterIds.push(c.tagId);
-            }
-        });
+
+        if (selTags && selTags.length > 0) {
+            selTags.map((s) => {
+                let index = tags?.findIndex((p) => p.tagId == s);
+                index && index > -1 && filterIds.push(s);
+            });
+        }
+
         formApi?.setValue('tags', filterIds);
     };
 
