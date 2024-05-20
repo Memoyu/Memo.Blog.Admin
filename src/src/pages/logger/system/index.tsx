@@ -25,7 +25,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'id',
-            width: 210,
+            width: 220,
         },
         {
             title: '日志等级',
