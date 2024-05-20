@@ -69,43 +69,26 @@ const Index: React.FC = () => {
 
     // 获取分类列表
     let getCategories = async () => {
-        let formApi = formRef.current?.formApi;
-        let selCategoryId: string = formApi?.getValue('categoryId');
-        // console.log('已选中', selCategoryId);
-
         let res = await articleCategoryList();
         setCategories(
             res.data?.map((c) => {
                 return { value: c.categoryId, label: c.name };
             })
         );
-        let index = res.data?.findIndex((c) => selCategoryId == c.categoryId);
 
-        if (!index || index < 0) {
-            formApi?.setValue('categoryId', '');
-        }
+        return res.data;
     };
 
     // 获取标签列表
     let getTags = async () => {
-        let formApi = formRef.current?.formApi;
-        let selTags: Array<string> = formApi?.getValue('tags');
-        // console.log('已选中', selTags);
-
         let res = await articleTagList();
-        let filterIds: Array<string> = [];
+
         setTags(
             res.data?.map((c) => {
-                if (selTags && selTags.length > 0) {
-                    let index = selTags.findIndex((p) => p == c.tagId);
-                    index > -1 && filterIds.push(c.tagId);
-                }
-
                 return { value: c.tagId, label: c.name };
             })
         );
-
-        formApi?.setValue('tags', filterIds);
+        return res.data;
     };
 
     // 点击保存/发布
@@ -142,13 +125,32 @@ const Index: React.FC = () => {
         });
     };
 
-    const handleCategoryFocus = () => {
-        // console.log('选中');
-        getCategories();
+    const handleCategoryFocus = async () => {
+        let categories = await getCategories();
+
+        let formApi = formRef.current?.formApi;
+        let selCategoryId: string = formApi?.getValue('categoryId');
+        // console.log('已选中', selCategoryId);
+        let index = categories?.findIndex((c) => selCategoryId == c.categoryId);
+        if (!index || index < 0) {
+            formApi?.setValue('categoryId', '');
+        }
     };
 
-    const handleTagFocus = () => {
-        getTags();
+    const handleTagFocus = async () => {
+        let tags = await getTags();
+
+        let filterIds: Array<string> = [];
+        let formApi = formRef.current?.formApi;
+        let selTags: Array<string> = formApi?.getValue('tags');
+        // console.log('已选中', selTags);
+        tags?.map((c) => {
+            if (selTags && selTags.length > 0) {
+                let index = selTags.findIndex((p) => p == c.tagId);
+                index > -1 && filterIds.push(c.tagId);
+            }
+        });
+        formApi?.setValue('tags', filterIds);
     };
 
     useOnMountUnsafe(() => {
