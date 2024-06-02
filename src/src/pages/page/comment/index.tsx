@@ -45,12 +45,8 @@ const Index: React.FC = () => {
         {
             title: 'ID',
             align: 'center',
-            width: 160,
+            width: 200,
             dataIndex: 'commentId',
-            // ellipsis: { showTitle: false },
-            // render: (text) => {
-            //     return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
-            // },
         },
         {
             title: '头像',
@@ -58,7 +54,7 @@ const Index: React.FC = () => {
             dataIndex: 'avatar',
             width: 70,
             render: (_, comment: CommentPageModel) => {
-                return <Avatar alt="cute cat" size="small" src={comment.visitor.avatar} />;
+                return <Avatar alt="cute cat" size="small" src={comment.visitor?.avatar} />;
             },
         },
         {
@@ -70,7 +66,7 @@ const Index: React.FC = () => {
             render: (_, comment: CommentPageModel) => {
                 return (
                     <Highlight
-                        sourceString={comment.visitor.nickname}
+                        sourceString={comment.visitor?.nickname}
                         searchWords={searchNicknames}
                     />
                 );
@@ -105,7 +101,7 @@ const Index: React.FC = () => {
             width: 130,
             ellipsis: { showTitle: false },
             render: (_, comment: CommentPageModel) => {
-                return <Text ellipsis={{ showTooltip: true }}>{comment.visitor.email}</Text>;
+                return <Text ellipsis={{ showTooltip: true }}>{comment.visitor?.email}</Text>;
             },
         },
         {

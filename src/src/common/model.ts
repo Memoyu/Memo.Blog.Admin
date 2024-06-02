@@ -647,3 +647,16 @@ export interface PermissionModel {
 }
 
 //#endregion
+
+//#region  Redux Model
+
+export interface UserNotifyModel {
+    avatar?: string;
+    title: string;
+    content: string;
+    to: string;
+    date: Date;
+    isRead: boolean;
+}
+
+//#endregion
