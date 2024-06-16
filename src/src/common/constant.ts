@@ -5,4 +5,6 @@ const USER: string = 'user';
 
 const THEME_MODE: string = 'theme-mode';
 
-export { TOKEN, USER, THEME_MODE };
+const NOTIFICATION_HUB_ENDPOINT = 'hubs/management/notification';
+
+export { TOKEN, USER, THEME_MODE, NOTIFICATION_HUB_ENDPOINT };
