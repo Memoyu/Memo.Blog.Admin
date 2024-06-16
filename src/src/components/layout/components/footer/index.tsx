@@ -38,12 +38,14 @@ const Index = () => {
 
     const [notifyVisible, setNotifyVisible] = useState<boolean>(false);
 
-    const { sendMessage, events } = Connector();
+    const { sendUserMessage, receivedNotification } = Connector();
     useEffect(() => {
-        events((title, content) => Toast.success(content));
+        receivedNotification((title, content) => Toast.success(title + ': ' + content));
     }, []);
 
     const switchMode = () => {
+        sendUserMessage(8496611720691717, '这是一条指定发送用户的消息');
+
         let theme = mode == 'light' ? 'dark' : 'light';
         setThemeMode(theme);
     };
