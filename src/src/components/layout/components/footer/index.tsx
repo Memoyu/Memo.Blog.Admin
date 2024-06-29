@@ -24,6 +24,7 @@ import './index.scss';
 
 import Connector from '@common/signalr-connection';
 import UserNotify from './components/user-notify';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const body = document.body;
 const { Text } = Typography;
@@ -39,9 +40,9 @@ const Index = () => {
     const [notifyVisible, setNotifyVisible] = useState<boolean>(false);
 
     const { sendUserMessage, receivedNotification } = Connector();
-    useEffect(() => {
+    useOnMountUnsafe(() => {
         receivedNotification((title, content) => Toast.success(title + ': ' + content));
-    }, []);
+    });
 
     const switchMode = () => {
         sendUserMessage(8496611720691717, '这是一条指定发送用户的消息');

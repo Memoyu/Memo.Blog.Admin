@@ -20,13 +20,14 @@ class Connector {
             })
             .withAutomaticReconnect()
             .build();
-        this.connection.start().catch((err) => document.write(err));
+        this.connection.start().catch((err) => console.log(err));
 
         this.receivedNotification = (onReceivedNotification) => {
-            this.connection.off('ReceivedNotification');
-
+            // this.connection.off('ReceivedNotification');
+            console.log('注册消息提醒');
             this.connection.on('ReceivedNotification', (title, content) => {
                 onReceivedNotification(title, content);
+                console.log('触发消息提醒');
             });
         };
     }
