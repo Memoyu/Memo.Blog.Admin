@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { UserLoginReducer, UserReducer, UserShowReducer } from './slices/userSlice.ts';
+import { UnreadMessageNumSliceReducer } from './slices/notificationSlice.ts';
 
 export const store = configureStore({
     reducer: {
         userInfo: UserReducer,
         userShow: UserShowReducer,
         userLogin: UserLoginReducer,
+        unreadMessageNum: UnreadMessageNumSliceReducer,
     },
 });
 

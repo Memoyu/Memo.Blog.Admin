@@ -1,87 +1,113 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { format } from 'date-fns';
-import {
-    Tooltip,
-    Button,
-    Avatar,
-    Badge,
-    Tabs,
-    TabPane,
-    Empty,
-    List,
-    Typography,
-    Toast,
-} from '@douyinfe/semi-ui';
+import { Button, Avatar, Badge, Tabs, TabPane, Empty, List, Typography } from '@douyinfe/semi-ui';
+
 import { IllustrationIdle, IllustrationIdleDark } from '@douyinfe/semi-illustrations';
 
+import { useTypedSelector } from '@src/hooks/useTypedSelector';
+
 import './index.scss';
-import { UserNotifyModel } from '@src/common/model';
+
+import { MessagePageModel, MessagePageRequest, UserNotifyModel } from '@src/common/model';
+
+import {
+    MessageType,
+    UserMessageResult,
+    CommentMessageResult,
+    LikeMessageResult,
+} from '@src/common/model';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { messagePage } from '@src/utils/request';
+import { useData } from '@src/hooks/useData';
+
+interface MessageShowModel {
+    avatar: string;
+    title: string;
+    content: string;
+    date: Date;
+}
 
 interface ComProps {}
 
-const { Text } = Typography;
-
-const list: Array<UserNotifyModel> = [
-    {
-        avatar: '',
-        title: 'title 评论了文章 xxxxxxx的快乐',
-        content: '评论内容2221112',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title2 评论了动态',
-        content: '评论内容22222',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title3 评论了关于',
-        content: '评论内容444444',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title4',
-        content: '评论内容555555',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title5',
-        content: '评论内容558888885555',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title6',
-        content: '评论内容77777',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-    {
-        avatar: '',
-        title: 'title7',
-        content: '评论内容550000005555',
-        to: 'http://2222',
-        date: new Date(),
-        isRead: false,
-    },
-];
+const { Text, Paragraph } = Typography;
 
 const Index: FC<ComProps> = ({}) => {
-    const [notifyActiveKey, setNotifyActiveKey] = useState<string>('1');
+    const [tabActiveKey, setTabActiveKey] = useState<string>(MessageType.Comment.toString());
+    const unreadMessageNum = useTypedSelector((state) => state.unreadMessageNum);
+
+    const pageSize = 15;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [messageShows, messageShowLoading, setMessageShows, setMessageShowLoading] =
+        useData<Array<MessageShowModel>>();
+    const messageShowNoMoreRef = useRef<boolean>(true);
+    const messageShowPageRef = useRef<number>(1);
+
+    const getMessagePage = (type: MessageType) => {
+        setMessageShowLoading(true);
+
+        let request = {
+            type: type,
+            page: messageShowPageRef.current,
+            size: pageSize,
+        } as MessagePageRequest;
+        messagePage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) return;
+
+                let items = res.data.items;
+
+                var messages: Array<MessageShowModel> =
+                    messageShowPageRef.current == 1 ? [] : messageShows ?? [];
+                items.forEach((m) => {
+                    messages.push(getMessageShow(m));
+                });
+                messageShowNoMoreRef.current = messages.length >= res.data.total;
+                setMessageShows(messages);
+            })
+            .finally(() => setMessageShowLoading(false));
+    };
+
+    useOnMountUnsafe(() => {
+        getMessagePage(MessageType.Comment);
+    });
+
+    // 构建消息提醒内容
+    const getMessageShow = (message: MessagePageModel) => {
+        let show: MessageShowModel = {
+            avatar: '',
+            title: '',
+            content: '',
+            date: message.createTime,
+        };
+        switch (message.messageType) {
+            case MessageType.User:
+                let userMessage: UserMessageResult = JSON.parse(message.content);
+                show.avatar = userMessage.userAvatar;
+                show.title = `${userMessage.userNickname} 发来消息：`;
+                show.content = userMessage.content;
+                break;
+            case MessageType.Comment:
+                let commentMessage: CommentMessageResult = JSON.parse(message.content);
+                show.avatar = commentMessage.visitorAvatar;
+                show.title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
+                show.content = commentMessage.content;
+                break;
+            case MessageType.Like:
+                let likeMessage: LikeMessageResult = JSON.parse(message.content);
+                show.avatar = likeMessage.visitorAvatar;
+                show.title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
+                break;
+        }
+        return show;
+    };
+
+    const handleTabChange = (key: string) => {
+        setTabActiveKey(key);
+        let type: MessageType = Number(key);
+        messageShowPageRef.current = 1;
+        messageShowNoMoreRef.current = false;
+        getMessagePage(type);
+    };
 
     const emptyRender = (
         <div className="empty">
@@ -93,63 +119,77 @@ const Index: FC<ComProps> = ({}) => {
         </div>
     );
 
-    return (
-        <Tabs
-            size="small"
-            activeKey={notifyActiveKey}
-            onChange={setNotifyActiveKey}
-            tabBarExtraContent={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Button onClick={() => {}}>标为已读</Button>
-                </div>
-            }
-        >
-            <TabPane
-                tab={
-                    <Badge count={99}>
-                        <Text
-                            strong={notifyActiveKey == '1'}
-                            type={notifyActiveKey == '1' ? 'primary' : 'tertiary'}
-                        >
-                            评论
-                        </Text>
-                    </Badge>
-                }
-                itemKey="1"
+    const tabTitleRender = (key: MessageType, title: string, num: number) => (
+        <Badge count={num == 0 ? undefined : num}>
+            <Text
+                strong={tabActiveKey == key.toString()}
+                type={tabActiveKey == key.toString() ? 'primary' : 'tertiary'}
             >
+                {title}
+            </Text>
+        </Badge>
+    );
+
+    const loadMoreMessageShowRender =
+        !messageShowLoading && !messageShowNoMoreRef.current ? (
+            <div
+                style={{
+                    textAlign: 'center',
+                    marginTop: 12,
+                    height: 32,
+                    lineHeight: '32px',
+                }}
+            >
+                <Button
+                    onClick={() => {
+                        messageShowPageRef.current += 1;
+                        let type: MessageType = Number(tabActiveKey);
+                        getMessagePage(type);
+                    }}
+                >
+                    显示更多
+                </Button>
+            </div>
+        ) : null;
+
+    const listContentRender = (
+        <>
+            {!messageShows || messageShows.length < 1 ? (
+                <div className="user-notify-list-wrap">{emptyRender}</div>
+            ) : (
                 <div className="user-notify-list-wrap">
                     <List
-                        // loading={loading}
-                        // loadMore={loadMore}
-                        dataSource={list}
+                        loading={messageShowLoading}
+                        loadMore={loadMoreMessageShowRender}
+                        dataSource={messageShows}
                         emptyContent={emptyRender}
                         renderItem={(item) => (
                             <List.Item
-                                style={{ padding: 5, width: '100%' }}
-                                header={<Avatar size="small">{item.avatar}</Avatar>}
+                                style={{ padding: 5 }}
+                                header={<Avatar size="small" src={item.avatar} />}
                                 main={
-                                    <div style={{ width: '100%' }}>
+                                    <div>
                                         <Text strong>{item.title}</Text>
-                                        <div>
-                                            <Text
-                                                type="secondary"
-                                                ellipsis={{
-                                                    rows: 2,
-                                                    showTooltip: {
-                                                        type: 'popover',
-                                                        opts: {
-                                                            style: {
-                                                                width: 300,
-                                                            },
-                                                        },
-                                                    },
-                                                }}
+                                        <Paragraph ellipsis={true} style={{ width: 260 }}>
+                                            {item.content}
+                                        </Paragraph>
+
+                                        <div
+                                            style={{
+                                                marginTop: 10,
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Button
+                                                size="small"
+                                                theme="borderless"
+                                                onClick={() => {}}
                                             >
-                                                {item.content}
-                                            </Text>
-                                        </div>
-                                        <div>
-                                            <Text type="tertiary" style={{ float: 'right' }}>
+                                                标为已读
+                                            </Button>
+                                            <Text type="tertiary">
                                                 {format(item.date, 'yyyy-MM-dd HH:mm')}
                                             </Text>
                                         </div>
@@ -159,12 +199,38 @@ const Index: FC<ComProps> = ({}) => {
                         )}
                     />
                 </div>
+            )}
+        </>
+    );
+
+    return (
+        <Tabs
+            size="small"
+            activeKey={tabActiveKey}
+            onChange={handleTabChange}
+            tabBarExtraContent={
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Button onClick={() => {}}>全部已读</Button>
+                </div>
+            }
+        >
+            <TabPane
+                tab={tabTitleRender(MessageType.Comment, '评论', unreadMessageNum.comment)}
+                itemKey={MessageType.Comment.toString()}
+            >
+                {listContentRender}
             </TabPane>
-            <TabPane tab="点赞" itemKey="2">
-                <div className="user-notify-list-wrap">{emptyRender}</div>
+            <TabPane
+                tab={tabTitleRender(MessageType.Like, '点赞', unreadMessageNum.like)}
+                itemKey={MessageType.Like.toString()}
+            >
+                {listContentRender}
             </TabPane>
-            <TabPane tab="通知" itemKey="3">
-                <div className="user-notify-list-wrap">{emptyRender}</div>
+            <TabPane
+                tab={tabTitleRender(MessageType.User, '消息', unreadMessageNum.user)}
+                itemKey={MessageType.User.toString()}
+            >
+                {listContentRender}
             </TabPane>
         </Tabs>
     );

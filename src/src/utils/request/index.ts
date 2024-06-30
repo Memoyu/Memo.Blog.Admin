@@ -48,6 +48,9 @@ import {
     VisitorModel,
     VisitorPageRequest,
     VisitorEditRequest,
+    UnreadMessageNum,
+    MessagePageModel,
+    MessagePageRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -409,6 +412,18 @@ export const permissionList = (name?: string, signature?: string) => {
 
 export const permissionGroup = (name?: string) => {
     return Request.get<Array<PermissionGroupModel>>('permission/group', { params: { name } });
+};
+
+//#endregion
+
+//#region 消息通知
+
+export const unreadMessageGet = () => {
+    return Request.get<UnreadMessageNum>('message/unread/number');
+};
+
+export const messagePage = (request: MessagePageRequest) => {
+    return Request.get<PaginationResult<MessagePageModel>>('message/page', { params: request });
 };
 
 //#endregion

@@ -648,6 +648,45 @@ export interface PermissionModel {
 
 //#endregion
 
+//#region  消息通知
+
+export enum BelongType {
+    Article = 0,
+    Moment = 1,
+    About = 2,
+}
+
+export enum MessageType {
+    User = 0,
+    Comment = 1,
+    Like = 2,
+}
+
+export interface UserMessageResult {
+    userNickname: string;
+    userAvatar: string;
+    content: string;
+}
+
+export interface CommentMessageResult {
+    visitorNickname: string;
+    visitorAvatar: string;
+    title: string;
+    belongId: number;
+    commentType: BelongType;
+    content: string;
+}
+
+export interface LikeMessageResult {
+    visitorNickname: string;
+    visitorAvatar: string;
+    title: string;
+    belongId: number;
+    likeType: BelongType;
+}
+
+//#endregion
+
 //#region  Redux Model
 
 export interface UserNotifyModel {
@@ -657,6 +696,23 @@ export interface UserNotifyModel {
     to: string;
     date: Date;
     isRead: boolean;
+}
+
+export interface MessagePageRequest extends PaginationRequest {
+    type: MessageType;
+}
+
+export interface MessagePageModel {
+    messageType: MessageType;
+    content: string;
+    createTime: Date;
+}
+
+export interface UnreadMessageNum {
+    total: number;
+    user: number;
+    comment: number;
+    like: number;
 }
 
 //#endregion

@@ -1,12 +1,13 @@
 import * as signalR from '@microsoft/signalr';
 import { store } from '@redux/store';
 import { NOTIFICATION_HUB_ENDPOINT } from '@common/constant';
+import { MessageType } from './model';
 const baseURL = import.meta.env.VITE_BASE_API;
 
 class Connector {
     private connection: signalR.HubConnection;
     public receivedNotification: (
-        onReceivedNotification: (title: string, content: string) => void
+        onReceivedNotification: (title: MessageType, content: string) => void
     ) => void;
 
     static instance: Connector;
@@ -25,8 +26,8 @@ class Connector {
         this.receivedNotification = (onReceivedNotification) => {
             // this.connection.off('ReceivedNotification');
             console.log('注册消息提醒');
-            this.connection.on('ReceivedNotification', (title, content) => {
-                onReceivedNotification(title, content);
+            this.connection.on('ReceivedNotification', (type, content) => {
+                onReceivedNotification(type, content);
                 console.log('触发消息提醒');
             });
         };
