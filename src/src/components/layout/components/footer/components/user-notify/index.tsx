@@ -21,6 +21,8 @@ import { messagePage } from '@src/utils/request';
 import { useData } from '@src/hooks/useData';
 
 interface MessageShowModel {
+    messageId: string;
+    isRead: boolean;
     avatar: string;
     title: string;
     content: string;
@@ -74,6 +76,8 @@ const Index: FC<ComProps> = ({}) => {
     // 构建消息提醒内容
     const getMessageShow = (message: MessagePageModel) => {
         let show: MessageShowModel = {
+            messageId: message.messageId,
+            isRead: message.isRead,
             avatar: '',
             title: '',
             content: '',
@@ -166,7 +170,11 @@ const Index: FC<ComProps> = ({}) => {
                         renderItem={(item) => (
                             <List.Item
                                 style={{ padding: 5 }}
-                                header={<Avatar size="small" src={item.avatar} />}
+                                header={
+                                    <Badge dot={!item.isRead}>
+                                        <Avatar size="small" src={item.avatar} />
+                                    </Badge>
+                                }
                                 main={
                                     <div>
                                         <Text strong>{item.title}</Text>
@@ -177,19 +185,22 @@ const Index: FC<ComProps> = ({}) => {
                                         <div
                                             style={{
                                                 marginTop: 10,
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
+                                                // display: 'flex',
+                                                // justifyContent: 'space-between',
                                                 alignItems: 'center',
                                             }}
                                         >
-                                            <Button
-                                                size="small"
-                                                theme="borderless"
-                                                onClick={() => {}}
-                                            >
-                                                标为已读
-                                            </Button>
-                                            <Text type="tertiary">
+                                            {/* {!item.isRead && (
+                                                <Button
+                                                    style={{ float: 'left' }}
+                                                    size="small"
+                                                    theme="borderless"
+                                                    onClick={() => {}}
+                                                >
+                                                    标为已读
+                                                </Button>
+                                            )} */}
+                                            <Text type="tertiary" style={{ float: 'right' }}>
                                                 {format(item.date, 'yyyy-MM-dd HH:mm')}
                                             </Text>
                                         </div>

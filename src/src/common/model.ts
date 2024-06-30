@@ -698,11 +698,18 @@ export interface UserNotifyModel {
     isRead: boolean;
 }
 
+export interface MessageReadRequest {
+    type?: MessageType;
+    messagesIds?: Array<string>;
+}
+
 export interface MessagePageRequest extends PaginationRequest {
     type: MessageType;
 }
 
 export interface MessagePageModel {
+    messageId: string;
+    isRead: boolean;
     messageType: MessageType;
     content: string;
     createTime: Date;

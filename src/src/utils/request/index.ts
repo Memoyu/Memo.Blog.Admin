@@ -51,6 +51,7 @@ import {
     UnreadMessageNum,
     MessagePageModel,
     MessagePageRequest,
+    MessageReadRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -424,6 +425,10 @@ export const unreadMessageGet = () => {
 
 export const messagePage = (request: MessagePageRequest) => {
     return Request.get<PaginationResult<MessagePageModel>>('message/page', { params: request });
+};
+
+export const messageRead = (request: MessageReadRequest) => {
+    return Request.put<string>('message/read', request);
 };
 
 //#endregion
