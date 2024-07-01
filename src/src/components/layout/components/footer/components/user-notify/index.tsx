@@ -1,24 +1,38 @@
 import { FC, useRef, useState } from 'react';
 import { format } from 'date-fns';
-import { Button, Avatar, Badge, Tabs, TabPane, Empty, List, Typography } from '@douyinfe/semi-ui';
+import {
+    Button,
+    Avatar,
+    Badge,
+    Tabs,
+    TabPane,
+    Empty,
+    List,
+    Typography,
+    Toast,
+} from '@douyinfe/semi-ui';
 
 import { IllustrationIdle, IllustrationIdleDark } from '@douyinfe/semi-illustrations';
 
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import { useData } from '@src/hooks/useData';
+import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
+import { setTypeNum } from '@redux/slices/notificationSlice';
 
-import './index.scss';
-
-import { MessagePageModel, MessagePageRequest, UserNotifyModel } from '@src/common/model';
+import { messagePage, messageRead } from '@src/utils/request';
 
 import {
     MessageType,
     UserMessageResult,
     CommentMessageResult,
     LikeMessageResult,
+    MessagePageModel,
+    MessagePageRequest,
+    MessageReadRequest,
 } from '@src/common/model';
-import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { messagePage } from '@src/utils/request';
-import { useData } from '@src/hooks/useData';
+
+import './index.scss';
 
 interface MessageShowModel {
     messageId: string;
@@ -34,11 +48,11 @@ interface ComProps {}
 const { Text, Paragraph } = Typography;
 
 const Index: FC<ComProps> = ({}) => {
+    const dispatch = useDispatch();
     const [tabActiveKey, setTabActiveKey] = useState<string>(MessageType.Comment.toString());
     const unreadMessageNum = useTypedSelector((state) => state.unreadMessageNum);
 
     const pageSize = 15;
-    const [currentPage, setCurrentPage] = useState(1);
     const [messageShows, messageShowLoading, setMessageShows, setMessageShowLoading] =
         useData<Array<MessageShowModel>>();
     const messageShowNoMoreRef = useRef<boolean>(true);
@@ -65,6 +79,7 @@ const Index: FC<ComProps> = ({}) => {
                 });
                 messageShowNoMoreRef.current = messages.length >= res.data.total;
                 setMessageShows(messages);
+                dispatch(setTypeNum({ num: res.data.unReads, type: request.type }));
             })
             .finally(() => setMessageShowLoading(false));
     };
@@ -105,12 +120,31 @@ const Index: FC<ComProps> = ({}) => {
         return show;
     };
 
+    // tab 切换
     const handleTabChange = (key: string) => {
         setTabActiveKey(key);
         let type: MessageType = Number(key);
         messageShowPageRef.current = 1;
         messageShowNoMoreRef.current = false;
         getMessagePage(type);
+    };
+
+    // 【全部已读】触发，已读当前选选中的类型消息
+    const handleAllReadClick = () => {
+        let type: MessageType = Number(tabActiveKey);
+        let request: MessageReadRequest = {
+            type: type,
+        };
+
+        messageRead(request).then((res) => {
+            if (!res.isSuccess) {
+                Toast.error('操作失败：' + res.message);
+                return;
+            }
+
+            Toast.success('已全部已读');
+            getMessagePage(type);
+        });
     };
 
     const emptyRender = (
@@ -221,7 +255,7 @@ const Index: FC<ComProps> = ({}) => {
             onChange={handleTabChange}
             tabBarExtraContent={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Button onClick={() => {}}>全部已读</Button>
+                    <Button onClick={handleAllReadClick}>全部已读</Button>
                 </div>
             }
         >

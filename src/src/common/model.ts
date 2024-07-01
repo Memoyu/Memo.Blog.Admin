@@ -707,6 +707,10 @@ export interface MessagePageRequest extends PaginationRequest {
     type: MessageType;
 }
 
+export interface MessagePagination extends PaginationResult<MessagePageModel> {
+    unReads: number;
+}
+
 export interface MessagePageModel {
     messageId: string;
     isRead: boolean;

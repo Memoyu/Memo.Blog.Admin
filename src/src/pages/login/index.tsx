@@ -4,13 +4,16 @@ import { IconUser, IconKey } from '@douyinfe/semi-icons';
 import { Layout, Button, Card, Form, Toast, Typography } from '@douyinfe/semi-ui';
 
 import { useDispatch } from 'react-redux';
-import { login, setUserInfo } from '@redux/slices/userSlice';
+import { login, logout, setUserInfo } from '@redux/slices/userSlice';
 
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 
 import { login as ToLogin, userGet } from '@utils/request';
 
+import Connector from '@components/signalr/signalr-connection';
+
 import './index.scss';
+import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -30,9 +33,16 @@ const Index: React.FC = () => {
         password: 'Visitor123',
     };
 
+    const { stop, start } = Connector();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [loginForm, setLoginForm] = useState<FormApi<UserLogin>>();
+
+    useOnMountUnsafe(() => {
+        dispatch(logout());
+        console.log('执行挂载');
+        stop();
+    });
 
     // 验证登录表单，并登录跳转
     let handlerLogin = async () => {
@@ -75,6 +85,7 @@ const Index: React.FC = () => {
         dispatch(setUserInfo(user));
 
         navigate(`/dashboard`, { replace: true });
+        start();
     };
 
     return (

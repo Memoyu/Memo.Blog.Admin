@@ -17,6 +17,28 @@ const unreadMessageNumSlice = createSlice({
             state = action.payload;
             return state;
         },
+
+        setTypeNum: (
+            state: UnreadMessageNum,
+            action: PayloadAction<{ num: number; type: MessageType }>
+        ) => {
+            let num = action.payload.num;
+            let type = action.payload.type;
+            switch (type) {
+                case MessageType.User:
+                    state.user = num;
+                    break;
+                case MessageType.Comment:
+                    state.comment = num;
+                    break;
+                case MessageType.Like:
+                    state.like = num;
+                    break;
+            }
+            state.total = state.user + state.comment + state.like;
+            return state;
+        },
+
         incrementTypeNum: (
             state: UnreadMessageNum,
             action: PayloadAction<{ num: number; type: MessageType }>
@@ -40,5 +62,5 @@ const unreadMessageNumSlice = createSlice({
     },
 });
 
-export const { setUnreadMessageNum, incrementTypeNum } = unreadMessageNumSlice.actions;
+export const { setUnreadMessageNum, setTypeNum, incrementTypeNum } = unreadMessageNumSlice.actions;
 export const UnreadMessageNumSliceReducer = unreadMessageNumSlice.reducer;

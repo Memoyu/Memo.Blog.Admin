@@ -52,6 +52,7 @@ import {
     MessagePageModel,
     MessagePageRequest,
     MessageReadRequest,
+    MessagePagination,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -424,7 +425,7 @@ export const unreadMessageGet = () => {
 };
 
 export const messagePage = (request: MessagePageRequest) => {
-    return Request.get<PaginationResult<MessagePageModel>>('message/page', { params: request });
+    return Request.get<MessagePagination>('message/page', { params: request });
 };
 
 export const messageRead = (request: MessageReadRequest) => {

@@ -13,13 +13,13 @@ import { IconExit, IconLikeHeart, IconAt, IconSend } from '@douyinfe/semi-icons'
 
 import UserNotify from '../user-notify';
 
-import Connector from '@common/signalr-connection';
+import Connector from '@components/signalr/signalr-connection';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useDispatch } from 'react-redux';
 import { incrementTypeNum, setUnreadMessageNum } from '@redux/slices/notificationSlice';
 import { useTypedSelector } from '@src/hooks/useTypedSelector';
-import { logout, toggleUserShow } from '@redux/slices/userSlice';
+import { toggleUserShow } from '@redux/slices/userSlice';
 
 import './index.scss';
 
@@ -140,7 +140,6 @@ const Index: FC<ComProps> = ({}) => {
 
     // 退出登录
     const handelLogout = () => {
-        dispatch(logout());
         navigate(`/login`, { replace: true });
     };
 

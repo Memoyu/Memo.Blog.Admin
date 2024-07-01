@@ -1,7 +1,8 @@
 import * as signalR from '@microsoft/signalr';
 import { store } from '@redux/store';
 import { NOTIFICATION_HUB_ENDPOINT } from '@common/constant';
-import { MessageType } from './model';
+import { MessageType } from '../../common/model';
+import { HubConnectionState } from '@microsoft/signalr';
 const baseURL = import.meta.env.VITE_BASE_API;
 
 class Connector {
@@ -21,10 +22,10 @@ class Connector {
             })
             .withAutomaticReconnect()
             .build();
-        this.connection.start().catch((err) => console.log(err));
+
+        this.connection.start().catch((err) => console.log('signalr 启动失败：', err));
 
         this.receivedNotification = (onReceivedNotification) => {
-            // this.connection.off('ReceivedNotification');
             console.log('注册消息提醒');
             this.connection.on('ReceivedNotification', (type, content) => {
                 onReceivedNotification(type, content);
@@ -32,6 +33,16 @@ class Connector {
             });
         };
     }
+
+    public start = () => {
+        this.connection.start().catch((err) => console.log('signalr 启动失败：', err));
+    };
+
+    public stop = () => {
+        // console.log('停止连接');
+        this.connection.off('ReceivedNotification');
+        this.connection.stop().catch((err) => console.log('signalr 停止失败：', err));
+    };
 
     public sendAllMessage = (messages: string) => {
         this.connection.send('sendAllMessage', messages).then((x) => console.log('sent'));
