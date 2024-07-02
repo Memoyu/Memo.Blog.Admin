@@ -11,6 +11,7 @@ import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { login as ToLogin, userGet } from '@utils/request';
 
 import Connector from '@components/signalr/signalr-connection';
+import { useConnectionStore } from '@components/signalr/useSignalR';
 
 import './index.scss';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
@@ -33,14 +34,15 @@ const Index: React.FC = () => {
         password: 'Visitor123',
     };
 
-    const { stop, start } = Connector();
+    // const { stop, start } = Connector();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [loginForm, setLoginForm] = useState<FormApi<UserLogin>>();
 
+    const { stop, start } = useConnectionStore((state) => state);
+
     useOnMountUnsafe(() => {
         dispatch(logout());
-        console.log('执行挂载');
         stop();
     });
 

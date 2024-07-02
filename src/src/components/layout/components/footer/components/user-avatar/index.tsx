@@ -46,7 +46,7 @@ const Index: FC<ComProps> = ({}) => {
     const avatar = useTypedSelector((state) => state.userInfo.avatar);
     const unreadMessageNum = useTypedSelector((state) => state.unreadMessageNum);
 
-    const { receivedNotification } = Connector();
+    //const { receivedNotification } = Connector();
 
     const getUnreadMessageNum = () => {
         unreadMessageGet().then((res) => {
@@ -56,18 +56,18 @@ const Index: FC<ComProps> = ({}) => {
     };
 
     useOnMountUnsafe(() => {
-        receivedNotification((type, content) => {
-            // 增加通知数量
-            dispatch(incrementTypeNum({ num: 1, type }));
+        // receivedNotification((type, content) => {
+        //     // 增加通知数量
+        //     dispatch(incrementTypeNum({ num: 1, type }));
 
-            // 推送通知
-            Notification.info({
-                icon: getMessageIcon(type),
-                title: getMessageTitle(type),
-                content: getMessageContent(type, content),
-                duration: 0,
-            });
-        });
+        //     // 推送通知
+        //     Notification.info({
+        //         icon: getMessageIcon(type),
+        //         title: getMessageTitle(type),
+        //         content: getMessageContent(type, content),
+        //         duration: 0,
+        //     });
+        // });
 
         getUnreadMessageNum();
     });
