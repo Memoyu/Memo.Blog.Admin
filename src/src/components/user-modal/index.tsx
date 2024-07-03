@@ -1,21 +1,19 @@
 import { IconMail, IconPhone } from '@douyinfe/semi-icons';
 import { Modal, Space, Tag, Typography, Avatar } from '@douyinfe/semi-ui';
 
-import { useDispatch } from 'react-redux';
-import { toggleUserShow } from '@redux/slices/userSlice';
-import { useTypedSelector } from '@src/hooks/useTypedSelector';
+import useUserStore from '@stores/useUserStore';
+import { shallow } from 'zustand/shallow';
 
 import './index.scss';
 
 const { Title } = Typography;
 
 const Index = () => {
-    const dispatch = useDispatch();
-    const userShow = useTypedSelector((state) => state.userShow);
-    const user = useTypedSelector((state) => state.userInfo);
+    const { userInfo, toggleUserShow } = useUserStore.getState();
+    const showUserModal = useUserStore((state) => state.showUserModal, shallow);
 
     const handleCancel = () => {
-        dispatch(toggleUserShow(false));
+        toggleUserShow(false);
     };
 
     return (
@@ -25,17 +23,12 @@ const Index = () => {
                 header={null}
                 footer={null}
                 maskClosable={true}
-                visible={userShow}
+                visible={showUserModal}
                 onCancel={handleCancel}
                 centered
             >
                 <div>
-                    <Avatar
-                        className="user-info-avatar"
-                        alt="Card meta img"
-                        size="large"
-                        src={user.avatar}
-                    />
+                    <Avatar className="user-info-avatar" size="large" src={userInfo?.avatar} />
                     <div
                         style={{
                             marginTop: 10,
@@ -44,8 +37,8 @@ const Index = () => {
                             textAlign: 'center',
                         }}
                     >
-                        <Title heading={3}>{user.nickname}</Title>
-                        <Title heading={6}>{user.username}</Title>
+                        <Title heading={3}>{userInfo?.nickname}</Title>
+                        <Title heading={6}>{userInfo?.username}</Title>
                         <Space style={{ marginTop: 30 }}>
                             <Tag
                                 color="light-blue"
@@ -53,7 +46,7 @@ const Index = () => {
                                 size="large"
                                 shape="circle"
                             >
-                                {user.email}
+                                {userInfo?.email}
                             </Tag>
                             <Tag
                                 color="cyan"
@@ -61,7 +54,7 @@ const Index = () => {
                                 shape="circle"
                                 prefixIcon={<IconPhone />}
                             >
-                                {user.phoneNumber}
+                                {userInfo?.phoneNumber}
                             </Tag>
                         </Space>
                     </div>

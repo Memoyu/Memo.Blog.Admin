@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import * as signalR from '@microsoft/signalr';
-import { Notification } from '@douyinfe/semi-ui';
 import { NOTIFICATION_HUB_ENDPOINT, NOTIFICATION_METHOD_NAME } from '@common/constant';
 import { HubConnection } from '@microsoft/signalr';
-
-import { store } from '@redux/store';
+import useUserStore from '@stores/useUserStore';
+import useNotificationStore from '@stores/useNotificationStore';
+import { MessageType } from '@src/common/model';
 
 export interface SignalRConnection {
     connect: HubConnection;
@@ -17,7 +17,7 @@ export const useConnectionStore = create<SignalRConnection>((set, get) => ({
     connect: new signalR.HubConnectionBuilder()
         .withUrl(baseURL + NOTIFICATION_HUB_ENDPOINT, {
             accessTokenFactory: () => {
-                const token = store.getState().userLogin?.token;
+                const token = useUserStore.getState().token;
                 return token;
             },
         })
@@ -32,13 +32,9 @@ export const useConnectionStore = create<SignalRConnection>((set, get) => ({
         connect.start().catch((err) => console.log('signalr 启动失败：', err));
 
         console.log('添加监听');
-        connect.on(NOTIFICATION_METHOD_NAME, (type, content) => {
+        connect.on(NOTIFICATION_METHOD_NAME, (type: MessageType, content: string) => {
             console.log('消息提醒触发');
-            Notification.info({
-                title: 'test',
-                content: 'test-content',
-                duration: 0,
-            });
+            useNotificationStore.getState().Notification(type, content);
         });
     },
     stop: () => {

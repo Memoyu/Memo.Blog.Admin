@@ -3,15 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
 import { Layout, Button, Card, Form, Toast, Typography } from '@douyinfe/semi-ui';
 
-import { useDispatch } from 'react-redux';
-import { login, logout, setUserInfo } from '@redux/slices/userSlice';
-
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 
 import { login as ToLogin, userGet } from '@utils/request';
 
-import Connector from '@components/signalr/signalr-connection';
 import { useConnectionStore } from '@components/signalr/useSignalR';
+import useUserStore from '@stores/useUserStore';
 
 import './index.scss';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
@@ -34,15 +31,15 @@ const Index: React.FC = () => {
         password: 'Visitor123',
     };
 
-    // const { stop, start } = Connector();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const { setUser, login, logout } = useUserStore.getState();
+
     const [loginForm, setLoginForm] = useState<FormApi<UserLogin>>();
 
     const { stop, start } = useConnectionStore((state) => state);
 
     useOnMountUnsafe(() => {
-        dispatch(logout());
+        logout();
         stop();
     });
 
@@ -76,7 +73,7 @@ const Index: React.FC = () => {
             return;
         }
         let token = loginRes.data;
-        dispatch(login(token.accessToken));
+        login(token.accessToken);
 
         let userRes = await userGet();
         if (!userRes.isSuccess || userRes.data == undefined) {
@@ -84,7 +81,7 @@ const Index: React.FC = () => {
             return;
         }
         let user = userRes.data;
-        dispatch(setUserInfo(user));
+        setUser(user);
 
         navigate(`/dashboard`, { replace: true });
         start();

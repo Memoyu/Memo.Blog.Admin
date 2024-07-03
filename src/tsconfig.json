@@ -21,6 +21,7 @@
             "@config/*": ["src/config/*"],
             "@utils/*": ["src/utils/*"],
             "@redux/*": ["src/redux/*"],
+            "@stores/*": ["src/stores/*"],
             "@pages/*": ["src/pages/*"]
         },
         /* Linting */

@@ -2,7 +2,7 @@ import { FC, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import { PathRouteProps, useLocation } from 'react-router';
 
-import { useTypedSelector } from '@src/hooks/useTypedSelector';
+import useUserStore from '@stores/useUserStore';
 
 export interface WrapperRouteProps extends PathRouteProps {
     /** document title*/
@@ -17,7 +17,7 @@ const PublicRoute = (props: PathRouteProps) => {
 
 const PrivateRoute = (props: PathRouteProps) => {
     const location = useLocation();
-    const { logged } = useTypedSelector((state) => state.userLogin);
+    const logged = useUserStore((state) => state.logged);
     const { pathname } = location;
 
     return logged ? (

@@ -2,8 +2,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Toast } from '@douyinfe/semi-ui';
 import { resultCode } from './resultCode';
-import { store } from '@redux/store';
-import { logout } from '@redux/slices/userSlice';
+import useUserStore from '@stores/useUserStore';
 
 const baseURL = import.meta.env.VITE_BASE_API;
 
@@ -27,7 +26,7 @@ export class Request {
 
         this.instance.interceptors.request.use(
             function (config) {
-                const token = store.getState().userLogin?.token;
+                const token = useUserStore.getState().token;
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`; //携带权限参数
                 }
@@ -60,7 +59,7 @@ export class Request {
                         code === resultCode.TOKEN_INVALIDATION ||
                         code === resultCode.AUTHENTICATION_FAILURE
                     ) {
-                        store.dispatch(logout());
+                        useUserStore.getState().logout();
                         window.location.href = `/login${'?from=' + encodeURIComponent(location.pathname)}`;
                         return Promise.reject(error);
                     }

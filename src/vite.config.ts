@@ -14,6 +14,7 @@ export default defineConfig({
             '@pages': resolve(__dirname, './src/pages'),
             '@utils': resolve(__dirname, './src/utils'),
             '@redux': resolve(__dirname, './src/redux'),
+            '@stores': resolve(__dirname, './src/stores'),
             '@config': resolve(__dirname, './src/config'),
         },
     },

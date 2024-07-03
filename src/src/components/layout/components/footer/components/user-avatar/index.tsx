@@ -1,25 +1,24 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Button,
     Avatar,
     Badge,
     Typography,
-    Notification,
     Popover,
     Popconfirm,
+    Notification,
 } from '@douyinfe/semi-ui';
 import { IconExit, IconLikeHeart, IconAt, IconSend } from '@douyinfe/semi-icons';
 
 import UserNotify from '../user-notify';
 
-import Connector from '@components/signalr/signalr-connection';
-
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-import { useDispatch } from 'react-redux';
-import { incrementTypeNum, setUnreadMessageNum } from '@redux/slices/notificationSlice';
-import { useTypedSelector } from '@src/hooks/useTypedSelector';
-import { toggleUserShow } from '@redux/slices/userSlice';
+
+import { useConnectionStore } from '@components/signalr/useSignalR';
+import useUserStore from '@stores/useUserStore';
+import useNotificationStore from '@stores/useNotificationStore';
+import { shallow } from 'zustand/shallow';
 
 import './index.scss';
 
@@ -38,37 +37,44 @@ const { Text } = Typography;
 
 const Index: FC<ComProps> = ({}) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+
+    const { userInfo, toggleUserShow } = useUserStore.getState();
+    const start = useConnectionStore((state) => state.start);
+
+    const { setUnreadNum, incrementTypeUnreadNum } = useNotificationStore.getState();
+    const total = useNotificationStore((state) => state.unreadNum.total, shallow);
 
     const [notifyVisible, setNotifyVisible] = useState<boolean>(false);
-
-    const nickname = useTypedSelector((state) => state.userInfo.nickname);
-    const avatar = useTypedSelector((state) => state.userInfo.avatar);
-    const unreadMessageNum = useTypedSelector((state) => state.unreadMessageNum);
-
-    //const { receivedNotification } = Connector();
 
     const getUnreadMessageNum = () => {
         unreadMessageGet().then((res) => {
             if (!res.isSuccess || !res.data) return;
-            dispatch(setUnreadMessageNum(res.data));
+            setUnreadNum(res.data);
         });
     };
 
+    useEffect(() => {
+        const unsub = useNotificationStore.subscribe(
+            (state) => state.notifications,
+            (notifications, prevnNotifications) => {
+                console.log('订阅触发');
+                if (notifications.length < 1) return;
+                let notification = notifications[0];
+
+                // 推送通知
+                Notification.info({
+                    icon: getMessageIcon(notification.type),
+                    title: getMessageTitle(notification.type),
+                    content: getMessageContent(notification.type, notification.content),
+                    duration: 0,
+                });
+            }
+        );
+        return unsub;
+    }, []);
+
     useOnMountUnsafe(() => {
-        // receivedNotification((type, content) => {
-        //     // 增加通知数量
-        //     dispatch(incrementTypeNum({ num: 1, type }));
-
-        //     // 推送通知
-        //     Notification.info({
-        //         icon: getMessageIcon(type),
-        //         title: getMessageTitle(type),
-        //         content: getMessageContent(type, content),
-        //         duration: 0,
-        //     });
-        // });
-
+        start();
         getUnreadMessageNum();
     });
 
@@ -135,7 +141,7 @@ const Index: FC<ComProps> = ({}) => {
 
     // 展示用户信息
     const handelShowUser = async () => {
-        dispatch(toggleUserShow(true));
+        toggleUserShow(true);
     };
 
     // 退出登录
@@ -158,11 +164,11 @@ const Index: FC<ComProps> = ({}) => {
                                 className="avatar"
                                 color="orange"
                                 size="small"
-                                src={avatar}
+                                src={userInfo?.avatar}
                                 onClick={handelShowUser}
                             />
                             <Text strong style={{ marginLeft: 15 }}>
-                                {nickname}
+                                {userInfo?.nickname}
                             </Text>
                         </div>
                         <div className="user-header-func">
@@ -183,12 +189,12 @@ const Index: FC<ComProps> = ({}) => {
                 </div>
             }
         >
-            <Badge count={unreadMessageNum.total == 0 ? undefined : unreadMessageNum.total}>
+            <Badge count={total == 0 ? undefined : total}>
                 <Avatar
                     className="avatar"
                     color="orange"
                     size="small"
-                    src={avatar}
+                    src={userInfo?.avatar}
                     onClick={() => setNotifyVisible((v) => !v)}
                 />
             </Badge>

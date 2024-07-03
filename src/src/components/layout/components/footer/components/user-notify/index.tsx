@@ -16,9 +16,8 @@ import { IllustrationIdle, IllustrationIdleDark } from '@douyinfe/semi-illustrat
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from '@src/hooks/useTypedSelector';
-import { setTypeNum } from '@redux/slices/notificationSlice';
+import useNotificationStore from '@stores/useNotificationStore';
+import { shallow } from 'zustand/shallow';
 
 import { messagePage, messageRead } from '@src/utils/request';
 
@@ -48,9 +47,9 @@ interface ComProps {}
 const { Text, Paragraph } = Typography;
 
 const Index: FC<ComProps> = ({}) => {
-    const dispatch = useDispatch();
     const [tabActiveKey, setTabActiveKey] = useState<string>(MessageType.Comment.toString());
-    const unreadMessageNum = useTypedSelector((state) => state.unreadMessageNum);
+    const setTypeUnreadNum = useNotificationStore((state) => state.setTypeUnreadNum);
+    const unreadNum = useNotificationStore((state) => state.unreadNum, shallow);
 
     const pageSize = 15;
     const [messageShows, messageShowLoading, setMessageShows, setMessageShowLoading] =
@@ -79,7 +78,7 @@ const Index: FC<ComProps> = ({}) => {
                 });
                 messageShowNoMoreRef.current = messages.length >= res.data.total;
                 setMessageShows(messages);
-                dispatch(setTypeNum({ num: res.data.unReads, type: request.type }));
+                setTypeUnreadNum(request.type, res.data.unReads);
             })
             .finally(() => setMessageShowLoading(false));
     };
@@ -260,19 +259,19 @@ const Index: FC<ComProps> = ({}) => {
             }
         >
             <TabPane
-                tab={tabTitleRender(MessageType.Comment, '评论', unreadMessageNum.comment)}
+                tab={tabTitleRender(MessageType.Comment, '评论', unreadNum.comment)}
                 itemKey={MessageType.Comment.toString()}
             >
                 {listContentRender}
             </TabPane>
             <TabPane
-                tab={tabTitleRender(MessageType.Like, '点赞', unreadMessageNum.like)}
+                tab={tabTitleRender(MessageType.Like, '点赞', unreadNum.like)}
                 itemKey={MessageType.Like.toString()}
             >
                 {listContentRender}
             </TabPane>
             <TabPane
-                tab={tabTitleRender(MessageType.User, '消息', unreadMessageNum.user)}
+                tab={tabTitleRender(MessageType.User, '消息', unreadNum.user)}
                 itemKey={MessageType.User.toString()}
             >
                 {listContentRender}

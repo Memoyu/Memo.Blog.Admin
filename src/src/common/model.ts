@@ -518,6 +518,15 @@ export interface UserModel {
     createTime: Date;
 }
 
+export interface UserStoreModel {
+    userId: string;
+    username: string;
+    nickname: string;
+    avatar: string;
+    email: string;
+    phoneNumber: string;
+}
+
 export interface UserIdentityModel {
     identityType: UserIdentityType;
     identifier: string;
@@ -724,6 +733,11 @@ export interface UnreadMessageNum {
     user: number;
     comment: number;
     like: number;
+}
+
+export interface NotificationStore {
+    type: MessageType;
+    content: string;
 }
 
 //#endregion
