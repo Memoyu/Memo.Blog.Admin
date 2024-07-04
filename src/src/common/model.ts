@@ -681,7 +681,7 @@ export interface CommentMessageResult {
     visitorNickname: string;
     visitorAvatar: string;
     title: string;
-    belongId: number;
+    belongId: string;
     commentType: BelongType;
     content: string;
 }
@@ -690,7 +690,7 @@ export interface LikeMessageResult {
     visitorNickname: string;
     visitorAvatar: string;
     title: string;
-    belongId: number;
+    belongId: string;
     likeType: BelongType;
 }
 
@@ -709,7 +709,7 @@ export interface UserNotifyModel {
 
 export interface MessageReadRequest {
     type?: MessageType;
-    messagesIds?: Array<string>;
+    messageIds?: Array<string>;
 }
 
 export interface MessagePageRequest extends PaginationRequest {

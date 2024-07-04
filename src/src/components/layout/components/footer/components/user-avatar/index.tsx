@@ -8,6 +8,7 @@ import {
     Popover,
     Popconfirm,
     Notification,
+    Toast,
 } from '@douyinfe/semi-ui';
 import { IconExit, IconLikeHeart, IconAt, IconSend } from '@douyinfe/semi-icons';
 
@@ -22,13 +23,15 @@ import { shallow } from 'zustand/shallow';
 
 import './index.scss';
 
-import { unreadMessageGet } from '@src/utils/request';
+import { messageRead, unreadMessageGet } from '@src/utils/request';
 
+import { CLIENT_ARTICLE_DETAIL_URL } from '@common/constant';
 import {
     MessageType,
     UserMessageResult,
     CommentMessageResult,
     LikeMessageResult,
+    NotificationStore,
 } from '@src/common/model';
 
 interface ComProps {}
@@ -44,6 +47,8 @@ const Index: FC<ComProps> = ({}) => {
     const { setUnreadNum } = useNotificationStore.getState();
     const total = useNotificationStore((state) => state.unreadNum.total, shallow);
 
+    const readMessage = useNotificationStore((state) => state.readMessage);
+
     const [notifyVisible, setNotifyVisible] = useState<boolean>(false);
 
     const getUnreadMessageNum = () => {
@@ -57,7 +62,6 @@ const Index: FC<ComProps> = ({}) => {
         const unsub = useNotificationStore.subscribe(
             (state) => state.notifications,
             (notifications, prevnNotifications) => {
-                console.log('订阅触发');
                 if (notifications.length < 1) return;
                 let notification = notifications[0];
 
@@ -65,8 +69,8 @@ const Index: FC<ComProps> = ({}) => {
                 Notification.info({
                     icon: getMessageIcon(notification.type),
                     title: getMessageTitle(notification.type),
-                    content: getMessageContent(notification.type, notification.content),
-                    duration: 10,
+                    content: getMessageContent(notification),
+                    duration: 0,
                 });
             }
         );
@@ -103,40 +107,60 @@ const Index: FC<ComProps> = ({}) => {
     };
 
     // 构建消息提醒内容
-    const getMessageContent = (type: MessageType, content: string) => {
+    const getMessageContent = (notification: NotificationStore) => {
+        let type = notification.type;
+        let message = notification.content;
+        let title = '';
+        let content = '';
+        let link = '';
+
         switch (type) {
             case MessageType.User:
-                let userMessage: UserMessageResult = JSON.parse(content);
-                return (
-                    <>
-                        <Text strong>{userMessage.userNickname} 发来消息：</Text>
-                        <br />
-                        <Text ellipsis={true} style={{ width: 330 }}>
-                            {userMessage.content}
-                        </Text>
-                    </>
-                );
+                let userMessage: UserMessageResult = JSON.parse(message);
+                title = `${userMessage.userNickname} 发来消息：`;
+                content = userMessage.content;
+                break;
             case MessageType.Comment:
-                let commentMessage: CommentMessageResult = JSON.parse(content);
-                return (
-                    <>
-                        <Text strong ellipsis={true} style={{ width: 330 }}>
-                            {commentMessage.visitorNickname} 评论文章: [{commentMessage.title}]
-                        </Text>
-                        <br />
-                        <Text ellipsis={true} style={{ width: 330 }}>
-                            {commentMessage.content}
-                        </Text>
-                    </>
-                );
+                let commentMessage: CommentMessageResult = JSON.parse(message);
+                title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
+                content = commentMessage.content;
+                link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
+                break;
             case MessageType.Like:
-                let likeMessage: LikeMessageResult = JSON.parse(content);
-                return (
-                    <Text strong ellipsis={true} style={{ width: 330 }}>
-                        {likeMessage.visitorNickname} 点赞文章: {likeMessage.title}
-                    </Text>
-                );
+                let likeMessage: LikeMessageResult = JSON.parse(message);
+                title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
+                link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
+                break;
         }
+
+        return (
+            <>
+                <Text strong ellipsis={true} style={{ width: 330 }}>
+                    {title}
+                </Text>
+                <br />
+                {content.length > 1 && (
+                    <Text ellipsis={true} style={{ width: 330, marginLeft: 10 }}>
+                        {content}
+                    </Text>
+                )}
+                {link.length > 1 && (
+                    <div style={{ marginTop: 8 }}>
+                        <Text
+                            onClick={() => handleReadMessageClick(type, notification.messageId)}
+                            link={{ href: link, target: '_blank' }}
+                        >
+                            查看详情
+                        </Text>
+                    </div>
+                )}
+            </>
+        );
+    };
+
+    // 触发查看消息详情，并已读消息
+    const handleReadMessageClick = (type: MessageType, messageId: string) => {
+        readMessage(type, messageId);
     };
 
     // 展示用户信息

@@ -32,6 +32,7 @@ import {
 } from '@src/common/model';
 
 import './index.scss';
+import { CLIENT_ARTICLE_DETAIL_URL } from '@src/common/constant';
 
 interface MessageShowModel {
     messageId: string;
@@ -40,6 +41,7 @@ interface MessageShowModel {
     title: string;
     content: string;
     date: Date;
+    link: string;
 }
 
 interface ComProps {}
@@ -49,6 +51,7 @@ const { Text, Paragraph } = Typography;
 const Index: FC<ComProps> = ({}) => {
     const setTypeUnreadNum = useNotificationStore((state) => state.setTypeUnreadNum);
     const unreadNum = useNotificationStore((state) => state.unreadNum, shallow);
+    const readMessage = useNotificationStore((state) => state.readMessage);
 
     const pageSize = 15;
     const [_, messageShowLoading, _set, setMessageShowLoading] = useData<Array<MessageShowModel>>();
@@ -86,13 +89,12 @@ const Index: FC<ComProps> = ({}) => {
     };
 
     useEffect(() => {
-        const unsub = useNotificationStore.subscribe(
+        const unsubNotification = useNotificationStore.subscribe(
             (state) => state.notifications,
             (notifications, _) => {
                 if (notifications.length < 1) return;
                 let notification = notifications[0];
-
-                console.log(tabActive.current, notification.type);
+                // console.log(tabActive.current, notification.type);
                 if (tabActive.current != notification.type) return; // 推送的消息不是当前选中的tab
                 setMessageShows((ms) => {
                     if (!ms) ms = [];
@@ -108,7 +110,30 @@ const Index: FC<ComProps> = ({}) => {
                 });
             }
         );
-        return unsub;
+
+        const unsubReadMessage = useNotificationStore.subscribe(
+            (state) => state.readMessageId,
+            (id, _) => {
+                if (id.length < 1) return;
+                setMessageShows((ms) => {
+                    if (!ms) return;
+                    try {
+                        ms.map((m) => {
+                            if (m.messageId == id) {
+                                m.isRead = true;
+                                throw '成功已读';
+                            }
+                        });
+                    } catch {}
+                    return [...ms];
+                });
+            }
+        );
+
+        return () => {
+            unsubNotification();
+            unsubReadMessage();
+        };
     }, []);
 
     useOnMountUnsafe(() => {
@@ -124,6 +149,7 @@ const Index: FC<ComProps> = ({}) => {
             title: '',
             content: '',
             date: message.createTime,
+            link: '',
         };
         switch (message.messageType) {
             case MessageType.User:
@@ -137,11 +163,13 @@ const Index: FC<ComProps> = ({}) => {
                 show.avatar = commentMessage.visitorAvatar;
                 show.title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
                 show.content = commentMessage.content;
+                show.link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
                 break;
             case MessageType.Like:
                 let likeMessage: LikeMessageResult = JSON.parse(message.content);
                 show.avatar = likeMessage.visitorAvatar;
                 show.title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
+                show.link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
                 break;
         }
         return show;
@@ -159,11 +187,7 @@ const Index: FC<ComProps> = ({}) => {
     // 【全部已读】触发，已读当前选选中的类型消息
     const handleAllReadClick = () => {
         let type: MessageType = tabActive.current;
-        let request: MessageReadRequest = {
-            type: type,
-        };
-
-        messageRead(request).then((res) => {
+        messageRead({ type }).then((res) => {
             if (!res.isSuccess) {
                 Toast.error('操作失败：' + res.message);
                 return;
@@ -172,6 +196,12 @@ const Index: FC<ComProps> = ({}) => {
             Toast.success('已全部已读');
             getMessagePage(type);
         });
+    };
+
+    // 触发查看消息详情，并已读消息
+    const handleReadMessageClick = (messageId: string) => {
+        let type: MessageType = tabActive.current;
+        readMessage(type, messageId);
     };
 
     const emptyRender = (
@@ -238,29 +268,36 @@ const Index: FC<ComProps> = ({}) => {
                                 }
                                 main={
                                     <div>
-                                        <Text strong>{item.title}</Text>
-                                        <Paragraph ellipsis={true} style={{ width: 260 }}>
-                                            {item.content}
-                                        </Paragraph>
-
+                                        <Text
+                                            strong
+                                            link={
+                                                item.link.length > 1 && {
+                                                    href: item.link,
+                                                    target: '_blank',
+                                                }
+                                            }
+                                            onClick={() =>
+                                                item.isRead
+                                                    ? () => {}
+                                                    : handleReadMessageClick(item.messageId)
+                                            }
+                                        >
+                                            {item.title}
+                                        </Text>
+                                        {item.content.length > 1 && (
+                                            <Paragraph
+                                                ellipsis={true}
+                                                style={{ width: 250, marginLeft: 10 }}
+                                            >
+                                                {item.content}
+                                            </Paragraph>
+                                        )}
                                         <div
                                             style={{
                                                 marginTop: 10,
-                                                // display: 'flex',
-                                                // justifyContent: 'space-between',
                                                 alignItems: 'center',
                                             }}
                                         >
-                                            {/* {!item.isRead && (
-                                                <Button
-                                                    style={{ float: 'left' }}
-                                                    size="small"
-                                                    theme="borderless"
-                                                    onClick={() => {}}
-                                                >
-                                                    标为已读
-                                                </Button>
-                                            )} */}
                                             <Text type="tertiary" style={{ float: 'right' }}>
                                                 {format(item.date, 'yyyy-MM-dd HH:mm')}
                                             </Text>
@@ -278,12 +315,14 @@ const Index: FC<ComProps> = ({}) => {
     return (
         <Tabs
             size="small"
-            // activeKey={tabActiveKey}
             defaultActiveKey={tabActive.current.toString()}
             onChange={handleTabChange}
             tabBarExtraContent={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Button onClick={handleAllReadClick}>全部已读</Button>
+                    <Text onClick={handleAllReadClick} link>
+                        全部已读
+                    </Text>
+                    {/* <Button onClick={handleAllReadClick}>全部已读</Button> */}
                 </div>
             }
         >

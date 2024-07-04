@@ -13,7 +13,7 @@ export interface SignalRConnection {
 }
 
 const baseURL = import.meta.env.VITE_BASE_API;
-export const useConnectionStore = create<SignalRConnection>((set, get) => ({
+export const useConnectionStore = create<SignalRConnection>((_set, get) => ({
     connect: new signalR.HubConnectionBuilder()
         .withUrl(baseURL + NOTIFICATION_HUB_ENDPOINT, {
             accessTokenFactory: () => {
