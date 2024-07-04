@@ -1,7 +1,6 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { UnreadMessageNum, MessageType, NotificationStore } from '@src/common/model';
-import { cloneDeep } from 'lodash';
 
 interface NotificationState {
     notifications: Array<NotificationStore>;
@@ -9,7 +8,7 @@ interface NotificationState {
     setUnreadNum: (unreadNum: UnreadMessageNum) => void;
     setTypeUnreadNum: (type: MessageType, num: number) => void; // 覆盖指定type 的 num
     incrementTypeUnreadNum: (type: MessageType, num: number) => void; // 增加指定type 的 num
-    Notification: (type: MessageType, content: string) => void; // 推送通知
+    Notification: (type: MessageType, messageId: string, content: string) => void; // 推送通知
 }
 
 const useNotificationStore = createWithEqualityFn<NotificationState>()(
@@ -18,7 +17,6 @@ const useNotificationStore = createWithEqualityFn<NotificationState>()(
         unreadNum: { total: 0, user: 0, comment: 0, like: 0 },
         setUnreadNum: (unreadNum: UnreadMessageNum) => set({ unreadNum: unreadNum }),
         setTypeUnreadNum: (type: MessageType, num: number) => {
-            //let unreadNum = cloneDeep(get().unreadNum);
             let unreadNum = get().unreadNum;
             switch (type) {
                 case MessageType.User:
@@ -36,7 +34,6 @@ const useNotificationStore = createWithEqualityFn<NotificationState>()(
             set({ unreadNum: unreadNum });
         },
         incrementTypeUnreadNum: (type: MessageType, num: number) => {
-            // let unreadNum = cloneDeep(get().unreadNum);
             let unreadNum = get().unreadNum;
             switch (type) {
                 case MessageType.User:
@@ -52,11 +49,11 @@ const useNotificationStore = createWithEqualityFn<NotificationState>()(
             unreadNum.total += num;
             set({ unreadNum: unreadNum });
         },
-        Notification: (type: MessageType, content: string) => {
+        Notification: (type: MessageType, messageId: string, content: string) => {
             console.log('推送通知');
             let notifications = [];
             get().incrementTypeUnreadNum(type, 1);
-            notifications.unshift({ type, content });
+            notifications.unshift({ type, messageId, content });
             set({ notifications: notifications });
         },
     }))

@@ -737,6 +737,7 @@ export interface UnreadMessageNum {
 
 export interface NotificationStore {
     type: MessageType;
+    messageId: string;
     content: string;
 }
 

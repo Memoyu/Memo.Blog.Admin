@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useRef, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
     Button,
@@ -47,15 +47,17 @@ interface ComProps {}
 const { Text, Paragraph } = Typography;
 
 const Index: FC<ComProps> = ({}) => {
-    const [tabActiveKey, setTabActiveKey] = useState<string>(MessageType.Comment.toString());
     const setTypeUnreadNum = useNotificationStore((state) => state.setTypeUnreadNum);
     const unreadNum = useNotificationStore((state) => state.unreadNum, shallow);
 
     const pageSize = 15;
-    const [messageShows, messageShowLoading, setMessageShows, setMessageShowLoading] =
-        useData<Array<MessageShowModel>>();
+    const [_, messageShowLoading, _set, setMessageShowLoading] = useData<Array<MessageShowModel>>();
+
+    const [messageShows, setMessageShows] = useState<Array<MessageShowModel>>();
+
     const messageShowNoMoreRef = useRef<boolean>(true);
     const messageShowPageRef = useRef<number>(1);
+    const tabActive = useRef<number>(MessageType.Comment);
 
     const getMessagePage = (type: MessageType) => {
         setMessageShowLoading(true);
@@ -82,6 +84,32 @@ const Index: FC<ComProps> = ({}) => {
             })
             .finally(() => setMessageShowLoading(false));
     };
+
+    useEffect(() => {
+        const unsub = useNotificationStore.subscribe(
+            (state) => state.notifications,
+            (notifications, _) => {
+                if (notifications.length < 1) return;
+                let notification = notifications[0];
+
+                console.log(tabActive.current, notification.type);
+                if (tabActive.current != notification.type) return; // 推送的消息不是当前选中的tab
+                setMessageShows((ms) => {
+                    if (!ms) ms = [];
+                    ms.unshift(
+                        getMessageShow({
+                            messageId: notification.messageId,
+                            messageType: notification.type,
+                            content: notification.content,
+                            createTime: new Date(),
+                        } as MessagePageModel)
+                    );
+                    return [...ms];
+                });
+            }
+        );
+        return unsub;
+    }, []);
 
     useOnMountUnsafe(() => {
         getMessagePage(MessageType.Comment);
@@ -121,8 +149,8 @@ const Index: FC<ComProps> = ({}) => {
 
     // tab 切换
     const handleTabChange = (key: string) => {
-        setTabActiveKey(key);
         let type: MessageType = Number(key);
+        tabActive.current = type;
         messageShowPageRef.current = 1;
         messageShowNoMoreRef.current = false;
         getMessagePage(type);
@@ -130,7 +158,7 @@ const Index: FC<ComProps> = ({}) => {
 
     // 【全部已读】触发，已读当前选选中的类型消息
     const handleAllReadClick = () => {
-        let type: MessageType = Number(tabActiveKey);
+        let type: MessageType = tabActive.current;
         let request: MessageReadRequest = {
             type: type,
         };
@@ -159,8 +187,8 @@ const Index: FC<ComProps> = ({}) => {
     const tabTitleRender = (key: MessageType, title: string, num: number) => (
         <Badge count={num == 0 ? undefined : num}>
             <Text
-                strong={tabActiveKey == key.toString()}
-                type={tabActiveKey == key.toString() ? 'primary' : 'tertiary'}
+                strong={tabActive.current == key}
+                type={tabActive.current == key ? 'primary' : 'tertiary'}
             >
                 {title}
             </Text>
@@ -180,7 +208,7 @@ const Index: FC<ComProps> = ({}) => {
                 <Button
                     onClick={() => {
                         messageShowPageRef.current += 1;
-                        let type: MessageType = Number(tabActiveKey);
+                        let type: MessageType = tabActive.current;
                         getMessagePage(type);
                     }}
                 >
@@ -250,7 +278,8 @@ const Index: FC<ComProps> = ({}) => {
     return (
         <Tabs
             size="small"
-            activeKey={tabActiveKey}
+            // activeKey={tabActiveKey}
+            defaultActiveKey={tabActive.current.toString()}
             onChange={handleTabChange}
             tabBarExtraContent={
                 <div style={{ display: 'flex', alignItems: 'center' }}>

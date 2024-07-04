@@ -41,7 +41,7 @@ const Index: FC<ComProps> = ({}) => {
     const { userInfo, toggleUserShow } = useUserStore.getState();
     const start = useConnectionStore((state) => state.start);
 
-    const { setUnreadNum, incrementTypeUnreadNum } = useNotificationStore.getState();
+    const { setUnreadNum } = useNotificationStore.getState();
     const total = useNotificationStore((state) => state.unreadNum.total, shallow);
 
     const [notifyVisible, setNotifyVisible] = useState<boolean>(false);
@@ -66,7 +66,7 @@ const Index: FC<ComProps> = ({}) => {
                     icon: getMessageIcon(notification.type),
                     title: getMessageTitle(notification.type),
                     content: getMessageContent(notification.type, notification.content),
-                    duration: 0,
+                    duration: 10,
                 });
             }
         );

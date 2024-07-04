@@ -32,10 +32,13 @@ export const useConnectionStore = create<SignalRConnection>((set, get) => ({
         connect.start().catch((err) => console.log('signalr 启动失败：', err));
 
         console.log('添加监听');
-        connect.on(NOTIFICATION_METHOD_NAME, (type: MessageType, content: string) => {
-            console.log('消息提醒触发');
-            useNotificationStore.getState().Notification(type, content);
-        });
+        connect.on(
+            NOTIFICATION_METHOD_NAME,
+            (type: MessageType, messageId: string, content: string) => {
+                console.log('消息提醒触发', messageId);
+                useNotificationStore.getState().Notification(type, messageId, content);
+            }
+        );
     },
     stop: () => {
         let connect = get().connect;
