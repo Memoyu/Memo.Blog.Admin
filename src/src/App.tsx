@@ -1,4 +1,4 @@
-import { LocaleProvider, Notification } from '@douyinfe/semi-ui';
+import { LocaleProvider } from '@douyinfe/semi-ui';
 import { BrowserRouter } from 'react-router-dom';
 import RenderRouter from './router';
 

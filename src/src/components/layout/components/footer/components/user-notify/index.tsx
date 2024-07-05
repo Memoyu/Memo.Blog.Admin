@@ -28,7 +28,6 @@ import {
     LikeMessageResult,
     MessagePageModel,
     MessagePageRequest,
-    MessageReadRequest,
 } from '@src/common/model';
 
 import './index.scss';

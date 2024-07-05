@@ -51,7 +51,6 @@ import {
     VisitorPageRequest,
     VisitorEditRequest,
     UnreadMessageNum,
-    MessagePageModel,
     MessagePageRequest,
     MessageReadRequest,
     MessagePagination,
