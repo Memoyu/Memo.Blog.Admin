@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { IconAvatar } from '@douyinfe/semi-icons-lab';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
+import { IconPlusCircleStroked, IconSend } from '@douyinfe/semi-icons';
 import {
     Button,
     Table,
@@ -15,6 +15,7 @@ import {
     Popconfirm,
     TagGroup,
     Toast,
+    Tag,
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
@@ -33,6 +34,7 @@ import {
     UserIdentityType,
     UserPageModel,
     UserPageRequest,
+    UserSelectModel,
 } from '@src/common/model';
 
 import {
@@ -43,6 +45,8 @@ import {
     userUpdate,
     roleList,
     userChangePassword,
+    userSelectList,
+    messageCreate,
 } from '@src/utils/request';
 
 import './index.scss';
@@ -146,7 +150,7 @@ const Index: React.FC = () => {
         {
             title: '操作',
             align: 'center',
-            width: 250,
+            width: 230,
             fixed: 'right',
             render: (_text, user: UserPageModel) => {
                 return (
@@ -216,13 +220,16 @@ const Index: React.FC = () => {
         UserIdentityType.Password
     );
 
+    const [sendMessageVisible, setSendMessageVisible] = useState<boolean>(false);
+    const [messageForm, setMessageForm] = useState<FormApi>();
+    const [userSelects, setUserSelects] = useState<Array<UserSelectModel>>();
+
     // 获取用户分页
     let getUserPage = (page: number = 1) => {
         setLoading(true);
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
-        // console.log(search);
 
         let request = {
             userId: search?.userId,
@@ -318,6 +325,54 @@ const Index: React.FC = () => {
                 Toast.success('变更用户密码成功');
                 setChangePasswordVisible(false);
             }
+        });
+    };
+
+    // 发送消息 按下
+    const handleSendMessageClick = () => {
+        userSelectList({}).then((res) => {
+            if (!res.isSuccess || !res.data) return;
+
+            // let opts: Array<OptionProps> = [];
+
+            // res.data.map((u) => {
+            //     opts.push({ value: u.userId, label: `${u.nickname}(${u.username})` });
+            // });
+            setUserSelects(res.data);
+        });
+
+        setSendMessageVisible(true);
+    };
+
+    // 消息发送
+    const handleSendMessageModalOk = () => {
+        messageForm?.validate().then(async (form) => {
+            let users = form.users;
+            let message = form.message;
+            if (!users || users.length < 1) {
+                Toast.error('请选择接收用户');
+                return;
+            }
+
+            if (!message || message.length < 1) {
+                Toast.error('请输入消息内容');
+                return;
+            }
+
+            if (message.length > 150) {
+                Toast.error('消息内容过长，请注意字数');
+                return;
+            }
+
+            messageCreate({ toUsers: users, content: message }).then((res) => {
+                if (!res.isSuccess) {
+                    Toast.error(res.message);
+                    return;
+                }
+
+                Toast.success('发送成功');
+                setSendMessageVisible(false);
+            });
         });
     };
 
@@ -450,6 +505,60 @@ const Index: React.FC = () => {
         return '';
     };
 
+    const renderMultipleWithCustomTag = (
+        optionNode: Record<string, any>,
+        props: { onClose: any }
+    ) => {
+        const content = (
+            <Tag
+                avatarSrc={optionNode.avatar}
+                avatarShape="circle"
+                closable={true}
+                onClose={props.onClose}
+                size="large"
+            >
+                {optionNode.username}
+            </Tag>
+        );
+        return {
+            isRenderInTag: false,
+            content,
+        };
+    };
+
+    const renderCustomOption = (item: UserSelectModel, _index: number) => {
+        const optionStyle = {
+            display: 'flex',
+            paddingLeft: 24,
+            paddingTop: 10,
+            paddingBottom: 10,
+        };
+        return (
+            <Form.Select.Option
+                value={item.userId}
+                style={optionStyle}
+                showTick={true}
+                {...item}
+                key={item.userId}
+            >
+                <Avatar size="small" src={item.avatar} />
+                <div style={{ marginLeft: 8 }}>
+                    <div style={{ fontSize: 14 }}>{item.nickname}</div>
+                    <div
+                        style={{
+                            color: 'var(--color-text-2)',
+                            fontSize: 12,
+                            lineHeight: '16px',
+                            fontWeight: 'normal',
+                        }}
+                    >
+                        {item.username}
+                    </div>
+                </div>
+            </Form.Select.Option>
+        );
+    };
+
     return (
         <Content title="用户管理" icon={<IconAvatar />}>
             <div className="user-container">
@@ -493,6 +602,14 @@ const Index: React.FC = () => {
                                     }}
                                 >
                                     新增
+                                </Button>
+
+                                <Button
+                                    type="primary"
+                                    icon={<IconSend size="small" />}
+                                    onClick={handleSendMessageClick}
+                                >
+                                    发送消息
                                 </Button>
                             </Space>
                         </Form>
@@ -634,6 +751,40 @@ const Index: React.FC = () => {
                             label={{ text: <span>确认密码</span>, required: true }}
                             required
                             validate={validatePassword}
+                        />
+                    </Form>
+                </Modal>
+
+                {/* 发送消息 */}
+                <Modal
+                    title={'发送消息'}
+                    visible={sendMessageVisible}
+                    onOk={handleSendMessageModalOk}
+                    onCancel={() => setSendMessageVisible(false)}
+                    centered
+                    okText={'发送'}
+                >
+                    <Form
+                        labelPosition="top"
+                        labelAlign="left"
+                        getFormApi={(formData) => setMessageForm(formData)}
+                    >
+                        <Form.Select
+                            field="users"
+                            label={{ text: '接收用户', required: true }}
+                            style={{ width: '100%' }}
+                            multiple
+                            renderSelectedItem={renderMultipleWithCustomTag}
+                        >
+                            {userSelects?.map((item, index) => renderCustomOption(item, index))}
+                        </Form.Select>
+
+                        <Form.TextArea
+                            field="message"
+                            // style={{ height: 150 }}
+                            label={{ text: '消息', required: true }}
+                            maxCount={150}
+                            showClear
                         />
                     </Form>
                 </Modal>

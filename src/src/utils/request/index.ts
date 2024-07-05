@@ -30,6 +30,8 @@ import {
     MomentEditRequest,
     RoleEditRequest,
     UserPageModel,
+    UserSelectRequest,
+    UserSelectModel,
     UserPageRequest,
     UserEditRequest,
     QiniuUploadTokenModel,
@@ -53,6 +55,7 @@ import {
     MessagePageRequest,
     MessageReadRequest,
     MessagePagination,
+    MessageCreateRequset,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -332,6 +335,12 @@ export const systemLogPage = (request: SystemLogPageRequest) => {
 
 //#region 用户
 
+export const userSelectList = (request: UserSelectRequest) => {
+    return Request.get<Array<UserSelectModel>>('user/list/select', {
+        params: request,
+    });
+};
+
 export const userPage = (request: UserPageRequest) => {
     return Request.get<PaginationResult<UserPageModel>>('user/page', {
         params: request,
@@ -419,6 +428,10 @@ export const permissionGroup = (name?: string) => {
 //#endregion
 
 //#region 消息通知
+
+export const messageCreate = (message: MessageCreateRequset) => {
+    return Request.post<string>('message/create', message);
+};
 
 export const unreadMessageGet = () => {
     return Request.get<UnreadMessageNum>('message/unread/number');

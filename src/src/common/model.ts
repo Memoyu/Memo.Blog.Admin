@@ -482,6 +482,18 @@ export interface SystemLogModel {
 
 //#region 用户管理
 
+export interface UserSelectRequest {
+    username?: string;
+    nickname?: string;
+}
+
+export interface UserSelectModel {
+    userId: string;
+    username: string;
+    nickname: string;
+    avatar: string;
+}
+
 export interface UserPageRequest extends PaginationRequest {
     userId?: string;
     username?: string;
@@ -669,6 +681,12 @@ export enum MessageType {
     User = 0,
     Comment = 1,
     Like = 2,
+}
+
+export interface MessageCreateRequset {
+    toUsers?: Array<string>;
+    toRoles?: Array<string>;
+    content: string;
 }
 
 export interface UserMessageResult {

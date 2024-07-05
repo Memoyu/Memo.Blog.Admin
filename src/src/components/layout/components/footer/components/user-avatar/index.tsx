@@ -8,7 +8,6 @@ import {
     Popover,
     Popconfirm,
     Notification,
-    Toast,
 } from '@douyinfe/semi-ui';
 import { IconExit, IconLikeHeart, IconAt, IconSend } from '@douyinfe/semi-icons';
 
@@ -23,7 +22,7 @@ import { shallow } from 'zustand/shallow';
 
 import './index.scss';
 
-import { messageRead, unreadMessageGet } from '@src/utils/request';
+import { unreadMessageGet } from '@src/utils/request';
 
 import { CLIENT_ARTICLE_DETAIL_URL } from '@common/constant';
 import {
@@ -61,7 +60,7 @@ const Index: FC<ComProps> = ({}) => {
     useEffect(() => {
         const unsub = useNotificationStore.subscribe(
             (state) => state.notifications,
-            (notifications, prevnNotifications) => {
+            (notifications, _prevnNotifications) => {
                 if (notifications.length < 1) return;
                 let notification = notifications[0];
 
@@ -70,7 +69,7 @@ const Index: FC<ComProps> = ({}) => {
                     icon: getMessageIcon(notification.type),
                     title: getMessageTitle(notification.type),
                     content: getMessageContent(notification),
-                    duration: 0,
+                    duration: 10,
                 });
             }
         );

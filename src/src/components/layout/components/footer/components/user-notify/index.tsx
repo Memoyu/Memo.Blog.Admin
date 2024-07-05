@@ -181,6 +181,8 @@ const Index: FC<ComProps> = ({}) => {
         tabActive.current = type;
         messageShowPageRef.current = 1;
         messageShowNoMoreRef.current = false;
+        // 清空
+        setMessageShows([]);
         getMessagePage(type);
     };
 
@@ -249,7 +251,7 @@ const Index: FC<ComProps> = ({}) => {
 
     const listContentRender = (
         <>
-            {!messageShows || messageShows.length < 1 ? (
+            {(!messageShows || messageShows.length < 1) && !messageShowLoading ? (
                 <div className="user-notify-list-wrap">{emptyRender}</div>
             ) : (
                 <div className="user-notify-list-wrap">
@@ -286,8 +288,13 @@ const Index: FC<ComProps> = ({}) => {
                                         </Text>
                                         {item.content.length > 1 && (
                                             <Paragraph
-                                                ellipsis={true}
-                                                style={{ width: 250, marginLeft: 10 }}
+                                                ellipsis={{
+                                                    rows: 2,
+                                                    expandable: true,
+                                                    collapsible: true,
+                                                    collapseText: '收起',
+                                                }}
+                                                style={{ width: 280, marginLeft: 10 }}
                                             >
                                                 {item.content}
                                             </Paragraph>
