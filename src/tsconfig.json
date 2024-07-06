@@ -2,7 +2,11 @@
     "compilerOptions": {
         "target": "ES2020",
         "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
         "module": "ESNext",
         "skipLibCheck": true,
         /* Bundler mode */
@@ -14,15 +18,30 @@
         "jsx": "react-jsx",
         "baseUrl": ".",
         "paths": {
-            "@src/*": ["src/*"],
-            "@assets/*": ["src/assets/*"],
-            "@common/*": ["src/common/*"],
-            "@components/*": ["src/components/*"],
-            "@config/*": ["src/config/*"],
-            "@utils/*": ["src/utils/*"],
-            "@redux/*": ["src/redux/*"],
-            "@stores/*": ["src/stores/*"],
-            "@pages/*": ["src/pages/*"]
+            "@src/*": [
+                "src/*"
+            ],
+            "@assets/*": [
+                "src/assets/*"
+            ],
+            "@common/*": [
+                "src/common/*"
+            ],
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@config/*": [
+                "src/config/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@stores/*": [
+                "src/stores/*"
+            ],
+            "@pages/*": [
+                "src/pages/*"
+            ]
         },
         /* Linting */
         "strict": true,
@@ -30,7 +49,9 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true
     },
-    "include": ["src"],
+    "include": [
+        "src"
+    ],
     "references": [
         {
             "path": "./tsconfig.node.json"
