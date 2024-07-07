@@ -1,24 +1,62 @@
 import { FC, useState, useEffect } from 'react';
-import { MdEditor } from 'md-editor-rt';
+import { MdEditor, config } from 'md-editor-rt';
+
+import { shallow } from 'zustand/shallow';
+import useTheme from '@src/stores/useTheme';
 
 import { uuid } from '@src/utils/uuid';
 import { getFileExt } from '@src/utils/file';
+import { qiniuUpload } from '@src/utils/request';
 
 import { QiniuUploadRequest } from '@src/common/model';
 
-import { qiniuUpload } from '@src/utils/request';
-
 import 'md-editor-rt/lib/style.css';
 import './index.scss';
+import { debounce } from '@src/utils/md';
 
 interface Iprops {
     imgPath: string;
     height?: number;
     content?: string;
     onChange?: (content: string) => void;
+    onSave?: () => void;
 }
 
-const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange }) => {
+config({
+    editorExtensions: {
+        highlight: {
+            css: {
+                vs: {
+                    light: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs.min.css',
+                    dark: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css',
+                },
+            },
+        },
+    },
+});
+
+const onHtmlChanged = debounce(() => {
+    const { hash } = location;
+
+    if (/^#/.test(hash)) {
+        const headingId = decodeURIComponent(hash.replace('#', ''));
+
+        if (headingId) {
+            const targetHeadDom = document.getElementById(headingId);
+
+            if (targetHeadDom) {
+                const scrollLength = (targetHeadDom as HTMLHeadElement).offsetTop + 414;
+
+                window.scrollTo({
+                    top: scrollLength,
+                    behavior: 'smooth',
+                });
+            }
+        }
+    }
+});
+
+const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange, onSave }) => {
     const toolbars: Array<any> = [
         'bold',
         'underline',
@@ -50,6 +88,7 @@ const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange }) => {
         'htmlPreview',
         'catalog',
     ];
+    const theme = useTheme((state) => state.theme, shallow);
 
     const [mdContent, setMdContent] = useState<string>('');
     const [imagePath, setIamgePath] = useState<string>('');
@@ -91,6 +130,9 @@ const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange }) => {
         <div className="blog-md-editor">
             <MdEditor
                 style={{ height: height }}
+                theme={theme}
+                previewTheme="github"
+                codeTheme="vs"
                 modelValue={mdContent}
                 toolbars={toolbars}
                 onChange={(c) => {
@@ -98,6 +140,8 @@ const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange }) => {
                     onChange && onChange(c);
                 }}
                 onUploadImg={(files, callback) => handleUploadImg(files, callback)}
+                onHtmlChanged={onHtmlChanged}
+                onSave={() => onSave && onSave()}
             />
         </div>
     );

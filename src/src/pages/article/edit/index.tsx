@@ -26,12 +26,9 @@ const { Section, Input, Select, TextArea } = Form;
 const { Text } = Typography;
 
 const Index: React.FC = () => {
-    // const navigate = useNavigate();
-
     const formRef = useRef<Form>(null);
     const params = useParams();
 
-    const [saveBtnText, setSaveBtnText] = useState<string>('发布');
     const [articleId, setArticleId] = useState<string>();
     const [article, setArticle] = useState<ArticleModel>();
     const [articleBanner, setArticleBanner] = useState<string>();
@@ -92,37 +89,43 @@ const Index: React.FC = () => {
     };
 
     // 点击保存/发布
-    let handleSaveArticle = (status: ArticleStatus) => {
+    let handleSaveArticle = (msg: string = '', status?: ArticleStatus) => {
         let formApi = formRef.current?.formApi;
-        formApi?.validate().then(async (form) => {
-            let article = form as ArticleEditRequest;
-            article.status = status;
-            article.content = articleContent;
-            article.isTop = isTop;
-            article.commentable = commentable;
-            article.publicable = publicable;
-            article.banner = articleBanner ?? '';
-            // console.log(article);
+        formApi
+            ?.validate()
+            .then(async (form) => {
+                let article = form as ArticleEditRequest;
+                article.status = status;
+                article.content = articleContent;
+                article.isTop = isTop;
+                article.commentable = commentable;
+                article.publicable = publicable;
+                article.banner = articleBanner ?? '';
+                // console.log(article);
 
-            let res;
-            if (articleId) {
-                // 更新
-                article.articleId = articleId;
-                res = await articleUpdate(article);
-            } else {
-                // 新增
-                res = await articleCreate(article);
-                setArticleId(res.data);
-            }
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            Toast.success(saveBtnText + '文章成功');
+                let res;
+                if (articleId) {
+                    // 更新
+                    article.articleId = articleId;
+                    res = await articleUpdate(article);
+                } else {
+                    // 新增
+                    res = await articleCreate(article);
+                }
+                if (!res.isSuccess) {
+                    Toast.error(res.message);
+                    setArticleId(res.data);
+                    return;
+                }
+                Toast.success('文章保存' + msg + '成功');
 
-            // 停留在编辑页面
-            // navigate('/article');
-        });
+                // 停留在编辑页面
+                // navigate('/article');
+            })
+            .catch((err) => {
+                let keys = Object.keys(err);
+                Toast.error(err[keys[0]]);
+            });
     };
 
     const handleCategoryFocus = async () => {
@@ -163,7 +166,6 @@ const Index: React.FC = () => {
         if (articleId) {
             setArticleId(articleId);
             getArticleDetail(articleId);
-            setSaveBtnText('保存');
         }
     });
 
@@ -179,7 +181,7 @@ const Index: React.FC = () => {
                                     label="标题"
                                     trigger="blur"
                                     rules={[
-                                        { required: true, message: '文章描述必填' },
+                                        { required: true, message: '文章标题必填' },
                                         { max: 50, message: '长度不能超50个字符' },
                                     ]}
                                 />
@@ -242,6 +244,7 @@ const Index: React.FC = () => {
                         height={800}
                         content={articleContent}
                         onChange={setArticleContent}
+                        onSave={() => handleSaveArticle()}
                     />
                 </Section>
                 <Space style={{ margin: 20, width: '100%' }}>
@@ -249,12 +252,15 @@ const Index: React.FC = () => {
                         type="primary"
                         theme="solid"
                         style={{ width: 120, marginRight: 4 }}
-                        onClick={() => handleSaveArticle(ArticleStatus.Published)}
+                        onClick={() => handleSaveArticle()}
                     >
-                        {saveBtnText}
+                        保存
                     </Button>
-                    <Button onClick={() => handleSaveArticle(ArticleStatus.Draft)}>
-                        保存到草稿
+                    <Button onClick={() => handleSaveArticle('草稿', ArticleStatus.Draft)}>
+                        草稿
+                    </Button>
+                    <Button onClick={() => handleSaveArticle('发布', ArticleStatus.Published)}>
+                        发布
                     </Button>
                     <Space style={{ marginLeft: 60 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>

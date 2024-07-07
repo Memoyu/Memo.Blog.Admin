@@ -1,7 +1,5 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { persist } from 'zustand/middleware';
-import { getLocalStorage, setLocalStorage, removeLocalStorage } from '@utils/storage';
-import { USER, TOKEN } from '@common/constant';
 import { UserModel, UserStoreModel } from '@src/common/model';
 import { userGet } from '@src/utils/request';
 
@@ -16,13 +14,10 @@ interface UserState {
     logout: () => void;
 }
 
-const storageUser = JSON.parse(getLocalStorage(USER) ?? '{}');
-const initialUser: UserStoreModel = storageUser;
-
 const useUserStore = createWithEqualityFn<UserState>()(
     persist(
         (set) => ({
-            userInfo: initialUser,
+            userInfo: undefined,
             token: '',
             logged: false,
             showUserModal: false,
@@ -36,7 +31,6 @@ const useUserStore = createWithEqualityFn<UserState>()(
                     phoneNumber: user.phoneNumber,
                 };
                 set({ userInfo: userStore });
-                setLocalStorage(USER, JSON.stringify(userStore));
             },
             toggleUserShow: (state: boolean) => {
                 if (state) {
@@ -60,12 +54,9 @@ const useUserStore = createWithEqualityFn<UserState>()(
             },
             login: (token: string) => {
                 set({ token: token, logged: true });
-                setLocalStorage(TOKEN, token);
             },
             logout: () => {
                 set({ token: '', logged: false });
-                removeLocalStorage(TOKEN);
-                removeLocalStorage(USER);
                 set({ userInfo: undefined, token: '', logged: false });
             },
         }),

@@ -5,36 +5,29 @@ import { Tooltip, Button, Avatar } from '@douyinfe/semi-ui';
 
 import UserAvatar from './components/user-avatar';
 
-import { setLocalStorage, getLocalStorage } from '@src/utils/storage';
-import { THEME_MODE } from '@common/constant';
+import { shallow } from 'zustand/shallow';
+import useTheme, { ThemeMode } from '@src/stores/useTheme';
 
 import './index.scss';
 
-const body = document.body;
-
 const Index = () => {
+    const theme = useTheme((state) => state.theme, shallow);
+    const setTheme = useTheme((state) => state.setTheme);
+
     const [isLight, setIsLight] = useState<boolean>(false);
-    const [mode, setMode] = useState<string>(getLocalStorage(THEME_MODE) || 'light');
 
     const switchMode = () => {
-        let theme = mode == 'light' ? 'dark' : 'light';
-        setThemeMode(theme);
+        let mode: ThemeMode = theme == 'light' ? 'dark' : 'light';
+        setThemeMode(mode);
     };
 
-    const setThemeMode = (mode: string) => {
-        if (mode == 'light') {
-            body.removeAttribute(THEME_MODE);
-        } else {
-            body.setAttribute(THEME_MODE, mode);
-        }
-
+    const setThemeMode = (mode: ThemeMode) => {
+        setTheme(mode);
         setIsLight(mode == 'light');
-        setMode(mode);
-        setLocalStorage(THEME_MODE, mode);
     };
 
     useEffect(() => {
-        setThemeMode(mode);
+        setThemeMode(theme);
     }, []);
 
     return (

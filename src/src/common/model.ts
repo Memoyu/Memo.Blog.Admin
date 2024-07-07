@@ -139,10 +139,10 @@ export interface ArticleEditRequest {
     tags: Array<TagModel>;
     content: string;
     banner: string;
-    status: ArticleStatus;
     isTop: boolean;
     commentable: boolean;
     publicable: boolean;
+    status?: ArticleStatus;
 }
 
 export interface ArticleModel {
