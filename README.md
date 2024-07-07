@@ -64,7 +64,7 @@
 |路由管理|[remix-run/react-router](https://github.com/remix-run/react-router)|
 |图表可视化|[apache/echarts](https://github.com/apache/echarts)|
 |日期处理|[date-fns/date-fns](https://github.com/date-fns/date-fns)|
-|markdown转换|[imzbf/md-editor-rt](https://github.com/imzbf/md-editor-rt)|
+|markdown编辑|[imzbf/md-editor-rt](https://github.com/imzbf/md-editor-rt)|
 |http请求|[axios/axios](https://github.com/axios/axios)|
 |工具库|[lodash/lodash](https://github.com/lodash/lodash)|
 |实时通信|[SignalR/SignalR](https://github.com/SignalR/SignalR)|
