@@ -84,12 +84,12 @@ const routeList: RouteObject[] = [
                 element: <WrapperRouteComponent element={<AccessLog />} title="访问日志" auth />,
             },
             {
-                path: 'system/account',
-                element: <WrapperRouteComponent element={<Account />} title="账户管理" auth />,
-            },
-            {
                 path: 'system/visitor',
                 element: <WrapperRouteComponent element={<Visitor />} title="访客管理" auth />,
+            },
+            {
+                path: 'system/account',
+                element: <WrapperRouteComponent element={<Account />} title="账户管理" auth />,
             },
             {
                 path: 'system/role',

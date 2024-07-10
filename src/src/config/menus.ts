@@ -117,15 +117,15 @@ const Menus: MenuItem[] = [
         items: [
             {
                 itemKey: '5-1',
-                text: '用户管理',
-                path: '/system/account',
-                icon: IconAvatar,
-            },
-            {
-                itemKey: '5-2',
                 text: '访客管理',
                 path: '/system/visitor',
                 icon: IconAccessibility,
+            },
+            {
+                itemKey: '5-2',
+                text: '用户管理',
+                path: '/system/account',
+                icon: IconAvatar,
             },
             {
                 itemKey: '5-3',
