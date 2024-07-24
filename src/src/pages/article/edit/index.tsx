@@ -114,9 +114,10 @@ const Index: React.FC = () => {
                 }
                 if (!res.isSuccess) {
                     Toast.error(res.message);
-                    setArticleId(res.data);
                     return;
                 }
+
+                setArticleId(res.data);
                 Toast.success('文章保存' + msg + '成功');
 
                 // 停留在编辑页面
@@ -221,7 +222,7 @@ const Index: React.FC = () => {
                                     placeholder="请填文章描述"
                                     rules={[
                                         { required: true, message: '文章描述必填' },
-                                        { max: 100, message: '长度不能超100个字符' },
+                                        { max: 500, message: '长度不能超500个字符' },
                                     ]}
                                 />
                             </Col>
