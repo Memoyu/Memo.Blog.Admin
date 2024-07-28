@@ -129,6 +129,7 @@ export interface ArticlePageModel {
     publicable: boolean;
     createTime: Date;
     updateTime?: Date;
+    publishTime?: Date;
 }
 
 export interface ArticleEditRequest {

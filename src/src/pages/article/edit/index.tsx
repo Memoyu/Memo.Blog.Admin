@@ -1,5 +1,4 @@
-import React, { useState, useRef } from 'react';
-// import { useNavigate } from 'react-router';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
@@ -33,6 +32,7 @@ const Index: React.FC = () => {
     const [article, setArticle] = useState<ArticleModel>();
     const [articleBanner, setArticleBanner] = useState<string>();
     const [articleContent, setArticleContent] = useState<string>('');
+    const [articleStatus, setArticleStatus] = useState<ArticleStatus>();
     const [isTop, setIsTop] = useState<boolean>(false);
     const [commentable, setCommentable] = useState<boolean>(true);
     const [publicable, setPublicable] = useState<boolean>(true);
@@ -49,6 +49,7 @@ const Index: React.FC = () => {
 
         let article = res.data;
         setArticle(article);
+        setArticleStatus(article.status);
         let formApi = formRef.current?.formApi;
         article &&
             formApi?.setValues({
@@ -118,6 +119,9 @@ const Index: React.FC = () => {
                 }
 
                 setArticleId(res.data);
+                if (status != undefined) {
+                    setArticleStatus(status);
+                }
                 Toast.success('文章保存' + msg + '成功');
 
                 // 停留在编辑页面
@@ -169,6 +173,8 @@ const Index: React.FC = () => {
             getArticleDetail(articleId);
         }
     });
+
+    // useEffect(() => {}, [articleStatus]);
 
     return (
         <Content title="文章编辑" icon={<IconChangelog />}>
@@ -257,12 +263,16 @@ const Index: React.FC = () => {
                     >
                         保存
                     </Button>
-                    <Button onClick={() => handleSaveArticle('草稿', ArticleStatus.Draft)}>
-                        草稿
-                    </Button>
-                    <Button onClick={() => handleSaveArticle('发布', ArticleStatus.Published)}>
-                        发布
-                    </Button>
+                    {articleStatus != ArticleStatus.Draft && (
+                        <Button onClick={() => handleSaveArticle('草稿', ArticleStatus.Draft)}>
+                            存为草稿
+                        </Button>
+                    )}
+                    {articleStatus != ArticleStatus.Published && (
+                        <Button onClick={() => handleSaveArticle('发布', ArticleStatus.Published)}>
+                            发布
+                        </Button>
+                    )}
                     <Space style={{ marginLeft: 60 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Text style={{ margin: 8 }}>置顶</Text>

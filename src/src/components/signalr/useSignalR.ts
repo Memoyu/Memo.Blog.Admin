@@ -26,16 +26,16 @@ export const useConnectionStore = create<SignalRConnection>((_set, get) => ({
     start: () => {
         let connect = get().connect;
 
-        console.log('链接状态：', connect.state);
+        //console.log('链接状态：', connect.state);
         if (connect.state != signalR.HubConnectionState.Disconnected) return;
-        console.log('启动链接');
+        //console.log('启动链接');
         connect.start().catch((err) => console.log('signalr 启动失败：', err));
 
-        console.log('添加监听');
+        //console.log('添加监听');
         connect.on(
             NOTIFICATION_METHOD_NAME,
             (type: MessageType, messageId: string, content: string) => {
-                console.log('消息提醒触发', messageId);
+                //console.log('消息提醒触发', messageId);
                 useNotificationStore.getState().Notification(type, messageId, content);
             }
         );
