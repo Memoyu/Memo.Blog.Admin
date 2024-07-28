@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
 import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
