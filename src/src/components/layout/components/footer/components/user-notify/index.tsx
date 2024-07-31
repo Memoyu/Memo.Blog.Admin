@@ -17,8 +17,10 @@ import {
     LikeMessageResult,
     MessagePageModel,
     MessagePageRequest,
+    CommentType,
+    BelongType,
 } from '@src/common/model';
-import { CLIENT_ARTICLE_DETAIL_URL } from '@src/common/constant';
+import { CLIENT_ARTICLE_DETAIL_URL, CLIENT_MOMENT_LIST_URL } from '@src/common/constant';
 
 import './index.scss';
 
@@ -146,18 +148,41 @@ const Index: FC<ComProps> = ({}) => {
                 show.title = `${userMessage.userNickname} 发来消息：`;
                 show.content = userMessage.content;
                 break;
+
             case MessageType.Comment:
                 let commentMessage: CommentMessageResult = JSON.parse(message.content);
-                show.avatar = commentMessage.visitorAvatar;
-                show.title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
-                show.content = commentMessage.content;
-                show.link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
+                switch (commentMessage.commentType) {
+                    case BelongType.Article:
+                        show.avatar = commentMessage.visitorAvatar;
+                        show.title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
+                        show.content = commentMessage.content;
+                        show.link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
+                        break;
+
+                    case BelongType.Moment:
+                        show.avatar = commentMessage.visitorAvatar;
+                        show.title = `${commentMessage.visitorNickname} 评论了动态！`;
+                        show.content = commentMessage.content;
+                        show.link = CLIENT_MOMENT_LIST_URL;
+                        break;
+                }
                 break;
+
             case MessageType.Like:
                 let likeMessage: LikeMessageResult = JSON.parse(message.content);
-                show.avatar = likeMessage.visitorAvatar;
-                show.title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
-                show.link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
+                switch (likeMessage.likeType) {
+                    case BelongType.Article:
+                        show.avatar = likeMessage.visitorAvatar;
+                        show.title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
+                        show.link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
+                        break;
+
+                    case BelongType.Moment:
+                        show.avatar = likeMessage.visitorAvatar;
+                        show.title = `${likeMessage.visitorNickname} 点赞了动态！`;
+                        show.link = CLIENT_MOMENT_LIST_URL;
+                        break;
+                }
                 break;
         }
         return show;

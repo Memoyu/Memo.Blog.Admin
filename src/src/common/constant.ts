@@ -12,6 +12,8 @@ const NOTIFICATION_METHOD_NAME = 'ReceivedNotification';
 
 const CLIENT_ARTICLE_DETAIL_URL = `${clientBaseURL}article/detail/`;
 
+const CLIENT_MOMENT_LIST_URL = `${clientBaseURL}moment`;
+
 export {
     TOKEN,
     USER,
@@ -19,4 +21,5 @@ export {
     NOTIFICATION_HUB_ENDPOINT,
     NOTIFICATION_METHOD_NAME,
     CLIENT_ARTICLE_DETAIL_URL,
+    CLIENT_MOMENT_LIST_URL,
 };

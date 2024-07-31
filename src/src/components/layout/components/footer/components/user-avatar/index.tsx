@@ -14,24 +14,24 @@ import { IconExit, IconLikeHeart, IconAt, IconSend } from '@douyinfe/semi-icons'
 import UserNotify from '../user-notify';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
-
 import { useConnectionStore } from '@components/signalr/useSignalR';
 import useUserStore from '@stores/useUserStore';
 import useNotificationStore from '@stores/useNotificationStore';
 import { shallow } from 'zustand/shallow';
 
-import './index.scss';
-
 import { unreadMessageGet } from '@src/utils/request';
 
-import { CLIENT_ARTICLE_DETAIL_URL } from '@common/constant';
+import { CLIENT_ARTICLE_DETAIL_URL, CLIENT_MOMENT_LIST_URL } from '@common/constant';
 import {
     MessageType,
     UserMessageResult,
     CommentMessageResult,
     LikeMessageResult,
     NotificationStore,
+    BelongType,
 } from '@src/common/model';
+
+import './index.scss';
 
 interface ComProps {}
 
@@ -121,14 +121,33 @@ const Index: FC<ComProps> = ({}) => {
                 break;
             case MessageType.Comment:
                 let commentMessage: CommentMessageResult = JSON.parse(message);
-                title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
-                content = commentMessage.content;
-                link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
+                switch (commentMessage.commentType) {
+                    case BelongType.Article:
+                        title = `${commentMessage.visitorNickname} 评论文章: [${commentMessage.title}]`;
+                        content = commentMessage.content;
+                        link = CLIENT_ARTICLE_DETAIL_URL + commentMessage.belongId;
+                        break;
+
+                    case BelongType.Moment:
+                        title = `${commentMessage.visitorNickname} 评论了动态！`;
+                        content = commentMessage.content;
+                        link = CLIENT_MOMENT_LIST_URL;
+                        break;
+                }
                 break;
             case MessageType.Like:
                 let likeMessage: LikeMessageResult = JSON.parse(message);
-                title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
-                link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
+                switch (likeMessage.likeType) {
+                    case BelongType.Article:
+                        title = `${likeMessage.visitorNickname} 点赞文章: [${likeMessage.title}]`;
+                        link = CLIENT_ARTICLE_DETAIL_URL + likeMessage.belongId;
+                        break;
+
+                    case BelongType.Moment:
+                        title = `${likeMessage.visitorNickname} 点赞了动态！`;
+                        link = CLIENT_MOMENT_LIST_URL;
+                        break;
+                }
                 break;
         }
 

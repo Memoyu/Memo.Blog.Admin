@@ -52,8 +52,7 @@ const Index: FC<SummaryCardProps> = ({ type, id, children }) => {
             split={false}
             style={{
                 width: 400,
-                maxHeight: 500,
-                padding: 20,
+                maxHeight: 350,
                 overflow: 'scroll',
             }}
             renderItem={(item) => (
@@ -68,7 +67,9 @@ const Index: FC<SummaryCardProps> = ({ type, id, children }) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <Text strong>{item.title}</Text>
+                            <Text strong ellipsis style={{ width: 310 }}>
+                                {item.title}
+                            </Text>
                             <Button
                                 theme="borderless"
                                 type="primary"
@@ -91,6 +92,7 @@ const Index: FC<SummaryCardProps> = ({ type, id, children }) => {
             position="left"
             content={popoverContentRender}
             onVisibleChange={handleArticlesVisibleChange}
+            style={{ padding: 10 }}
         >
             {children}
         </Popover>
