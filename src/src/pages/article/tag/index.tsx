@@ -22,6 +22,7 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
+import RelatedArticles from '../components/related-articles';
 
 const Index: React.FC = () => {
     const columns: ColumnProps[] = [
@@ -50,6 +51,15 @@ const Index: React.FC = () => {
             title: '关联文章',
             align: 'center',
             dataIndex: 'articles',
+            render: (text, category: TagModel) => {
+                return (
+                    <RelatedArticles type="tag" id={category.tagId}>
+                        <Button theme="borderless" type="primary" size="small">
+                            {text}
+                        </Button>
+                    </RelatedArticles>
+                );
+            },
         },
         {
             title: '操作',

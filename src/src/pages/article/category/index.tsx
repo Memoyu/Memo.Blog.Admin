@@ -4,6 +4,7 @@ import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import { Button, Table, Popconfirm, Space, Modal, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
+import RelatedArticles from '@pages/article/components/related-articles';
 
 import { useData } from '@src/hooks/useData';
 import { useModal } from '@src/hooks/useModal';
@@ -40,6 +41,15 @@ const Index: React.FC = () => {
             title: '关联文章',
             align: 'center',
             dataIndex: 'articles',
+            render: (text, category: CategoryModel) => {
+                return (
+                    <RelatedArticles type="category" id={category.categoryId}>
+                        <Button theme="borderless" type="primary" size="small">
+                            {text}
+                        </Button>
+                    </RelatedArticles>
+                );
+            },
         },
         {
             title: '操作',

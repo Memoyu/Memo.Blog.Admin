@@ -55,6 +55,7 @@ import {
     MessageReadRequest,
     MessagePagination,
     MessageCreateRequset,
+    ArticleRelatedModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -142,6 +143,12 @@ export const articleUpdate = (article: ArticleEditRequest) => {
 
 export const articleDelete = (id: string) => {
     return Request.delete('article/delete', { params: { articleId: id } });
+};
+
+export const articleRelatedList = (type: number, id: string) => {
+    return Request.get<Array<ArticleRelatedModel>>('article/list/related', {
+        params: { type, id },
+    });
 };
 
 //#endregion

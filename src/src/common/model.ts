@@ -107,6 +107,11 @@ export interface ArticleRankingModel {
     likes: number;
 }
 
+export interface ArticleRelatedModel {
+    articleId: string; // 文章Id
+    title: string;
+}
+
 export interface ArticlePageRequest extends PaginationRequest {
     title?: string;
     categoryId?: string;
@@ -167,6 +172,12 @@ export enum ArticleStatus {
     Draft = 0,
     Published = 1,
     Offline = 2,
+}
+
+export interface ArticleAuthorModel {
+    userId: string;
+    nickname: string;
+    avatar: string;
 }
 
 //#endregion

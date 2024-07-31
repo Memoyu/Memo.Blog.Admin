@@ -4,7 +4,7 @@ import { useRoutes } from 'react-router-dom';
 import { WrapperRouteComponent, WrapperRouteWithOutLayoutComponent } from './config';
 import Login from '@pages/login';
 import Layout from '@components/layout';
-import Empty from '@components/empty';
+import Empty from '@components/layout/components/empty';
 
 const Dashboard = lazy(() => import('@src/pages/dashboard'));
 

@@ -1,0 +1,11 @@
+.related-articls {
+    .semi-list-item-body-main {
+        width: 100%;
+    }
+
+    &-item {
+        &:hover {
+            background-color: rgba(var(--semi-grey-0));
+        }
+    }
+}

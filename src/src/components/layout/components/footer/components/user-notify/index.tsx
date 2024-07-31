@@ -1,18 +1,7 @@
 import { FC, useRef, useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import {
-    Button,
-    Avatar,
-    Badge,
-    Tabs,
-    TabPane,
-    Empty,
-    List,
-    Typography,
-    Toast,
-} from '@douyinfe/semi-ui';
-
-import { IllustrationIdle, IllustrationIdleDark } from '@douyinfe/semi-illustrations';
+import { Button, Avatar, Badge, Tabs, TabPane, List, Typography, Toast } from '@douyinfe/semi-ui';
+import ListEmpty from '@src/components/list-empty';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
@@ -29,9 +18,9 @@ import {
     MessagePageModel,
     MessagePageRequest,
 } from '@src/common/model';
+import { CLIENT_ARTICLE_DETAIL_URL } from '@src/common/constant';
 
 import './index.scss';
-import { CLIENT_ARTICLE_DETAIL_URL } from '@src/common/constant';
 
 interface MessageShowModel {
     messageId: string;
@@ -76,7 +65,7 @@ const Index: FC<ComProps> = ({}) => {
                 let items = res.data.items;
 
                 var messages: Array<MessageShowModel> =
-                    messageShowPageRef.current == 1 ? [] : messageShows ?? [];
+                    messageShowPageRef.current == 1 ? [] : (messageShows ?? []);
                 items.forEach((m) => {
                     messages.push(getMessageShow(m));
                 });
@@ -205,16 +194,6 @@ const Index: FC<ComProps> = ({}) => {
         readMessage(type, messageId);
     };
 
-    const emptyRender = (
-        <div className="empty">
-            <Empty
-                image={<IllustrationIdle />}
-                darkModeImage={<IllustrationIdleDark />}
-                description={'空空如也！'}
-            />
-        </div>
-    );
-
     const tabTitleRender = (key: MessageType, title: string, num: number) => (
         <Badge count={num == 0 ? undefined : num}>
             <Text
@@ -251,14 +230,16 @@ const Index: FC<ComProps> = ({}) => {
     const listContentRender = (
         <>
             {(!messageShows || messageShows.length < 1) && !messageShowLoading ? (
-                <div className="user-notify-list-wrap">{emptyRender}</div>
+                <div className="user-notify-list-wrap">
+                    <ListEmpty />
+                </div>
             ) : (
                 <div className="user-notify-list-wrap">
                     <List
                         loading={messageShowLoading}
                         loadMore={loadMoreMessageShowRender}
                         dataSource={messageShows}
-                        emptyContent={emptyRender}
+                        emptyContent={<ListEmpty />}
                         renderItem={(item) => (
                             <List.Item
                                 style={{ padding: 5 }}
