@@ -17,7 +17,6 @@ import {
     LikeMessageResult,
     MessagePageModel,
     MessagePageRequest,
-    CommentType,
     BelongType,
 } from '@src/common/model';
 import { CLIENT_ARTICLE_DETAIL_URL, CLIENT_MOMENT_LIST_URL } from '@src/common/constant';
