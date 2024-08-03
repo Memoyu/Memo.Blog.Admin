@@ -56,6 +56,8 @@ import {
     MessagePagination,
     MessageCreateRequset,
     ArticleRelatedModel,
+    ArticleTemplateModel,
+    ArticleTemplateEditRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -149,6 +151,32 @@ export const articleRelatedList = (type: number, id: string) => {
     return Request.get<Array<ArticleRelatedModel>>('article/list/related', {
         params: { type, id },
     });
+};
+
+//#endregion
+
+//#region 文章模板
+
+export const articleTemplateList = (name?: string) => {
+    return Request.get<Array<ArticleTemplateModel>>('articletemplate/list', {
+        params: { name: name },
+    });
+};
+
+export const articleTemplateGet = (id: string) => {
+    return Request.get<ArticleTemplateModel>('articletemplate/get', { params: { templateId: id } });
+};
+
+export const articleTemplateCreate = (template: ArticleTemplateEditRequest) => {
+    return Request.post<string>('articletemplate/create', template);
+};
+
+export const articleTemplateUpdate = (template: ArticleTemplateEditRequest) => {
+    return Request.put<string>('articletemplate/update', template);
+};
+
+export const articleTemplateDelete = (id: string) => {
+    return Request.delete('articletemplate/delete', { params: { templateId: id } });
 };
 
 //#endregion

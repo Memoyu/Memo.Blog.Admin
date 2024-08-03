@@ -182,6 +182,22 @@ export interface ArticleAuthorModel {
 
 //#endregion
 
+//#region 文章模板
+
+export interface ArticleTemplateEditRequest {
+    templateId?: string; // 模板Id
+    name: string;
+    content?: string;
+}
+
+export interface ArticleTemplateModel {
+    templateId: string; // 模板Id
+    name: string;
+    content: string;
+}
+
+//#endregion
+
 //#region 分类
 
 export interface CategoryModel {

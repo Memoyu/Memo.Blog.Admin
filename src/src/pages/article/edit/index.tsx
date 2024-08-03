@@ -6,6 +6,7 @@ import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyi
 import Content from '@src/components/page-content';
 import UploadImage from '@src/components/upload-image';
 import MdEditor from '@src/components/md-editor';
+import TemplateList from './components/template-list';
 
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
@@ -22,7 +23,7 @@ import {
 import './index.scss';
 
 const { Section, Input, Select, TextArea } = Form;
-const { Text } = Typography;
+const { Title, Text } = Typography;
 
 const Index: React.FC = () => {
     const formRef = useRef<Form>(null);
@@ -38,6 +39,8 @@ const Index: React.FC = () => {
     const [publicable, setPublicable] = useState<boolean>(true);
     const [categories, setCategories] = useState<Array<OptionProps>>();
     const [tags, setTags] = useState<Array<OptionProps>>();
+
+    const [templateVisible, setTemplateVisible] = useState<boolean>(true);
 
     // 获取文章详情
     let getArticleDetail = async (id: string) => {
@@ -163,6 +166,10 @@ const Index: React.FC = () => {
         formApi?.setValue('tags', filterIds);
     };
 
+    const handleUsingTemplateClick = (content: string) => {
+        setArticleContent(content);
+    };
+
     useOnMountUnsafe(() => {
         getCategories();
         getTags();
@@ -173,8 +180,6 @@ const Index: React.FC = () => {
             getArticleDetail(articleId);
         }
     });
-
-    // useEffect(() => {}, [articleStatus]);
 
     return (
         <Content title="文章编辑" icon={<IconChangelog />}>
@@ -245,7 +250,21 @@ const Index: React.FC = () => {
                         </Row>
                     </Section>
                 </Form>
-                <Section className="content-editer" text={'文章内容'}>
+                <Section
+                    className="content-editer"
+                    text={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Title heading={5}>文章内容</Title>{' '}
+                            <Button
+                                style={{ marginLeft: 30 }}
+                                theme="borderless"
+                                onClick={() => setTemplateVisible(true)}
+                            >
+                                文章模板
+                            </Button>
+                        </div>
+                    }
+                >
                     <MdEditor
                         imgPath="articles/content"
                         height={800}
@@ -297,6 +316,11 @@ const Index: React.FC = () => {
                     </Space>
                 </Space>
             </div>
+            <TemplateList
+                visible={templateVisible}
+                onVisibleChange={setTemplateVisible}
+                onOk={handleUsingTemplateClick}
+            />
         </Content>
     );
 };
