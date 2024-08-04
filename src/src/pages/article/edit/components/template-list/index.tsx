@@ -40,7 +40,8 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
     const [currentTemplate, setCurrentTemplate] = useState<ArticleTemplateModel>();
     const [content, setContent] = useState<string>('');
     const [name, setName] = useState<string>('');
-    const [createNameInput, setCreateNameInput] = useState<string>('');
+    const [templateNameVisible, setTemplateNameVisible] = useState<boolean>(false);
+    const [createTemplateName, setCeateTemplateName] = useState<string>('');
 
     // 获取模板列表
     let getTemplateList = () => {
@@ -61,9 +62,23 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
     };
 
     // modal 使用模板 点击
-    const handleModalOkClick = () => {
-        if (content.length < 1) {
+    const handleUsingTemplateOkClick = () => {
+        if (currentTemplate == undefined) {
             Toast.warning('请选择需要使用的模板！');
+            return;
+        }
+
+        if (currentTemplate.content != content || currentTemplate.name != name) {
+            Toast.warning('已修改模板，先保存在使用吧！');
+            return;
+        }
+
+        handleUsingTemplateContent(content);
+    };
+
+    const handleUsingTemplateContent = (content: string) => {
+        if (content.length < 1) {
+            Toast.warning('选择的模板内容为空！');
             return;
         }
 
@@ -73,11 +88,14 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
 
     // 创建模板
     const handleCreateTemplateClick = () => {
-        articleTemplateCreate({ name: createNameInput }).then((res) => {
+        articleTemplateCreate({ name: createTemplateName }).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
+
+            Toast.success('新增模板成功！');
+            setTemplateNameVisible(false);
             getTemplateList();
         });
     };
@@ -86,6 +104,16 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
     const handleSaveTemplateClick = () => {
         if (currentTemplate == undefined) {
             Toast.warning('请编辑模板后再保存！');
+            return;
+        }
+
+        if (name.length < 1) {
+            Toast.warning('模板名称不能为空！');
+            return;
+        }
+
+        if (content.length < 1) {
+            Toast.warning('模板内容不能为空！');
             return;
         }
 
@@ -131,10 +159,15 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
     };
 
     // 选中模板
-    const handleSelectTemplate = (template: ArticleTemplateModel) => {
+    const handleSelectTemplateClick = (template: ArticleTemplateModel) => {
         setContent(template.content);
         setName(template.name);
         setCurrentTemplate(template);
+    };
+
+    // 双击模板
+    const handleTemplateDoubleClick = (template: ArticleTemplateModel) => {
+        handleUsingTemplateContent(template.content);
     };
 
     // 清除选中模板
@@ -150,6 +183,7 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
 
         return () => {
             setModalVisible(false);
+            setTemplateNameVisible(false);
             clearCurrentTemplate();
         };
     }, [visible]);
@@ -158,7 +192,7 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
         <Modal
             title="文章模板"
             visible={modalVisible}
-            onOk={handleModalOkClick}
+            onOk={handleUsingTemplateOkClick}
             onCancel={() => {
                 handleModalVisibleChange();
             }}
@@ -169,8 +203,12 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
         >
             <div className="article-template-wrap">
                 <div className="article-template-list">
-                    <Space spacing="medium" className="article-template-space">
+                    <Space spacing="medium" className="template-func">
                         <Popconfirm
+                            trigger="custom"
+                            visible={templateNameVisible}
+                            onCancel={() => setTemplateNameVisible(false)}
+                            onConfirm={() => handleCreateTemplateClick()}
                             showCloseIcon={false}
                             title={null}
                             icon={null}
@@ -178,68 +216,70 @@ const Index: FC<ComProps> = ({ visible, onVisibleChange, onOk }) => {
                                 <div style={{ width: 300 }}>
                                     <Input
                                         maxLength={20}
-                                        onChange={setCreateNameInput}
+                                        onChange={setCeateTemplateName}
                                         placeholder="模板名称"
                                     />
                                 </div>
                             }
-                            onConfirm={() => handleCreateTemplateClick()}
                         >
-                            <Button>新增模板</Button>
+                            <Button onClick={() => setTemplateNameVisible(true)}>新增模板</Button>
                         </Popconfirm>
                         <Button onClick={() => handleSaveTemplateClick()}>保存模板</Button>
                     </Space>
-                    <List
-                        loading={templatesLoading}
-                        dataSource={templates}
-                        emptyContent={<ListEmpty />}
-                        split={false}
-                        renderItem={(item) => (
-                            <List.Item
-                                className="template-item"
-                                style={{
-                                    padding: 5,
-                                    backgroundColor:
-                                        item.templateId == currentTemplate?.templateId
-                                            ? 'rgba(var(--semi-grey-1))'
-                                            : '',
-                                }}
-                                main={
-                                    <div
-                                        className="template-item-main"
-                                        onClick={() => handleSelectTemplate(item)}
-                                    >
-                                        <Text
-                                            strong
-                                            ellipsis
-                                            style={{ cursor: 'pointer', width: 210 }}
+                    <div className="template-list">
+                        <List
+                            loading={templatesLoading}
+                            dataSource={templates}
+                            emptyContent={<ListEmpty />}
+                            split={false}
+                            renderItem={(item) => (
+                                <List.Item
+                                    className="template-list-item"
+                                    style={{
+                                        padding: 5,
+                                        backgroundColor:
+                                            item.templateId == currentTemplate?.templateId
+                                                ? 'rgba(var(--semi-grey-1))'
+                                                : '',
+                                    }}
+                                    main={
+                                        <div
+                                            className="template-item-main"
+                                            onClick={() => handleSelectTemplateClick(item)}
+                                            onDoubleClick={() => handleTemplateDoubleClick(item)}
                                         >
-                                            {item.name}
-                                        </Text>
-                                        <Popconfirm
-                                            position="left"
-                                            title="确定是否要删除此模板？"
-                                            onConfirm={() =>
-                                                handleDeleteTemplateClick(item.templateId)
-                                            }
-                                        >
-                                            <Button
-                                                onClick={(e) => e.stopPropagation()}
-                                                theme="borderless"
-                                                type="danger"
-                                                size="small"
+                                            <Text
+                                                strong
+                                                ellipsis
+                                                style={{ cursor: 'pointer', width: 210 }}
                                             >
-                                                删除
-                                            </Button>
-                                        </Popconfirm>
-                                    </div>
-                                }
-                            />
-                        )}
-                    />
+                                                {item.name}
+                                            </Text>
+                                            <Popconfirm
+                                                position="left"
+                                                title="确定是否要删除此模板？"
+                                                onConfirm={() =>
+                                                    handleDeleteTemplateClick(item.templateId)
+                                                }
+                                            >
+                                                <Button
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    theme="borderless"
+                                                    type="danger"
+                                                    size="small"
+                                                >
+                                                    删除
+                                                </Button>
+                                            </Popconfirm>
+                                        </div>
+                                    }
+                                />
+                            )}
+                        />
+                    </div>
                 </div>
                 <div className="article-template-preview">
-                    <div className="article-template-space">
+                    <div className="template-info">
                         <Input
                             maxLength={20}
                             value={name}

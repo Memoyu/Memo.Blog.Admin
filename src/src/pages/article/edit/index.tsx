@@ -1,7 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { IconChangelog } from '@douyinfe/semi-icons-lab';
-import { Form, Typography, Switch, Row, Col, Button, Space, Toast } from '@douyinfe/semi-ui';
+import {
+    Form,
+    Typography,
+    Switch,
+    Row,
+    Col,
+    Button,
+    Input,
+    Space,
+    Toast,
+    Popconfirm,
+    Modal,
+} from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 import UploadImage from '@src/components/upload-image';
@@ -18,11 +30,12 @@ import {
     articleUpdate,
     articleCategoryList,
     articleTagList,
+    articleTemplateCreate,
 } from '@src/utils/request';
 
 import './index.scss';
 
-const { Section, Input, Select, TextArea } = Form;
+const { Section, Select, TextArea } = Form;
 const { Title, Text } = Typography;
 
 const Index: React.FC = () => {
@@ -40,8 +53,11 @@ const Index: React.FC = () => {
     const [categories, setCategories] = useState<Array<OptionProps>>();
     const [tags, setTags] = useState<Array<OptionProps>>();
 
-    const [templateVisible, setTemplateVisible] = useState<boolean>(true);
-
+    const [templateVisible, setTemplateVisible] = useState<boolean>(false);
+    const [templateNameVisible, setTemplateNameVisible] = useState<boolean>(false);
+    const [createTemplateName, setCeateTemplateName] = useState<string>('');
+    const [coverConfirmVisible, setCoverConfirmVisible] = useState<boolean>(false);
+    const [templateContent, setTemplateContent] = useState<string>('');
     // 获取文章详情
     let getArticleDetail = async (id: string) => {
         let res = await articleGet(id);
@@ -166,8 +182,49 @@ const Index: React.FC = () => {
         formApi?.setValue('tags', filterIds);
     };
 
+    // 触发使用模板内容替换现有内容
     const handleUsingTemplateClick = (content: string) => {
+        // 内容不为空时，进行弹窗确认，确认则替换
+        if (articleContent.length > 0) {
+            setTemplateContent(content);
+            setCoverConfirmVisible(true);
+            return;
+        }
+
         setArticleContent(content);
+    };
+
+    // 触发覆盖当前内容
+    const handleCoverContentOk = () => {
+        setArticleContent(templateContent);
+        setCoverConfirmVisible(false);
+    };
+
+    // 触发存为模板
+    const handleSaveTemplateClick = () => {
+        if (articleContent.length < 1) {
+            Toast.warning('请填写文章内容再保存为模板！');
+            return;
+        }
+
+        setTemplateNameVisible(true);
+    };
+
+    // 触发创建文章模板
+    const handleCreateTemplateClick = () => {
+        if (createTemplateName.length < 1) {
+            Toast.warning('请填写模板名称！');
+            return;
+        }
+
+        articleTemplateCreate({ name: createTemplateName, content: articleContent }).then((res) => {
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+            Toast.success('存为模板成功！');
+            setTemplateNameVisible(false);
+        });
     };
 
     useOnMountUnsafe(() => {
@@ -188,7 +245,7 @@ const Index: React.FC = () => {
                     <Section text={'基本信息'}>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Input
+                                <Form.Input
                                     field="title"
                                     label="标题"
                                     trigger="blur"
@@ -253,16 +310,37 @@ const Index: React.FC = () => {
                 <Section
                     className="content-editer"
                     text={
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <Space spacing="medium" align="center">
                             <Title heading={5}>文章内容</Title>{' '}
-                            <Button
-                                style={{ marginLeft: 30 }}
-                                theme="borderless"
-                                onClick={() => setTemplateVisible(true)}
-                            >
+                            <Button theme="borderless" onClick={() => setTemplateVisible(true)}>
                                 文章模板
                             </Button>
-                        </div>
+                            <Popconfirm
+                                trigger="custom"
+                                visible={templateNameVisible}
+                                onCancel={() => setTemplateNameVisible(false)}
+                                showCloseIcon={false}
+                                title={null}
+                                icon={null}
+                                content={
+                                    <div style={{ width: 300 }}>
+                                        <Input
+                                            maxLength={20}
+                                            onChange={setCeateTemplateName}
+                                            placeholder="模板名称"
+                                        />
+                                    </div>
+                                }
+                                onConfirm={() => handleCreateTemplateClick()}
+                            >
+                                <Button
+                                    theme="borderless"
+                                    onClick={() => handleSaveTemplateClick()}
+                                >
+                                    存为模板
+                                </Button>
+                            </Popconfirm>
+                        </Space>
                     }
                 >
                     <MdEditor
@@ -321,6 +399,16 @@ const Index: React.FC = () => {
                 onVisibleChange={setTemplateVisible}
                 onOk={handleUsingTemplateClick}
             />
+            <Modal
+                title="覆盖当前内容"
+                visible={coverConfirmVisible}
+                onOk={handleCoverContentOk}
+                onCancel={() => setCoverConfirmVisible(false)}
+                maskClosable={false}
+                centered
+            >
+                文章内容不为空，确定要覆盖吗？
+            </Modal>
         </Content>
     );
 };

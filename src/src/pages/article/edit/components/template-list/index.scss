@@ -2,30 +2,42 @@
     display: flex;
     justify-content: center;
 
-    .article-template-space {
-        margin: 10px;
-    }
-
     .article-template-list {
         width: 100%;
+
         .semi-list-item-body-main {
             width: 100%;
         }
 
-        .template-item {
-            &-main {
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-            }
+        .template-func {
+            margin: 6px 0;
+        }
 
-            &:hover {
-                background-color: rgba(var(--semi-grey-0));
+        .template-list {
+            //overflow: auto;
+            height: 500px;
+            overflow: hidden;
+            overflow-y: scroll;
+
+            &-item {
+                &-main {
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                }
+
+                &:hover {
+                    background-color: rgba(var(--semi-grey-0));
+                }
             }
         }
     }
     .article-template-preview {
         width: 900px;
         margin: auto;
+
+        .template-info {
+            margin: 6px 0;
+        }
     }
 }
