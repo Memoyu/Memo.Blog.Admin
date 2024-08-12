@@ -15,9 +15,27 @@ body,
 
 body {
     --semi-color-primary: rgba(var(--semi-violet-6), 1) !important;
-    --semi-color-primary-light-default: rgba(var(--semi-violet-0), 0.8) !important;
-    --semi-color-secondary: rgba(var(--semi-violet-3), 1) !important;
-    --semi-color-tertiary: rgba(var(--semi-violet-0), 1) !important;
+    --semi-color-primary-hover: rgba(var(--semi-violet-5), 1) !important;
+    --semi-color-primary-active: rgba(var(--semi-violet-7), 1) !important;
+    --semi-color-primary-disabled: rgba(var(--semi-violet-1), 1) !important;
+    --semi-color-primary-light-default: rgba(var(--semi-violet-1), 1) !important;
+    --semi-color-primary-light-hover: rgba(var(--semi-violet-2), 1) !important;
+    --semi-color-primary-light-active: rgba(var(--semi-violet-3), 1) !important;
+
+    --semi-color-secondary: rgba(var(--semi-purple-6), 1) !important;
+    --semi-color-secondary-hover: rgba(var(--semi-purple-5), 1) !important;
+    --semi-color-secondary-active: rgba(var(--semi-purple-7), 1) !important;
+    --semi-color-secondary-disabled: rgba(var(--semi-purple-1), 1) !important;
+    --semi-color-secondary-light-default: rgba(var(--semi-purple-0), 1) !important;
+    --semi-color-secondary-light-hover: rgba(var(--semi-purple-1), 1) !important;
+    --semi-color-secondary-light-active: rgba(var(--semi-purple-2), 1) !important;
+
+    --semi-color-tertiary: rgba(var(--semi-neutral-8), 1) !important;
+    --semi-color-tertiary-hover: rgba(var(--semi-neutral-7), 1) !important;
+    --semi-color-tertiary-active: rgba(var(--semi-neutral-9), 1) !important;
+    --semi-color-tertiary-light-default: rgba(var(--semi-grey-0), 1) !important;
+    --semi-color-tertiary-light-hover: rgba(var(--semi-grey-1), 1) !important;
+    --semi-color-tertiary-light-active: rgba(var(--semi-grey-2), 1) !important;
 }
 
 ::-webkit-scrollbar {

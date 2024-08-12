@@ -141,7 +141,7 @@ const Menus: MenuItem[] = [
                 icon: IconButton,
             },
             {
-                itemKey: '5-1',
+                itemKey: '5-5',
                 text: '系统配置',
                 path: '/system/config',
                 icon: IconConfig,

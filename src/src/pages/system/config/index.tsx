@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from 'react';
 
-import { Input, Layout, Tree } from '@douyinfe/semi-ui';
+import { Button, Input, Layout, Tree } from '@douyinfe/semi-ui';
 import { TreeNodeData } from '@douyinfe/semi-ui/lib/es/tree';
 
 import PageBanner from './components/page/banner';
@@ -67,7 +67,12 @@ const Index: React.FC = () => {
                     onSelect={handleConfigSelected}
                 />
             </Layout.Sider>
-            <Layout.Content style={{ padding: 15 }}>{configContent}</Layout.Content>
+            <Layout>
+                <Layout.Content style={{ padding: 15 }}>{configContent} </Layout.Content>
+                <Layout.Footer>
+                    <Button>保存配置</Button>
+                </Layout.Footer>
+            </Layout>
         </Layout>
     );
 };
