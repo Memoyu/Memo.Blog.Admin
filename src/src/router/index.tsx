@@ -27,6 +27,7 @@ const Visitor = lazy(() => import('@src/pages/system/visitor'));
 const Role = lazy(() => import('@src/pages/system/role'));
 const RoleEdit = lazy(() => import('@src/pages/system/role/edit'));
 const Permission = lazy(() => import('@src/pages/system/permission'));
+const Config = lazy(() => import('@src/pages/system/config'));
 
 const routeList: RouteObject[] = [
     {
@@ -102,6 +103,10 @@ const routeList: RouteObject[] = [
             {
                 path: 'system/permission',
                 element: <WrapperRouteComponent element={<Permission />} title="权限管理" auth />,
+            },
+            {
+                path: 'system/config',
+                element: <WrapperRouteComponent element={<Config />} title="系统配置" auth />,
             },
         ],
     },

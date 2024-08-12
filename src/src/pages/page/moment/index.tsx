@@ -5,7 +5,6 @@ import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
 import {
     Button,
     Typography,
-    Badge,
     TagGroup,
     Table,
     Space,
@@ -36,6 +35,7 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
+import Dot from '@src/components/dot';
 
 const { Text } = Typography;
 
@@ -96,13 +96,13 @@ const Index: React.FC = () => {
             title: '公开',
             align: 'center',
             width: 60,
-            render: (_, article: MomentModel) => getBoolTag(article.showable),
+            render: (_, article: MomentModel) => <Dot tag={article.showable} />,
         },
         {
             title: '评论',
             align: 'center',
             width: 60,
-            render: (_, article: MomentModel) => getBoolTag(article.commentable),
+            render: (_, article: MomentModel) => <Dot tag={article.commentable} />,
         },
         {
             title: '操作',
@@ -179,11 +179,6 @@ const Index: React.FC = () => {
             .finally(() => setLoading(false));
     };
 
-    // bool 转 Badge元素
-    const getBoolTag = (value: boolean) => {
-        return value ? <Badge dot type="success" /> : <Badge dot type="danger" />;
-    };
-
     useOnMountUnsafe(() => {
         getMomentPage();
     });
@@ -225,16 +220,17 @@ const Index: React.FC = () => {
     };
 
     // 确认编辑
-    const handleEditModalOk = () => {
+    const handleSaveMoment = (close: boolean = true) => {
         editForm?.validate().then(async (form) => {
             let moment = {
                 ...form,
                 content,
             } as MomentEditRequest;
 
-            var msg = '';
-            var res;
-            if (editMoment && editMoment.momentId) {
+            let msg = '';
+            let res;
+            if (editMoment != undefined && editMoment.momentId) {
+                moment.momentId = editMoment.momentId;
                 res = await momentUpdate(moment);
                 msg = '更新成功';
             } else {
@@ -246,9 +242,17 @@ const Index: React.FC = () => {
                 Toast.error(res.message);
                 return;
             }
-            setEditVisible(false);
             Toast.success(msg);
+
+            setEditMoment((old) => {
+                if (old != undefined && res.data != undefined) old.momentId = res.data;
+                return old;
+            });
             getMomentPage();
+
+            if (close) {
+                setEditVisible(false);
+            }
         });
     };
 
@@ -324,7 +328,7 @@ const Index: React.FC = () => {
                     <Modal
                         title={editModalTitle}
                         visible={editVisible}
-                        onOk={handleEditModalOk}
+                        onOk={() => handleSaveMoment()}
                         onCancel={() => setEditVisible(false)}
                         centered
                         bodyStyle={{ height: 570 }}
@@ -346,6 +350,7 @@ const Index: React.FC = () => {
                                     height={490}
                                     content={content}
                                     onChange={setContent}
+                                    onSave={() => handleSaveMoment(false)}
                                 />
                             </Form.Section>
                             <div style={{ display: 'flex' }}>

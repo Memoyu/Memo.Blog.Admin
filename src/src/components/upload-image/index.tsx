@@ -16,8 +16,8 @@ import { QiniuUploadModel } from '@src/common/model';
 import './index.scss';
 
 interface Iprops {
-    width?: number;
-    height?: number;
+    width?: number | string;
+    height?: number | string;
     limit?: number;
     path: string;
     url?: string;

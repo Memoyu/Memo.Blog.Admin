@@ -37,7 +37,7 @@ const Index = () => {
             <Tooltip content={`${isLight ? '暗色' : '亮色'}`}>
                 <Button
                     className="other"
-                    type={'tertiary'}
+                    // type={'tertiary'}
                     style={{ borderRadius: '50%' }}
                     theme={isLight ? 'solid' : 'light'}
                     icon={isLight ? <IconMoon /> : <IconSun />}

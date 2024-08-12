@@ -257,6 +257,17 @@ const Index: React.FC = () => {
                             </Col>
                             <Col span={6}>
                                 <Select
+                                    style={{ width: '100%' }}
+                                    field="categoryId"
+                                    label="分类"
+                                    placeholder="请选文章分类"
+                                    optionList={categories}
+                                    rules={[{ required: true, message: '文章分类必填' }]}
+                                    onFocus={() => handleCategoryFocus()}
+                                />
+                            </Col>
+                            <Col span={6}>
+                                <Select
                                     showClear
                                     style={{ width: '100%' }}
                                     maxTagCount={3}
@@ -267,17 +278,6 @@ const Index: React.FC = () => {
                                     optionList={tags}
                                     rules={[{ required: true, message: '文章标签必填' }]}
                                     onFocus={() => handleTagFocus()}
-                                />
-                            </Col>
-                            <Col span={6}>
-                                <Select
-                                    style={{ width: '100%' }}
-                                    field="categoryId"
-                                    label="分类"
-                                    placeholder="请选文章分类"
-                                    optionList={categories}
-                                    rules={[{ required: true, message: '文章分类必填' }]}
-                                    onFocus={() => handleCategoryFocus()}
                                 />
                             </Col>
                         </Row>

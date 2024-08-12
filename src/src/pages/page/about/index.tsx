@@ -100,6 +100,7 @@ const Index: React.FC = () => {
                         height={800}
                         content={content}
                         onChange={setContent}
+                        onSave={() => handleSaveAbout()}
                     />
                 </Section>
                 <Space style={{ margin: 20, width: '100%' }}>

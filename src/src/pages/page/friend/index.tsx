@@ -6,7 +6,6 @@ import {
     Table,
     Space,
     Avatar,
-    Badge,
     Typography,
     Modal,
     Popconfirm,
@@ -36,6 +35,7 @@ import {
 
 import './index.scss';
 import UploadImage from '@src/components/upload-image';
+import Dot from '@src/components/dot';
 
 const { Text } = Typography;
 
@@ -96,8 +96,7 @@ const Index: React.FC = () => {
             title: '公开',
             align: 'center',
             width: 60,
-            render: (_, comment: FriendModel) =>
-                comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
+            render: (_, comment: FriendModel) => <Dot tag={comment.showable} />,
         },
         {
             title: '操作',

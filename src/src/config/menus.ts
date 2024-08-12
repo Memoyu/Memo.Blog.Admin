@@ -14,6 +14,7 @@ import {
     IconRadio,
     IconToken,
     IconAccessibility,
+    IconConfig,
 } from '@douyinfe/semi-icons-lab';
 
 export interface MenuItem {
@@ -138,6 +139,12 @@ const Menus: MenuItem[] = [
                 text: '权限管理',
                 path: '/system/permission',
                 icon: IconButton,
+            },
+            {
+                itemKey: '5-1',
+                text: '系统配置',
+                path: '/system/config',
+                icon: IconConfig,
             },
         ],
     },

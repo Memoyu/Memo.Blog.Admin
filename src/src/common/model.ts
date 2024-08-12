@@ -697,6 +697,29 @@ export interface PermissionModel {
 
 //#endregion
 
+//#region 配置管理
+
+export interface ConfigModel {
+    style: StyleConfigModel;
+    banner: BannerConfigModel;
+}
+
+export interface StyleConfigModel {
+    primaryColor: string;
+    secondaryColor: string;
+    tertiaryColor: string;
+}
+
+export interface BannerConfigModel {
+    home: string;
+    article: string;
+    lab: string;
+    moment: string;
+    about: string;
+}
+
+//#endregion
+
 //#region  消息通知
 
 export enum BelongType {

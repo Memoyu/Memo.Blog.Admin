@@ -10,12 +10,13 @@ import {
     Form,
     Popconfirm,
     Typography,
-    Badge,
     Toast,
     Tag,
     TagGroup,
+    Avatar,
 } from '@douyinfe/semi-ui';
 
+import Dot from '@src/components/dot';
 import Content from '@src/components/page-content';
 import ArticlAnlyanis from './components/article-anlyanis';
 
@@ -138,19 +139,19 @@ const Index: React.FC = () => {
             title: '置顶',
             align: 'center',
             width: 60,
-            render: (_, article: ArticlePageModel) => getBoolTag(article.isTop),
+            render: (_, article: ArticlePageModel) => <Dot tag={article.isTop} />,
         },
         {
             title: '评论',
             align: 'center',
             width: 60,
-            render: (_, article: ArticlePageModel) => getBoolTag(article.commentable),
+            render: (_, article: ArticlePageModel) => <Dot tag={article.commentable} />,
         },
         {
             title: '公开',
             align: 'center',
             width: 60,
-            render: (_, article: ArticlePageModel) => getBoolTag(article.publicable),
+            render: (_, article: ArticlePageModel) => <Dot tag={article.publicable} />,
         },
 
         {
@@ -275,11 +276,6 @@ const Index: React.FC = () => {
         getCategories();
         getTags();
     });
-
-    // bool 转 Badge元素
-    const getBoolTag = (value: boolean) => {
-        return value ? <Badge dot type="success" /> : <Badge dot type="danger" />;
-    };
 
     // 编辑文章
     const handleEditArticle = (data?: ArticlePageModel) => {

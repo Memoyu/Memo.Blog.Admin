@@ -1,5 +1,8 @@
 .blog-image-upload {
     // 填充图片后再或移除图片闪动问题
+    .semi-upload-picture-file-card-icon-close {
+        color: var(--semi-color-primary);
+    }
     .semi-upload-picture-file-card img {
         width: 100%;
     }

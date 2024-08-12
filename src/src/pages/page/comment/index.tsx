@@ -4,7 +4,6 @@ import { IconBadge } from '@douyinfe/semi-icons-lab';
 import {
     Button,
     Typography,
-    Badge,
     Avatar,
     Table,
     Space,
@@ -37,6 +36,7 @@ import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/util
 
 import './index.scss';
 import { commentTypeOpts } from '@src/common/select-options';
+import Dot from '@src/components/dot';
 
 const { Text } = Typography;
 
@@ -146,8 +146,7 @@ const Index: React.FC = () => {
             title: '公开',
             align: 'center',
             width: 60,
-            render: (_, comment: CommentPageModel) =>
-                comment.showable ? <Badge dot type="success" /> : <Badge dot type="danger" />,
+            render: (_, comment: CommentPageModel) => <Dot tag={comment.showable} />,
         },
         {
             title: '操作',

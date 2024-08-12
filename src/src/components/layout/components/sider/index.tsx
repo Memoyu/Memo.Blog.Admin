@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import { Avatar, Layout, Nav } from '@douyinfe/semi-ui';
+import { Layout, Nav, Image } from '@douyinfe/semi-ui';
 import configMenus, { MenuItem } from '@src/config/menus';
 
 import './index.scss';
@@ -93,17 +93,7 @@ const Index: FC = () => {
             >
                 <Nav.Header
                     className="layout-sider-header"
-                    logo={
-                        <Avatar
-                            size="small"
-                            color="amber"
-                            border={{ motion: true }}
-                            style={{ marginRight: '2px' }}
-                            contentMotion={true}
-                            src={logo}
-                        />
-                    }
-                    text={"memoyu's blog"}
+                    logo={<Image preview={false} src={logo} />}
                 />
                 <div className="layout-sider-nav-content">
                     {menus.map((sub: MenuItem) => (
