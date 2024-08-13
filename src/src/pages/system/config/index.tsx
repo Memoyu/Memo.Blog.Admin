@@ -1,6 +1,6 @@
 import { FC, ReactNode, useState } from 'react';
 
-import { Button, Input, Layout, Tree, Typography } from '@douyinfe/semi-ui';
+import { Button, Input, Layout, Space, Tree, Typography } from '@douyinfe/semi-ui';
 import { TreeNodeData } from '@douyinfe/semi-ui/lib/es/tree';
 
 import PageBanner from './components/page/banner';
@@ -64,7 +64,7 @@ const Index: React.FC = () => {
 
     return (
         <Layout>
-            <Layout.Sider style={{ width: '320px' }}>
+            <Layout.Sider style={{ minWidth: '240px' }}>
                 <Tree
                     expandAll={true}
                     filterTreeNode
@@ -78,7 +78,10 @@ const Index: React.FC = () => {
             <Layout>
                 <Layout.Content style={{ padding: 15 }}>{configContent} </Layout.Content>
                 <Layout.Footer>
-                    <Button>保存配置</Button>
+                    <Space spacing="loose">
+                        <Button type="danger">还原</Button>
+                        <Button>保存配置</Button>
+                    </Space>
                 </Layout.Footer>
             </Layout>
         </Layout>

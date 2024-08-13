@@ -49,10 +49,7 @@ const Index: FC = () => {
         <div className="config-banner">
             <Section text={'页面头图'}>
                 <List
-                    grid={{
-                        gutter: 10,
-                        span: 6,
-                    }}
+                    grid={{}}
                     dataSource={banners}
                     renderItem={(item) => (
                         <List.Item>
