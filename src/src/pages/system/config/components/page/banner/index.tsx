@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import { ImagePreview, Image, Typography, Row, Col, List } from '@douyinfe/semi-ui';
+import { Form, Typography, List } from '@douyinfe/semi-ui';
 
 import './index.scss';
 import UploadImage from '@src/components/upload-image';
-import Section from '@douyinfe/semi-ui/lib/es/form/section';
+
+const { Section } = Form;
 
 interface BannerImage {
     title: string;

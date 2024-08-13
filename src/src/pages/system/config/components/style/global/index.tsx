@@ -1,79 +1,80 @@
-import { FC } from 'react';
-import { ImagePreview, Image, Typography, Row, Col, List } from '@douyinfe/semi-ui';
+import { FC, useEffect, useState } from 'react';
+import { Form, Typography, Button, Space, ColorPicker, Tooltip } from '@douyinfe/semi-ui';
+
+import { ColorValue } from '@douyinfe/semi-ui/lib/es/colorPicker';
+import { getScaleColors } from '@src/utils/color';
 
 import './index.scss';
-import UploadImage from '@src/components/upload-image';
-import Section from '@douyinfe/semi-ui/lib/es/form/section';
 
-interface BannerImage {
-    title: string;
-    desc: string;
-    url: string;
-}
-
+const { Section } = Form;
 const { Text } = Typography;
 
 const Index: FC = () => {
-    const banners: Array<BannerImage> = [
-        {
-            title: '首页：',
-            desc: '(首页)',
-            url: 'http://oss.blog.memoyu.com/articles/banner/502a2248-2ee7-48eb-af67-c5b0b9a9a5f1.png',
-        },
-        {
-            title: '文章：',
-            desc: '(文章)',
-            url: 'http://oss.blog.memoyu.com/articles/banner/502a2248-2ee7-48eb-af67-c5b0b9a9a5f1.png',
-        },
-        {
-            title: '实验室：',
-            desc: '(实验室)',
-            url: 'http://oss.blog.memoyu.com/page/about/banner/fc873d0f-b4bf-414b-8458-930de1d12d5d.png',
-        },
-        {
-            title: '动态：',
-            desc: '(动态)',
-            url: 'http://oss.blog.memoyu.com/page/about/banner/fc873d0f-b4bf-414b-8458-930de1d12d5d.png',
-        },
-        {
-            title: '关于我：',
-            desc: '(关于我)',
-            url: 'http://oss.blog.memoyu.com/page/about/846dc9f9-cef4-44e5-a078-dcc9dfb16507.png',
-        },
-    ];
+    const [selectedColor, setSelectedColor] = useState<string>();
+    const [colors, setColors] = useState<Array<string>>();
+    const [colorFirst, setColorFirst] = useState<ColorValue>(
+        ColorPicker.colorStringToValue('#002f61')
+    );
+    const [colorLast, setColorLast] = useState<ColorValue>(
+        ColorPicker.colorStringToValue('#ffff00')
+    );
 
-    const handleSaveBanner = (url: string) => {};
+    const handleGenColors = () => {
+        let keys = [colorFirst.hex, colorLast.hex];
+        let colors = getScaleColors(keys);
+        // console.log(colors, keys);
+        setColors(colors);
+    };
+
+    useEffect(() => {
+        handleGenColors();
+    }, [colorFirst, colorLast]);
 
     return (
-        <div className="config-banner">
-            <Section text={'页面头图'}>
-                <List
-                    grid={{
-                        gutter: 10,
-                        span: 6,
-                    }}
-                    dataSource={banners}
-                    renderItem={(item) => (
-                        <List.Item>
-                            <div style={{ margin: 8 }}>
-                                <div>
-                                    <Text strong style={{ fontSize: 15 }}>
-                                        {item.title}
-                                    </Text>
-                                    <Text type="tertiary">{item.desc}</Text>
+        <div className="config-global-style">
+            <Section text={'主题色'}>
+                <div style={{ display: 'flex' }}>
+                    <ColorPicker
+                        value={colorFirst}
+                        alpha={false}
+                        onChange={setColorFirst}
+                        usePopover={true}
+                        popoverProps={{ trigger: 'click' }}
+                    />
+
+                    <Text strong style={{ fontSize: 15 }}>
+                        --
+                    </Text>
+                    <ColorPicker
+                        value={colorLast}
+                        alpha={false}
+                        onChange={setColorLast}
+                        usePopover={true}
+                        popoverProps={{ trigger: 'click' }}
+                    />
+                </div>
+
+                <div className="color-block-list">
+                    {colors?.map((color, index) => {
+                        return (
+                            <Tooltip content={color}>
+                                <div
+                                    key={index + color}
+                                    className={
+                                        `color-block` +
+                                        (selectedColor === color ? ' color-block-active' : '')
+                                    }
+                                    onClick={() => setSelectedColor(color)}
+                                    style={{
+                                        backgroundColor: color,
+                                    }}
+                                >
+                                    <div className="color-block-index">{index}</div>
                                 </div>
-                                <div style={{ marginTop: 8 }}>
-                                    <UploadImage
-                                        type="banner"
-                                        url={item.url}
-                                        path="config/banner"
-                                        onSuccess={handleSaveBanner}
-                                    />
-                                </div>
-                            </div>
-                        </List.Item>
-                    )}
-                />
+                            </Tooltip>
+                        );
+                    })}
+                </div>
             </Section>
         </div>
     );
