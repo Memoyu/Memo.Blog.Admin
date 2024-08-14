@@ -3,6 +3,7 @@ import { Image, Avatar, Toast } from '@douyinfe/semi-ui';
 import { Upload } from '@douyinfe/semi-ui';
 import { IconPlus, IconCamera } from '@douyinfe/semi-icons';
 import { getFileExt } from '@src/utils/file';
+import { uuid } from '@src/utils/uuid';
 import { qiniuTokenGet } from '@src/utils/request';
 
 import {
@@ -58,7 +59,7 @@ const Index: FC<Iprops> = ({
 
     // 组装uuid文件名
     let getFileName = (file: FileItem) => {
-        let uid = file.uid;
+        let uid = uuid();
         return uid + getFileExt(file.name);
     };
 
@@ -149,7 +150,7 @@ const Index: FC<Iprops> = ({
 
     // 上传图片成功后触发
     let handleUploadSuccess = async (responseBody: object) => {
-        // console.log('responseBody', responseBody);
+        console.log('responseBody', responseBody);
         let res = { ...responseBody } as QiniuUploadModel;
         if (res.key.length > 0) onSuccess(host + res.key);
     };
@@ -180,7 +181,8 @@ const Index: FC<Iprops> = ({
                         token: qiniuTokenRef.current,
                     };
                 }}
-                action="https://up-z2.qiniup.com"
+                // headers={{ Accept: 'application/json' }}
+                action="https://up-z2.qiniup.com/"
                 renderThumbnail={(file) =>
                     type != 'avatar' ? <Image src={file.url} /> : undefined
                 }

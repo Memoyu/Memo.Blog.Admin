@@ -699,15 +699,20 @@ export interface PermissionModel {
 
 //#region 配置管理
 
-export interface ConfigModel {
-    style: StyleConfigModel;
+export interface ConfigEditRequest {
+    color: ColorConfigModel;
     banner: BannerConfigModel;
 }
 
-export interface StyleConfigModel {
-    primaryColor: string;
-    secondaryColor: string;
-    tertiaryColor: string;
+export interface ConfigModel {
+    color: ColorConfigModel;
+    banner: BannerConfigModel;
+}
+
+export interface ColorConfigModel {
+    primary: Array<string>;
+    secondary: Array<string>;
+    tertiary: Array<string>;
 }
 
 export interface BannerConfigModel {

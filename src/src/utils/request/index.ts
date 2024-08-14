@@ -58,6 +58,8 @@ import {
     ArticleRelatedModel,
     ArticleTemplateModel,
     ArticleTemplateEditRequest,
+    ConfigModel,
+    ConfigEditRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -457,6 +459,18 @@ export const permissionList = (name?: string, signature?: string) => {
 
 export const permissionGroup = (name?: string) => {
     return Request.get<Array<PermissionGroupModel>>('permission/group', { params: { name } });
+};
+
+//#endregion
+
+//#region 系统配置
+
+export const configUpdate = (config: ConfigEditRequest) => {
+    return Request.put<string>('config/update', config);
+};
+
+export const configGet = () => {
+    return Request.get<ConfigModel>('config/get');
 };
 
 //#endregion
