@@ -14,23 +14,21 @@ interface ComProps {
 const { Text } = Typography;
 
 const Index: FC<ComProps> = ({ color, onChange }) => {
-    const [primary, setPrimary] = useState<Array<string>>([]);
-    const [secondary, setSecondary] = useState<Array<string>>([]);
-    const [tertiary, setTertiary] = useState<Array<string>>([]);
+    const [primary, setPrimary] = useState<Array<string>>(['', '#4E31AA']);
+    const [secondary, setSecondary] = useState<Array<string>>(['', '#3795BD']);
+    const [tertiary, setTertiary] = useState<Array<string>>(['', '#697565']);
 
     const [primaryColors, setPrimaryColors] = useState<Array<string>>();
     const [secondaryColors, setSecondaryColors] = useState<Array<string>>();
     const [tertiaryColors, setTertiaryColors] = useState<Array<string>>();
 
     useEffect(() => {
-        let pc = color?.primary ?? ['', ''];
-        setPrimary(pc);
-
-        let sc = color?.secondary ?? ['', ''];
-        setSecondary(sc);
-
-        let tc = color?.tertiary ?? ['', ''];
-        setTertiary(tc);
+        // let pc = color?.primary;
+        // setPrimary(pc);
+        // let sc = color?.secondary ;
+        // setSecondary(sc);
+        // let tc = color?.tertiary;
+        // setTertiary(tc);
     }, [color]);
 
     return (

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { ColorPicker, Tooltip } from '@douyinfe/semi-ui';
 
-import { getScaleColors } from '@src/utils/color';
+import { getBrighten, getScaleColors } from '@src/utils/color';
 
 import './index.scss';
 
 interface ComProps {
-    light?: string;
-    dark?: string;
+    light: string;
+    dark: string;
     onChange?: (colors: string[]) => void;
 }
 
@@ -18,8 +18,15 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
     const [colorLight, setColorLight] = useState<string>();
 
     const handleGenColors = () => {
-        if (colorLight == undefined || colorDark == undefined) return;
+        if (
+            colorLight == undefined ||
+            colorDark == undefined ||
+            colorLight == '' ||
+            colorDark == ''
+        )
+            return;
         let keys = [colorLight, colorDark];
+        console.log('keys', keys);
         let colors = getScaleColors(keys);
         onChange && onChange(colors);
         setColors(colors);
@@ -30,16 +37,24 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
     }, [colorDark, colorLight]);
 
     useEffect(() => {
-        setColorLight(light);
+        let li = getBrighten(dark);
+        console.log('li', li);
+        setColorLight(li);
         setColorDark(dark);
+
         handleGenColors();
     }, [light, dark]);
+
+    const stringToColor = (str?: string) => {
+        if (str == undefined || str == '') str = '#4E31AA';
+        return ColorPicker.colorStringToValue(str);
+    };
 
     return (
         <div className="color-scale">
             <div className="color-scale-key">
                 <ColorPicker
-                    value={ColorPicker.colorStringToValue(colorLight ?? '')}
+                    value={stringToColor(colorLight)}
                     alpha={false}
                     onChange={(c) => setColorLight(c.hex)}
                     usePopover={true}
@@ -56,7 +71,7 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
                     </div>
                 </ColorPicker>
                 <ColorPicker
-                    value={ColorPicker.colorStringToValue(colorDark ?? '')}
+                    value={stringToColor(colorDark)}
                     alpha={false}
                     onChange={(c) => setColorDark(c.hex)}
                     usePopover={true}
