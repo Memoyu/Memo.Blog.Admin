@@ -1,7 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { ColorPicker, Select, TabPane, Tabs, Tooltip } from '@douyinfe/semi-ui';
 
-import { getBrighten, getDarken, getScaleColors } from '@src/utils/color';
+import {
+    getBrighten,
+    getDarken,
+    getDesaturate,
+    getSaturate,
+    getScaleColors,
+} from '@src/utils/color';
 
 import './index.scss';
 import { optionRenderProps } from '@douyinfe/semi-ui/lib/es/select';
@@ -38,7 +44,7 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
 
     const [colorTabKey, setColorTabKey] = useState('0');
     const [selectedColor, setSelectedColor] = useState<string>('#4183aa');
-    const [pickerdColor, setPickerColor] = useState<string>('#722ED1');
+    const [pickerdColor, setPickerColor] = useState<string>('#9E28B3');
 
     const [activeColor, setActiveColor] = useState<string>();
     const [colors, setColors] = useState<Array<string>>();
@@ -60,31 +66,37 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
         setColors(colors);
     };
     useEffect(() => {
-        setColorTabKey('1');
-        setConvertCurrentColor('#722ED1', '1');
+        setConvertCurrentColor('#38AA43', '1');
     }, [light]);
 
-    const setConvertCurrentColor = (val: string, key?: string) => {
+    const setConvertCurrentColor = (val: string, key: string) => {
         setSelectedColor(val);
+        setColorTabKey(key);
 
-        if (colorTabKey == key) {
+        console.log('key', key);
+
+        if (key == '0') {
             setColors(Array.from({ length: 10 }, (_, i) => `rgba(var(--semi-${val}-${i}), 1)`));
         } else {
             setPickerColor(val);
-            // 获取亮色
-            let light = getBrighten(val, 3.92);
-            light = getDarken(light, 0.15);
 
-            let dark = getBrighten(val, 1.74);
-            dark = getDarken(dark, 4.22);
-            // dark = getBrighten(light, 0.15);
+            let lights = getScaleColors(['#ffffff', val], 20);
+            // console.log('lights', lights);
+            let light = lights[4];
 
-            // 获取后五个深颜色
-            let lightColors = getScaleColors([val, dark], 5);
-            let darkColors = getScaleColors([light, val], 6);
-            darkColors.pop();
-            console.log(lightColors, darkColors);
-            setColors([...darkColors, ...lightColors]);
+            let darkTemp = getDarken(val, 1.9);
+            darkTemp = getSaturate(darkTemp, 2.3);
+            let darks = getScaleColors([darkTemp, '#000000'], 20);
+            // console.log('darks', darks);
+            let dark = darks[6];
+
+            // // 获取后五个深颜色
+            let lightColors = getScaleColors([light, val], 6);
+            let darkColors = getScaleColors([val, dark], 5);
+
+            lightColors.pop();
+            setColors([...lightColors, ...darkColors]);
+            //setColors([...darks]);
         }
     };
 
@@ -123,7 +135,6 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
     };
 
     const renderSelectItemWithColor = (optionNode: Record<string, any>) => {
-        console.log(optionNode);
         let value = optionNode.value;
         let color = `rgba(var(--semi-${value}-5), 1)`;
         if (optionList[0].findIndex((o) => o.value == value) < 0) color = value as string;
@@ -152,7 +163,7 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
                     <ColorPicker
                         value={ColorPicker.colorStringToValue(pickerdColor)}
                         alpha={false}
-                        onChange={(c) => setConvertCurrentColor(c.hex, colorTabKey)}
+                        onChange={(c) => setConvertCurrentColor(c.hex, '1')}
                     />
                 </TabPane>
             </Tabs>
@@ -168,7 +179,7 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
                     outerTopSlot={outerTopSlotNode}
                     position="top"
                     value={selectedColor}
-                    onChange={(val) => val && setConvertCurrentColor(val.toString(), colorTabKey)}
+                    onChange={(val) => val && setConvertCurrentColor(val.toString(), '0')}
                     emptyContent={<></>}
                     maxHeight={344}
                     style={{ width: 150 }}

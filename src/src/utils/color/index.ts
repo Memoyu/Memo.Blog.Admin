@@ -12,10 +12,18 @@ export function getDarken(hex: string, darken: number = 3) {
     return chroma(hex).darken(darken).hex();
 }
 
+export function getSaturate(hex: string, saturate: number = 3) {
+    return chroma(hex).saturate(saturate).hex();
+}
+
+export function getDesaturate(hex: string, saturate: number = 3) {
+    return chroma(hex).desaturate(saturate).hex();
+}
+
 export function getScaleColors(
     colorKeys: string[],
     quantity: number = 10,
-    colorspace: InterpolationColorspace = 'CAM02p'
+    colorspace: InterpolationColorspace = 'LAB'
 ) {
     let generousColorLength = 100;
     let cssColorKeys = colorKeys.map((c) => c as CssColor);
@@ -47,7 +55,7 @@ export function getScaleColors(
     // new color scale.
     const lastColorIndex = newColors.length - 1;
     const first = initialColorScale(0);
-    const last = initialColorScale(12);
+    const last = initialColorScale(generousColorLength);
     newColors.splice(0, 1, first.hex());
     newColors.splice(lastColorIndex, 1);
     newColors.splice(lastColorIndex, 1, last.hex());
