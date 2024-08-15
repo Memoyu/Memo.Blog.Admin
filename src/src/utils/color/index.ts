@@ -4,8 +4,12 @@
 import chroma from 'chroma-js';
 import { createScale, CssColor, InterpolationColorspace } from '@adobe/leonardo-contrast-colors';
 
-export function getBrighten(hex: string) {
-    return chroma(hex).brighten(3).hex();
+export function getBrighten(hex: string, brighten: number = 3) {
+    return chroma(hex).brighten(brighten).hex();
+}
+
+export function getDarken(hex: string, darken: number = 3) {
+    return chroma(hex).darken(darken).hex();
 }
 
 export function getScaleColors(
