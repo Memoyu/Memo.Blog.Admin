@@ -69,6 +69,15 @@ export const login = (username: string, password: string) => {
 
 //#region 七牛云文件存储
 
+export const qiniuDemoTokenGet = (path: string) => {
+    let instance = axios.create({ withCredentials: false });
+    return instance.get(
+        // 'http://localhost:11010/api/filestorage/qiniu/generate',
+        'http://blog.memoyu.com/api/filestorage/qiniu/generate',
+        { params: { path } }
+    );
+};
+
 export const qiniuTokenGet = (path: string) => {
     return Request.get<QiniuUploadTokenModel>('filestorage/qiniu/generate', { params: { path } });
 };

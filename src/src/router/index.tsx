@@ -3,6 +3,7 @@ import { RouteObject } from 'react-router';
 import { useRoutes } from 'react-router-dom';
 import { WrapperRouteComponent, WrapperRouteWithOutLayoutComponent } from './config';
 import Login from '@pages/login';
+import DemoBanner from '@pages/demo/banner';
 import Layout from '@components/layout';
 import Empty from '@components/layout/components/empty';
 
@@ -117,6 +118,10 @@ const routeList: RouteObject[] = [
                 title="404"
             />
         ),
+    },
+    {
+        path: 'demo',
+        element: <WrapperRouteWithOutLayoutComponent element={<DemoBanner />} title="DemoBanner" />,
     },
 ];
 
