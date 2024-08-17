@@ -6,12 +6,7 @@ import PageBanner from './components/page/banner';
 import StyleColor from './components/style/color';
 
 import './index.scss';
-import {
-    BannerConfigModel,
-    ConfigModel,
-    ColorConfigModel,
-    ConfigEditRequest,
-} from '@src/common/model';
+import { ConfigModel, ConfigEditRequest } from '@src/common/model';
 import { configGet, configUpdate } from '@src/utils/request';
 
 interface ConfidPanel {
