@@ -19,24 +19,24 @@ import './index.scss';
 interface Iprops {
     width?: number | string;
     height?: number | string;
-    limit?: number;
     path: string;
     url?: string;
     title?: string;
     type?: 'avatar' | 'banner' | 'image';
     onSuccess: (url: string) => void;
+    onRemove?: () => void;
 }
 
 // 上传单个图片组件
 const Index: FC<Iprops> = ({
     width,
     height,
-    limit = 1,
     path,
     url,
     title = '',
     type = 'image',
     onSuccess,
+    onRemove,
 }) => {
     const [filePath, setFilePath] = useState<string>('');
     const [fileFullPath, setFileFullPath] = useState<string>('');
@@ -68,11 +68,6 @@ const Index: FC<Iprops> = ({
         let h = height ? height : type == 'avatar' ? 55 : type == 'banner' ? 120 : 88;
         let w = width ? width : type == 'avatar' ? 55 : type == 'banner' ? 300 : 88;
         return [h, w];
-    };
-
-    // 上传个数限制
-    let getLimit = () => {
-        return type == 'avatar' ? undefined : limit;
     };
 
     // 是否展示上传集合
@@ -119,38 +114,47 @@ const Index: FC<Iprops> = ({
     }, [url]);
 
     // 上传图片前触发
-    let handleBeforeUpload = async (upProps: BeforeUploadProps) => {
-        let file = upProps.file;
-        let result = {
-            autoRemove: false,
-            fileInstance: file.fileInstance,
-            shouldUpload: true,
-        } as BeforeUploadObjectResult;
-
-        let tokenRes = await getQiniuUploadToken(getFileName(file));
-
-        if (!tokenRes || tokenRes?.token?.length <= 0) {
-            // console.log('uploadFail');
-            result = {
+    let handleBeforeUpload = (upProps: BeforeUploadProps) => {
+        return new Promise<BeforeUploadObjectResult>((resolve, reject) => {
+            let file = upProps.file;
+            let result = {
                 autoRemove: false,
+                fileInstance: file.fileInstance,
+                shouldUpload: false,
+            } as BeforeUploadObjectResult;
+
+            let failResult = {
+                autoRemove: true,
                 status: 'uploadFail',
                 fileInstance: file.fileInstance,
                 validateMessage: '无法上传附件',
                 shouldUpload: false,
             };
-        } else {
-            let token = tokenRes.token;
-            qiniuTokenRef.current = token;
-            setHost(tokenRes.host);
-        }
 
-        // console.log('beforeUpload', result, upProps);
-        return result;
+            getQiniuUploadToken(getFileName(file))
+                .then((res) => {
+                    if (!res || res?.token?.length <= 0) {
+                        // console.log('uploadFail');
+                        reject(failResult);
+                    } else {
+                        let token = res.token;
+                        qiniuTokenRef.current = token;
+                        result.shouldUpload = true;
+                        setHost(res.host);
+                        // console.log('beforeUpload', result, upProps);
+                        resolve(result);
+                    }
+                })
+                .catch((err) => {
+                    reject(failResult);
+                    console.log(err);
+                });
+        });
     };
 
     // 上传图片成功后触发
     let handleUploadSuccess = async (responseBody: object) => {
-        console.log('responseBody', responseBody);
+        // console.log('responseBody', responseBody);
         let res = { ...responseBody } as QiniuUploadModel;
         if (res.key.length > 0) onSuccess(host + res.key);
     };
@@ -160,6 +164,13 @@ const Index: FC<Iprops> = ({
         // console.log('change', ocProps);
         let newFileList = [...ocProps.fileList];
         setImages(newFileList);
+    };
+    const handleUploadRemove = (
+        _currentFile: File,
+        _fileList: Array<FileItem>,
+        _currentFileItem: FileItem
+    ) => {
+        onRemove && onRemove();
     };
 
     return (
@@ -174,7 +185,7 @@ const Index: FC<Iprops> = ({
                 accept="image/*"
                 listType="picture"
                 name="file"
-                limit={getLimit()}
+                limit={1}
                 data={() => {
                     return {
                         key: fileFullPath,
@@ -189,6 +200,7 @@ const Index: FC<Iprops> = ({
                 beforeUpload={(upProps) => handleBeforeUpload(upProps)}
                 onSuccess={(responseBody) => handleUploadSuccess(responseBody)}
                 onChange={(ocProps) => handleUploadChange(ocProps)}
+                onRemove={handleUploadRemove}
             >
                 {getChildren()}
             </Upload>

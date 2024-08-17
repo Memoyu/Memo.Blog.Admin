@@ -19,63 +19,82 @@ interface ComProps {
 const { Text } = Typography;
 
 const Index: FC<ComProps> = ({ banner, onChange }) => {
-    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>();
-
     const banners: Array<BannerImage> = [
         {
             key: 1,
             title: '首页',
-            desc: '(首页)',
+            desc: '',
         },
-        { key: 2, title: '文章', desc: '(文章)' },
-        { key: 3, title: '实验室', desc: '(实验室)' },
-        { key: 4, title: '动态', desc: '(动态)' },
-        { key: 5, title: '关于我', desc: '(关于我)' },
+        { key: 2, title: '文章', desc: '' },
+        { key: 3, title: '实验室', desc: '' },
+        { key: 4, title: '动态', desc: '' },
+        { key: 5, title: '关于我', desc: '' },
     ];
 
+    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>({} as BannerConfigModel);
+
     useEffect(() => {
+        if (banner == undefined) return;
         setBannerConfig(banner);
     }, [banner]);
 
     const handleUploadImageSuccess = (key: number, url: string) => {
-        let banner = {} as BannerConfigModel;
         switch (key) {
             case 1:
-                banner.home = url;
+                bannerConfig.home = url;
                 break;
             case 2:
-                banner.article = url;
+                bannerConfig.article = url;
                 break;
             case 3:
-                banner.lab = url;
+                bannerConfig.lab = url;
                 break;
             case 4:
-                banner.moment = url;
+                bannerConfig.moment = url;
                 break;
             case 5:
-                banner.about = url;
+                bannerConfig.about = url;
                 break;
         }
-        setBannerConfig(banner);
-        onChange && onChange(banner);
+        setBannerConfig(bannerConfig);
+        onChange && onChange(bannerConfig);
+    };
+    const handleUploadImageRemove = (key: number) => {
+        console.log('图片清除');
+        switch (key) {
+            case 1:
+                bannerConfig.home = '';
+                break;
+            case 2:
+                bannerConfig.article = '';
+                break;
+            case 3:
+                bannerConfig.lab = '';
+                break;
+            case 4:
+                bannerConfig.moment = '';
+                break;
+            case 5:
+                bannerConfig.about = '';
+                break;
+        }
+        setBannerConfig(bannerConfig);
+        onChange && onChange(bannerConfig);
     };
 
     const getBannerUrl = (key: number) => {
-        let banner = {} as BannerConfigModel;
         switch (key) {
             case 1:
-                return banner.home;
+                return bannerConfig?.home;
             case 2:
-                return banner.article;
+                return bannerConfig?.article;
             case 3:
-                return banner.lab;
+                return bannerConfig?.lab;
             case 4:
-                return banner.moment;
+                return bannerConfig?.moment;
             case 5:
-                return banner.about;
+                return bannerConfig?.about;
         }
-        setBannerConfig(banner);
-        onChange && onChange(banner);
     };
 
     return (
@@ -98,6 +117,7 @@ const Index: FC<ComProps> = ({ banner, onChange }) => {
                                     url={getBannerUrl(item.key)}
                                     path="config/banner"
                                     onSuccess={(url) => handleUploadImageSuccess(item.key, url)}
+                                    onRemove={() => handleUploadImageRemove(item.key)}
                                 />
                             </div>
                         </div>

@@ -1,25 +1,21 @@
 import { FC, useEffect, useState } from 'react';
 import { ColorPicker, Select, TabPane, Tabs, Tooltip } from '@douyinfe/semi-ui';
-
-import {
-    getBrighten,
-    getDarken,
-    getDesaturate,
-    getSaturate,
-    getScaleColors,
-} from '@src/utils/color';
-
-import './index.scss';
-import { optionRenderProps } from '@douyinfe/semi-ui/lib/es/select';
 import Icon, { IconTick } from '@douyinfe/semi-icons';
 
+import { getDarken, getSaturate, getScaleColors } from '@src/utils/color';
+
+import { optionRenderProps } from '@douyinfe/semi-ui/lib/es/select';
+
+import './index.scss';
+
 interface ComProps {
-    light: string;
-    dark: string;
+    base?: string;
     onChange?: (colors: string[]) => void;
 }
 
-const Index: FC<ComProps> = ({ light, dark, onChange }) => {
+type ColorTypeKey = 'semi' | 'custom';
+
+const Index: FC<ComProps> = ({ base, onChange }) => {
     const optionList = [
         [
             { value: 'amber', label: 'amber' },
@@ -42,41 +38,39 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
         [],
     ];
 
-    const [colorTabKey, setColorTabKey] = useState('0');
-    const [selectedColor, setSelectedColor] = useState<string>('#4183aa');
-    const [pickerdColor, setPickerColor] = useState<string>('#9E28B3');
+    const [colorTabKey, setColorTabKey] = useState<ColorTypeKey>('semi');
+    const [selectedColor, setSelectedColor] = useState<string>();
+    const [pickerdColor, setPickerColor] = useState<string>('#6A3AC7');
 
-    const [activeColor, setActiveColor] = useState<string>();
+    const [activeColor, setActiveColor] = useState<number>(5);
     const [colors, setColors] = useState<Array<string>>();
-    const [colorDark, setColorDark] = useState<string>();
-    const [colorLight, setColorLight] = useState<string>();
 
-    const handleGenColors = () => {
-        if (
-            colorLight == undefined ||
-            colorDark == undefined ||
-            colorLight == '' ||
-            colorDark == ''
-        )
-            return;
-        let keys = [colorLight, colorDark];
-        // console.log('keys', keys);
-        let colors = getScaleColors(keys);
-        onChange && onChange(colors);
-        setColors(colors);
-    };
     useEffect(() => {
-        setConvertCurrentColor('#38AA43', '1');
-    }, [light]);
+        // console.log('base color', base);
+        let color = base;
+        if (color == undefined || color.length < 1) {
+            color = 'violet';
+        }
 
-    const setConvertCurrentColor = (val: string, key: string) => {
+        let key: ColorTypeKey = 'custom';
+        if (inSemiColor(color)) key = 'semi';
+
+        setConvertCurrentColor(color, key);
+    }, [base]);
+
+    // 是否在semi初始色阶中
+    const inSemiColor = (color: string) => {
+        return optionList[0].findIndex((o) => color.startsWith(o.value)) > -1;
+    };
+
+    // 生成根据主色生成颜色阶
+    const setConvertCurrentColor = (val: string, key: ColorTypeKey) => {
         setSelectedColor(val);
         setColorTabKey(key);
 
-        console.log('key', key);
-
-        if (key == '0') {
-            setColors(Array.from({ length: 10 }, (_, i) => `rgba(var(--semi-${val}-${i}), 1)`));
+        let colors: Array<string> = [];
+        if (key == 'semi') {
+            colors = Array.from({ length: 10 }, (_, i) => `${val}-${i}`);
         } else {
             setPickerColor(val);
 
@@ -84,20 +78,37 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
             // console.log('lights', lights);
             let light = lights[4];
 
-            let darkTemp = getDarken(val, 1.9);
-            darkTemp = getSaturate(darkTemp, 2.3);
-            let darks = getScaleColors([darkTemp, '#000000'], 20);
+            let dark = getDarken(val, 1.9);
+            dark = getSaturate(dark, 2.3);
+            let darks = getScaleColors([dark, '#000000'], 20);
             // console.log('darks', darks);
-            let dark = darks[6];
+            dark = darks[6];
 
-            // // 获取后五个深颜色
+            // 获取前五个颜色
             let lightColors = getScaleColors([light, val], 6);
+            // 获取后五个深颜色
             let darkColors = getScaleColors([val, dark], 5);
 
             lightColors.pop();
-            setColors([...lightColors, ...darkColors]);
-            //setColors([...darks]);
+
+            // console.log('colors', lightColors, darkColors);
+            colors = [...lightColors, ...darkColors];
         }
+
+        setColors(colors);
+        onChange && onChange(colors);
+    };
+
+    const getSemiColorRgba = (color: string, index: number) => {
+        return `rgba(var(--semi-${color}-${index}), 1)`;
+    };
+
+    const getBlockColor = (color: string) => {
+        if (colorTabKey == 'semi') {
+            color = `rgba(var(--semi-${color}), 1)`;
+        }
+
+        return color;
     };
 
     const renderOptionItemWithColor = (renderProps: optionRenderProps) => {
@@ -109,8 +120,8 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
             (disabled ? ' semi-select-option-disabled' : '') +
             (selected ? ' semi-select-option-selected' : '');
 
-        let color = `rgba(var(--semi-${value}-5), 1)`;
-        if (optionList[0].findIndex((o) => o.value == value) < 0) color = value as string;
+        let color = value as string;
+        if (inSemiColor(color)) color = getSemiColorRgba(color, 5);
 
         return (
             <div
@@ -119,7 +130,7 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
                 onClick={onClick}
                 onMouseEnter={onMouseEnter}
             >
-                <Icon style={{ width: 12 }} svg={selected ? <IconTick /> : undefined} />
+                <Icon style={{ width: 15 }} svg={selected ? <IconTick /> : undefined} />
                 <div
                     style={{
                         width: 20,
@@ -136,15 +147,15 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
 
     const renderSelectItemWithColor = (optionNode: Record<string, any>) => {
         let value = optionNode.value;
-        let color = `rgba(var(--semi-${value}-5), 1)`;
-        if (optionList[0].findIndex((o) => o.value == value) < 0) color = value as string;
+        let color = value as string;
+        if (inSemiColor(color)) color = getSemiColorRgba(color, 5);
         let content = (
             <div style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}>
                 <div
                     style={{
                         width: 20,
                         height: 20,
-                        margin: '0 8px',
+                        margin: '0 8px 0 0',
                         borderRadius: 9999,
                         backgroundColor: color,
                     }}
@@ -157,13 +168,16 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
 
     const outerTopSlotNode = (
         <div style={{ margin: 10 }}>
-            <Tabs activeKey={colorTabKey} onChange={(key: string) => setColorTabKey(key)}>
-                <TabPane tab={'Semi色阶'} itemKey="0" />
-                <TabPane tab={'自定义'} itemKey="1">
+            <Tabs
+                activeKey={colorTabKey}
+                onChange={(key: string) => setColorTabKey(key as ColorTypeKey)}
+            >
+                <TabPane tab={'Semi色阶'} itemKey={'semi'} />
+                <TabPane tab={'自定义'} itemKey={'custom'}>
                     <ColorPicker
                         value={ColorPicker.colorStringToValue(pickerdColor)}
                         alpha={false}
-                        onChange={(c) => setConvertCurrentColor(c.hex, '1')}
+                        onChange={(c) => setConvertCurrentColor(c.hex, 'custom')}
                     />
                 </TabPane>
             </Tabs>
@@ -175,11 +189,11 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
             <div className="color-scale-key">
                 <Select
                     placeholder="选择颜色"
-                    optionList={optionList[Number(colorTabKey)]}
+                    optionList={colorTabKey == 'semi' ? optionList[0] : []}
                     outerTopSlot={outerTopSlotNode}
                     position="top"
                     value={selectedColor}
-                    onChange={(val) => val && setConvertCurrentColor(val.toString(), '0')}
+                    onChange={(val) => setConvertCurrentColor(val as string, 'semi')}
                     emptyContent={<></>}
                     maxHeight={344}
                     style={{ width: 150 }}
@@ -196,11 +210,11 @@ const Index: FC<ComProps> = ({ light, dark, onChange }) => {
                             <div
                                 className={
                                     `color-block color-block-item` +
-                                    (activeColor === color ? ' color-block-item-active' : '')
+                                    (activeColor === index ? ' color-block-item-active' : '')
                                 }
-                                onClick={() => setActiveColor(color)}
+                                onClick={() => setActiveColor(index)}
                                 style={{
-                                    backgroundColor: color,
+                                    backgroundColor: getBlockColor(color),
                                 }}
                             >
                                 <div

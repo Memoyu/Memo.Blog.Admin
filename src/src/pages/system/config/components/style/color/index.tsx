@@ -8,27 +8,58 @@ import { ColorConfigModel } from '@src/common/model';
 
 interface ComProps {
     color: ColorConfigModel | undefined;
-    onChange?: (banner: ColorConfigModel) => void;
+    onChange?: (color: ColorConfigModel) => void;
 }
+
+type ColorType = 'primary' | 'secondary' | 'tertiary';
 
 const { Text } = Typography;
 
 const Index: FC<ComProps> = ({ color, onChange }) => {
-    const [primary, setPrimary] = useState<Array<string>>(['', '#4E31AA']);
-    const [secondary, setSecondary] = useState<Array<string>>(['', '#3795BD']);
-    const [tertiary, setTertiary] = useState<Array<string>>(['', '#697565']);
+    const [colorConfig, setColorConfig] = useState<ColorConfigModel>();
 
-    const [primaryColors, setPrimaryColors] = useState<Array<string>>();
-    const [secondaryColors, setSecondaryColors] = useState<Array<string>>();
-    const [tertiaryColors, setTertiaryColors] = useState<Array<string>>();
+    const handleColorChange = (type: ColorType, colors: Array<string>) => {
+        if (colorConfig == undefined) return;
+        switch (type) {
+            case 'primary':
+                colorConfig.primary = colors;
+                break;
+            case 'secondary':
+                colorConfig.secondary = colors;
+                break;
+            case 'tertiary':
+                colorConfig.tertiary = colors;
+                break;
+        }
+        // console.log('color config', config);
+        onChange && onChange(colorConfig);
+    };
+
+    const getBaseColor = (type: ColorType) => {
+        let color = undefined;
+
+        switch (type) {
+            case 'primary':
+                color = colorConfig?.primary[5];
+                break;
+            case 'secondary':
+                color = colorConfig?.secondary[5];
+                break;
+            case 'tertiary':
+                color = colorConfig?.tertiary[5];
+                break;
+        }
+
+        if (color == undefined) return;
+        if (color.startsWith('#')) return color;
+        return color.substring(0, color.lastIndexOf('-'));
+    };
 
     useEffect(() => {
-        // let pc = color?.primary;
-        // setPrimary(pc);
-        // let sc = color?.secondary ;
-        // setSecondary(sc);
-        // let tc = color?.tertiary;
-        // setTertiary(tc);
+        // console.log('颜色配置', color);
+
+        if (color == undefined) return;
+        setColorConfig(color);
     }, [color]);
 
     return (
@@ -40,7 +71,10 @@ const Index: FC<ComProps> = ({ color, onChange }) => {
                         (default: 5, hover: 6, active: 7, disabled: 2, light-default: 0,
                         light-hover: 1, light-active: 2)
                     </Text>
-                    <ColorScale light={primary[0]} dark={primary[1]} onChange={setPrimaryColors} />
+                    <ColorScale
+                        base={getBaseColor('primary')}
+                        onChange={(colors) => handleColorChange('primary', colors)}
+                    />
                 </div>
                 <div className="color-scale-group-item">
                     <Text strong>次要颜色</Text>
@@ -49,9 +83,8 @@ const Index: FC<ComProps> = ({ color, onChange }) => {
                         light-hover: 1, light-active: 2)
                     </Text>
                     <ColorScale
-                        light={secondary[0]}
-                        dark={secondary[1]}
-                        onChange={setSecondaryColors}
+                        base={getBaseColor('secondary')}
+                        onChange={(colors) => handleColorChange('secondary', colors)}
                     />
                 </div>
                 <div className="color-scale-group-item">
@@ -61,9 +94,8 @@ const Index: FC<ComProps> = ({ color, onChange }) => {
                         light-active: 2)
                     </Text>
                     <ColorScale
-                        light={tertiary[0]}
-                        dark={tertiary[1]}
-                        onChange={setTertiaryColors}
+                        base={getBaseColor('tertiary')}
+                        onChange={(colors) => handleColorChange('tertiary', colors)}
                     />
                 </div>
             </div>

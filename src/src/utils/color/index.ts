@@ -4,20 +4,20 @@
 import chroma from 'chroma-js';
 import { createScale, CssColor, InterpolationColorspace } from '@adobe/leonardo-contrast-colors';
 
-export function getBrighten(hex: string, brighten: number = 3) {
-    return chroma(hex).brighten(brighten).hex();
+export function getBrighten(hex: string, num: number = 3) {
+    return chroma(hex).brighten(num).hex();
 }
 
-export function getDarken(hex: string, darken: number = 3) {
-    return chroma(hex).darken(darken).hex();
+export function getDarken(hex: string, num: number = 3) {
+    return chroma(hex).darken(num).hex();
 }
 
-export function getSaturate(hex: string, saturate: number = 3) {
-    return chroma(hex).saturate(saturate).hex();
+export function getSaturate(hex: string, num: number = 3) {
+    return chroma(hex).saturate(num).hex();
 }
 
-export function getDesaturate(hex: string, saturate: number = 3) {
-    return chroma(hex).desaturate(saturate).hex();
+export function getDesaturate(hex: string, num: number = 3) {
+    return chroma(hex).desaturate(num).hex();
 }
 
 export function getScaleColors(

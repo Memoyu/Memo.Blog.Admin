@@ -13,7 +13,6 @@ import {
     Toast,
     Tag,
     TagGroup,
-    Avatar,
 } from '@douyinfe/semi-ui';
 
 import Dot from '@src/components/dot';

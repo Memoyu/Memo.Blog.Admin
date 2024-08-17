@@ -6,8 +6,13 @@ import PageBanner from './components/page/banner';
 import StyleColor from './components/style/color';
 
 import './index.scss';
-import { BannerConfigModel, ConfigModel, ColorConfigModel } from '@src/common/model';
-import { configGet } from '@src/utils/request';
+import {
+    BannerConfigModel,
+    ConfigModel,
+    ColorConfigModel,
+    ConfigEditRequest,
+} from '@src/common/model';
+import { configGet, configUpdate } from '@src/utils/request';
 
 interface ConfidPanel {
     label: string;
@@ -17,10 +22,26 @@ interface ConfidPanel {
 
 const { Title } = Typography;
 
+const violets = Array.from({ length: 10 }, (_, i) => `violet-${i}`);
+const init: ConfigModel = {
+    banner: {
+        home: '',
+        article: '',
+        lab: '',
+        moment: '',
+        about: '',
+    },
+    color: {
+        primary: violets,
+        secondary: violets,
+        tertiary: violets,
+    },
+};
+
 const Index: React.FC = () => {
-    const [config, setConfig] = useState<ConfigModel>();
-    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>();
-    const [colorConfig, setColorConfig] = useState<ColorConfigModel>();
+    const [initConfig, setInitConfig] = useState<ConfigModel>(init);
+    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>(cloneDeep(init.banner));
+    const [colorConfig, setColorConfig] = useState<ColorConfigModel>(cloneDeep(init.color));
 
     const confidPanels: Array<ConfidPanel> = [
         {
@@ -37,15 +58,36 @@ const Index: React.FC = () => {
 
     const getConfig = () => {
         configGet().then((res) => {
-            if (!res.isSuccess || !res.data) {
+            if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
-            setConfig(res.data);
-            let banner = cloneDeep(res.data.banner);
-            setBannerConfig(banner);
-            let color = cloneDeep(res.data.color);
-            setColorConfig(color);
+            if (!res.data) return;
+
+            setInitConfig(res.data);
+            let clone = cloneDeep(res.data);
+            setBannerConfig(clone.banner);
+            setColorConfig(clone.color);
+        });
+    };
+
+    const handleResetConfigClick = () => {
+        // console.log('重置', bannerConfig, initConfig);
+        setBannerConfig(cloneDeep(initConfig.banner));
+        setColorConfig(cloneDeep(initConfig.color));
+    };
+
+    const handleSaveConfigClick = () => {
+        let edit: ConfigEditRequest = { banner: bannerConfig, color: colorConfig };
+        // console.log(edit);
+        configUpdate(edit).then((res) => {
+            if (!res.isSuccess) {
+                Toast.error(res.message);
+                return;
+            }
+
+            setInitConfig({ banner: bannerConfig, color: colorConfig });
+            Toast.success('保存配置成功');
         });
     };
 
@@ -67,8 +109,10 @@ const Index: React.FC = () => {
                 ))}
             </Collapse>
             <Space spacing="loose" style={{ marginTop: 30 }}>
-                <Button type="danger">还原</Button>
-                <Button>保存配置</Button>
+                <Button theme="borderless" type="danger" onClick={() => handleResetConfigClick()}>
+                    还原
+                </Button>
+                <Button onClick={() => handleSaveConfigClick()}>保存配置</Button>
             </Space>
         </div>
     );
