@@ -13,12 +13,11 @@ interface BannerImage {
 
 interface ComProps {
     banner: BannerConfigModel | undefined;
-    onChange?: (banner: BannerConfigModel) => void;
 }
 
 const { Text } = Typography;
 
-const Index: FC<ComProps> = ({ banner, onChange }) => {
+const Index: FC<ComProps> = ({ banner }) => {
     const banners: Array<BannerImage> = [
         {
             key: 1,
@@ -57,7 +56,6 @@ const Index: FC<ComProps> = ({ banner, onChange }) => {
                 break;
         }
         setBannerConfig(bannerConfig);
-        onChange && onChange(bannerConfig);
     };
     const handleUploadImageRemove = (key: number) => {
         console.log('图片清除');
@@ -79,7 +77,6 @@ const Index: FC<ComProps> = ({ banner, onChange }) => {
                 break;
         }
         setBannerConfig(bannerConfig);
-        onChange && onChange(bannerConfig);
     };
 
     const getBannerUrl = (key: number) => {

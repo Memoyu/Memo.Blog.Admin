@@ -7,15 +7,14 @@ import './index.scss';
 import { ColorConfigModel } from '@src/common/model';
 
 interface ComProps {
-    color: ColorConfigModel | undefined;
-    onChange?: (color: ColorConfigModel) => void;
+    color: ColorConfigModel | undefined; // 引用直接传地址
 }
 
 type ColorType = 'primary' | 'secondary' | 'tertiary';
 
 const { Text } = Typography;
 
-const Index: FC<ComProps> = ({ color, onChange }) => {
+const Index: FC<ComProps> = ({ color }) => {
     const [colorConfig, setColorConfig] = useState<ColorConfigModel>();
 
     const handleColorChange = (type: ColorType, colors: Array<string>) => {
@@ -31,8 +30,6 @@ const Index: FC<ComProps> = ({ color, onChange }) => {
                 colorConfig.tertiary = colors;
                 break;
         }
-        // console.log('color config', config);
-        onChange && onChange(colorConfig);
     };
 
     const getBaseColor = (type: ColorType) => {
@@ -57,7 +54,6 @@ const Index: FC<ComProps> = ({ color, onChange }) => {
 
     useEffect(() => {
         // console.log('颜色配置', color);
-
         if (color == undefined) return;
         setColorConfig(color);
     }, [color]);

@@ -39,20 +39,19 @@ const init: ConfigModel = {
 };
 
 const Index: React.FC = () => {
-    const [initConfig, setInitConfig] = useState<ConfigModel>(init);
-    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>(cloneDeep(init.banner));
-    const [colorConfig, setColorConfig] = useState<ColorConfigModel>(cloneDeep(init.color));
+    const [config, setConfig] = useState<ConfigModel>(init);
+    const [editConfig, setEditConfig] = useState<ConfigEditRequest>({} as ConfigEditRequest);
 
     const confidPanels: Array<ConfidPanel> = [
         {
             label: '头图配置',
             key: '0',
-            content: <PageBanner banner={bannerConfig} onChange={setBannerConfig} />,
+            content: <PageBanner banner={editConfig.banner} />,
         },
         {
             label: '颜色配置',
             key: '1',
-            content: <StyleColor color={colorConfig} onChange={setColorConfig} />,
+            content: <StyleColor color={editConfig.color} />,
         },
     ];
 
@@ -64,29 +63,30 @@ const Index: React.FC = () => {
             }
             if (!res.data) return;
 
-            setInitConfig(res.data);
-            let clone = cloneDeep(res.data);
-            setBannerConfig(clone.banner);
-            setColorConfig(clone.color);
+            setConfig(res.data);
+            setEditConfig(cloneDeep(res.data));
         });
     };
 
     const handleResetConfigClick = () => {
-        // console.log('重置', bannerConfig, initConfig);
-        setBannerConfig(cloneDeep(initConfig.banner));
-        setColorConfig(cloneDeep(initConfig.color));
+        console.log('重置', config);
+        //if (!editConfig) return;
+        setEditConfig(cloneDeep(config));
     };
 
     const handleSaveConfigClick = () => {
-        let edit: ConfigEditRequest = { banner: bannerConfig, color: colorConfig };
+        if (editConfig == undefined) {
+            Toast.error('请选择配置');
+            return;
+        }
         // console.log(edit);
-        configUpdate(edit).then((res) => {
+        configUpdate(editConfig).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
 
-            setInitConfig({ banner: bannerConfig, color: colorConfig });
+            setConfig({ banner: editConfig.banner, color: editConfig.color });
             Toast.success('保存配置成功');
         });
     };

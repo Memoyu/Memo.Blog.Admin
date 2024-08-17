@@ -40,7 +40,7 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
 
     const [colorTabKey, setColorTabKey] = useState<ColorTypeKey>('semi');
     const [selectedColor, setSelectedColor] = useState<string>();
-    const [pickerdColor, setPickerColor] = useState<string>('#6A3AC7');
+    const [pickerdColor, setPickerColor] = useState<string>();
 
     const [activeColor, setActiveColor] = useState<number>(5);
     const [colors, setColors] = useState<Array<string>>();
@@ -48,9 +48,7 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
     useEffect(() => {
         // console.log('base color', base);
         let color = base;
-        if (color == undefined || color.length < 1) {
-            color = 'violet';
-        }
+        if (color == undefined || color.length < 1) return;
 
         let key: ColorTypeKey = 'custom';
         if (inSemiColor(color)) key = 'semi';
@@ -175,7 +173,11 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
                 <TabPane tab={'Semi色阶'} itemKey={'semi'} />
                 <TabPane tab={'自定义'} itemKey={'custom'}>
                     <ColorPicker
-                        value={ColorPicker.colorStringToValue(pickerdColor)}
+                        value={
+                            pickerdColor == undefined
+                                ? pickerdColor
+                                : ColorPicker.colorStringToValue(pickerdColor)
+                        }
                         alpha={false}
                         onChange={(c) => setConvertCurrentColor(c.hex, 'custom')}
                     />
