@@ -18,11 +18,11 @@ interface ConfidPanel {
 const { Title } = Typography;
 
 const banner: BannerConfigModel = {
-    home: '',
-    article: '',
-    lab: '',
-    moment: '',
-    about: '',
+    home: {},
+    article: {},
+    lab: {},
+    moment: {},
+    about: {},
 };
 const color: ColorConfigModel = {
     primary: [],

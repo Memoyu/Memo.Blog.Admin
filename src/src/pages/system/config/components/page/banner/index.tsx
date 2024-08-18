@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import './index.scss';
-import { Typography, List } from '@douyinfe/semi-ui';
+import { Typography, List, Input } from '@douyinfe/semi-ui';
 
 import UploadImage from '@src/components/upload-image';
 
@@ -52,29 +52,29 @@ const Index: FC<ComProps> = ({ banner, onChange }) => {
     const setBannerUrl = (key: number, url: string) => {
         let bc = bannerConfig
             ? bannerConfig
-            : { home: '', article: '', lab: '', moment: '', about: '' };
+            : { home: {}, article: {}, lab: {}, moment: {}, about: {} };
         switch (key) {
             case 1:
-                bc.home = url;
+                bc.home.url = url;
                 break;
             case 2:
-                bc.article = url;
+                bc.article.url = url;
                 break;
             case 3:
-                bc.lab = url;
+                bc.lab.url = url;
                 break;
             case 4:
-                bc.moment = url;
+                bc.moment.url = url;
                 break;
             case 5:
-                bc.about = url;
+                bc.about.url = url;
                 break;
         }
         setBannerConfig(bc);
         onChange && onChange(bc);
     };
 
-    const getBannerUrl = (key: number) => {
+    const getBanner = (key: number) => {
         //console.log('获取图片', banner);
         switch (key) {
             case 1:
@@ -97,22 +97,15 @@ const Index: FC<ComProps> = ({ banner, onChange }) => {
                 dataSource={banners}
                 renderItem={(item) => (
                     <List.Item>
-                        <div style={{ margin: 8 }} key={item.key}>
+                        {' '}
+                        <div style={{ width: 300, margin: 8 }} key={item.key}>
                             <div>
                                 <Text strong style={{ fontSize: 15, marginRight: 15 }}>
                                     {item.title}
                                 </Text>
                                 <Text type="tertiary">{item.desc}</Text>
                             </div>
-                            <div style={{ marginTop: 8 }}>
-                                <UploadImage
-                                    type="banner"
-                                    url={getBannerUrl(item.key)}
-                                    path="config/banner"
-                                    onSuccess={(url) => handleUploadImageSuccess(item.key, url)}
-                                    onRemove={() => handleUploadImageRemove(item.key)}
-                                />
-                            </div>
+                            <div></div>
                         </div>
                     </List.Item>
                 )}
