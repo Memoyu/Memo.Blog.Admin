@@ -1,5 +1,5 @@
 <div align="center"  style="margin-bottom: 40px">
- <img src="https://raw.githubusercontent.com/Memoyu/Memo.Blog/main/docs/images/logo.png" alt="memoyu" />
+ <img src="https://raw.githubusercontent.com/Memoyu/Memo.Blog/main/docs/images/logo.png" alt="memo blog" />
 </div>
 <div align="center">
  <h3>基于React开发的Blog系统管理端</h3>
@@ -7,7 +7,7 @@
  <a href="https://semi.design/zh-CN"><img src="https://img.shields.io/badge/ui-semi.design-blue"/></a>
  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3963bc.svg"/></a>
  <a href="https://github.com/Memoyu"><img src="https://img.shields.io/badge/developer-memoyu-blue"/></a>
-
+</div>
 
 
 ## 简介
@@ -36,7 +36,6 @@
 
 
 ## 功能实现
-
 - Blog系统数据统计展示；
 - 文章、分类、标签、评论管理；
 - 开源项目同步/管理；
@@ -73,6 +72,10 @@
 
 
 
-## 开源协议
+## 感谢授权
+🙏🏻 感谢JetBrains对本项目授予的开发工具开源许可 [JetBrains Open Source  Support](https://www.jetbrains.com/community/opensource/#support)
 
+
+
+## 开源协议
 MIT License. See [License here](./LICENSE) for details.
