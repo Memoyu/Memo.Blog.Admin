@@ -4,9 +4,6 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-  branches:
-    include:
-      - main
   tags: 
     include:
       - v* 
