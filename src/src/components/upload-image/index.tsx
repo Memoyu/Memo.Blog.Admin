@@ -110,6 +110,7 @@ const Index: FC<Iprops> = ({
 
     useEffect(() => {
         if (type != 'avatar' && url && url?.length > 0) setImages([{ url: url } as FileItem]);
+        else setImages([]);
         setFilePath(path.replace(new RegExp('\\/+$', 'g'), '') + '/');
     }, [url]);
 
@@ -177,7 +178,7 @@ const Index: FC<Iprops> = ({
         <div className={type == 'avatar' ? 'blog-avatar-upload' : 'blog-image-upload'}>
             <Upload
                 style={{ margin: '0px 5px' }} // 解决报错时，红色边框被遮住问题
-                defaultFileList={images}
+                // defaultFileList={images}
                 fileList={images}
                 showUploadList={getShowUploadList()}
                 picHeight={getSize()[0]}

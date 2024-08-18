@@ -1,8 +1,9 @@
 import { FC, useEffect, useState } from 'react';
+import './index.scss';
 import { Typography, List } from '@douyinfe/semi-ui';
 
-import './index.scss';
 import UploadImage from '@src/components/upload-image';
+
 import { BannerConfigModel } from '@src/common/model';
 
 interface BannerImage {
@@ -13,11 +14,12 @@ interface BannerImage {
 
 interface ComProps {
     banner: BannerConfigModel | undefined;
+    onChange?: (banner: BannerConfigModel) => void;
 }
 
 const { Text } = Typography;
 
-const Index: FC<ComProps> = ({ banner }) => {
+const Index: FC<ComProps> = ({ banner, onChange }) => {
     const banners: Array<BannerImage> = [
         {
             key: 1,
@@ -30,56 +32,50 @@ const Index: FC<ComProps> = ({ banner }) => {
         { key: 5, title: '关于我', desc: '' },
     ];
 
-    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>({} as BannerConfigModel);
+    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>();
 
     useEffect(() => {
-        if (banner == undefined) return;
+        // console.log('头图加载', banner);
         setBannerConfig(banner);
     }, [banner]);
 
     const handleUploadImageSuccess = (key: number, url: string) => {
-        switch (key) {
-            case 1:
-                bannerConfig.home = url;
-                break;
-            case 2:
-                bannerConfig.article = url;
-                break;
-            case 3:
-                bannerConfig.lab = url;
-                break;
-            case 4:
-                bannerConfig.moment = url;
-                break;
-            case 5:
-                bannerConfig.about = url;
-                break;
-        }
-        setBannerConfig(bannerConfig);
+        //console.log('图片上传', key, url);
+        setBannerUrl(key, url);
     };
+
     const handleUploadImageRemove = (key: number) => {
-        console.log('图片清除');
+        // console.log('图片清除');
+        setBannerUrl(key, '');
+    };
+
+    const setBannerUrl = (key: number, url: string) => {
+        let bc = bannerConfig
+            ? bannerConfig
+            : { home: '', article: '', lab: '', moment: '', about: '' };
         switch (key) {
             case 1:
-                bannerConfig.home = '';
+                bc.home = url;
                 break;
             case 2:
-                bannerConfig.article = '';
+                bc.article = url;
                 break;
             case 3:
-                bannerConfig.lab = '';
+                bc.lab = url;
                 break;
             case 4:
-                bannerConfig.moment = '';
+                bc.moment = url;
                 break;
             case 5:
-                bannerConfig.about = '';
+                bc.about = url;
                 break;
         }
-        setBannerConfig(bannerConfig);
+        setBannerConfig(bc);
+        onChange && onChange(bc);
     };
 
     const getBannerUrl = (key: number) => {
+        //console.log('获取图片', banner);
         switch (key) {
             case 1:
                 return bannerConfig?.home;

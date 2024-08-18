@@ -1,12 +1,12 @@
 import { ReactNode, useEffect, useState } from 'react';
+import './index.scss';
 import { cloneDeep } from 'lodash';
 import { Button, Collapse, Space, Toast, Typography } from '@douyinfe/semi-ui';
 
 import PageBanner from './components/page/banner';
 import StyleColor from './components/style/color';
 
-import './index.scss';
-import { ConfigModel, ConfigEditRequest } from '@src/common/model';
+import { ConfigModel, BannerConfigModel, ColorConfigModel } from '@src/common/model';
 import { configGet, configUpdate } from '@src/utils/request';
 
 interface ConfidPanel {
@@ -17,36 +17,34 @@ interface ConfidPanel {
 
 const { Title } = Typography;
 
-const violets = Array.from({ length: 10 }, (_, i) => `violet-${i}`);
-const init: ConfigModel = {
-    banner: {
-        home: '',
-        article: '',
-        lab: '',
-        moment: '',
-        about: '',
-    },
-    color: {
-        primary: violets,
-        secondary: violets,
-        tertiary: violets,
-    },
+const banner: BannerConfigModel = {
+    home: '',
+    article: '',
+    lab: '',
+    moment: '',
+    about: '',
+};
+const color: ColorConfigModel = {
+    primary: [],
+    secondary: [],
+    tertiary: [],
 };
 
 const Index: React.FC = () => {
-    const [config, setConfig] = useState<ConfigModel>(init);
-    const [editConfig, setEditConfig] = useState<ConfigEditRequest>({} as ConfigEditRequest);
+    const [config, setConfig] = useState<ConfigModel>({ banner, color });
+    const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>({ ...banner });
+    const [colorConfig, setColorConfig] = useState<ColorConfigModel>({ ...color });
 
     const confidPanels: Array<ConfidPanel> = [
         {
             label: '头图配置',
             key: '0',
-            content: <PageBanner banner={editConfig.banner} />,
+            content: <PageBanner banner={bannerConfig} onChange={setBannerConfig} />,
         },
         {
             label: '颜色配置',
             key: '1',
-            content: <StyleColor color={editConfig.color} />,
+            content: <StyleColor color={colorConfig} onChange={setColorConfig} />,
         },
     ];
 
@@ -59,29 +57,36 @@ const Index: React.FC = () => {
             if (!res.data) return;
 
             setConfig(res.data);
-            setEditConfig(cloneDeep(res.data));
+            setColorConfig({ ...res.data.color });
+            setBannerConfig({ ...res.data.banner });
         });
     };
 
     const handleResetConfigClick = () => {
-        console.log('重置', config);
-        //if (!editConfig) return;
-        setEditConfig(cloneDeep(config));
+        // console.log('重置', resetConfig);
+        setColorConfig({ ...config.color });
+        setBannerConfig({ ...config.banner });
     };
 
     const handleSaveConfigClick = () => {
-        if (editConfig == undefined) {
-            Toast.error('请选择配置');
+        //console.log('编辑配置', bannerConfig, colorConfig);
+        if (
+            colorConfig.primary.length < 1 ||
+            colorConfig.secondary.length < 1 ||
+            colorConfig.tertiary.length < 1
+        ) {
+            Toast.error('请选择颜色配置');
             return;
         }
-        // console.log(edit);
-        configUpdate(editConfig).then((res) => {
+
+        let req = { banner: bannerConfig, color: colorConfig };
+        configUpdate(req).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);
                 return;
             }
 
-            setConfig({ banner: editConfig.banner, color: editConfig.color });
+            setConfig(cloneDeep(req));
             Toast.success('保存配置成功');
         });
     };
@@ -92,12 +97,12 @@ const Index: React.FC = () => {
 
     return (
         <div className="config-container">
-            <Collapse defaultActiveKey={confidPanels.map((p) => p.key)}>
+            <Collapse defaultActiveKey={confidPanels.map((p) => p.key)} keepDOM={true}>
                 {confidPanels.map((p) => (
                     <Collapse.Panel
                         header={<Title heading={4}>{p.label}</Title>}
                         itemKey={p.key}
-                        key={p.key}
+                        key={p.key + 'key'}
                     >
                         <div style={{ margin: 15 }}>{p.content}</div>
                     </Collapse.Panel>

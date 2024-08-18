@@ -301,6 +301,7 @@ const Index: React.FC = () => {
                                         url={articleBanner}
                                         path="articles/banner"
                                         onSuccess={setArticleBanner}
+                                        onRemove={() => setArticleBanner('')}
                                     />
                                 </Form.Slot>
                             </Col>

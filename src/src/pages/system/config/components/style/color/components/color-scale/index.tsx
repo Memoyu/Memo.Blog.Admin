@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
+import './index.scss';
 import { ColorPicker, Select, TabPane, Tabs, Tooltip } from '@douyinfe/semi-ui';
 import Icon, { IconTick } from '@douyinfe/semi-icons';
 
 import { getDarken, getSaturate, getScaleColors } from '@src/utils/color';
 
 import { optionRenderProps } from '@douyinfe/semi-ui/lib/es/select';
-
-import './index.scss';
 
 interface ComProps {
     base?: string;
@@ -38,6 +37,8 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
         [],
     ];
 
+    const [color, setColor] = useState<string>();
+
     const [colorTabKey, setColorTabKey] = useState<ColorTypeKey>('semi');
     const [selectedColor, setSelectedColor] = useState<string>();
     const [pickerdColor, setPickerColor] = useState<string>();
@@ -46,69 +47,77 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
     const [colors, setColors] = useState<Array<string>>();
 
     useEffect(() => {
-        // console.log('base color', base);
-        let color = base;
-        if (color == undefined || color.length < 1) return;
-
+        //console.log('外部基础色变更', base);
         let key: ColorTypeKey = 'custom';
-        if (inSemiColor(color)) key = 'semi';
+        if (!base || inSemiColor(base)) key = 'semi';
+        setColorTabKey(key);
 
-        setConvertCurrentColor(color, key);
+        setColor(base);
     }, [base]);
 
+    useEffect(() => {
+        //console.log('内部基础色变更', color);
+        setConvertCurrentColor(color);
+    }, [color]);
+
     // 是否在semi初始色阶中
-    const inSemiColor = (color: string) => {
+    const inSemiColor = (color?: string) => {
+        if (!color) return false;
         return optionList[0].findIndex((o) => color.startsWith(o.value)) > -1;
     };
 
     // 生成根据主色生成颜色阶
-    const setConvertCurrentColor = (val: string, key: ColorTypeKey) => {
-        setSelectedColor(val);
-        setColorTabKey(key);
+    const setConvertCurrentColor = (color?: string) => {
+        //console.log('生成色阶', color);
+        setSelectedColor(color);
 
         let colors: Array<string> = [];
-        if (key == 'semi') {
-            colors = Array.from({ length: 10 }, (_, i) => `${val}-${i}`);
-        } else {
-            setPickerColor(val);
+        if (color) {
+            if (colorTabKey == 'semi') {
+                colors = Array.from({ length: 10 }, (_, i) => `${color}-${i}`);
+            } else {
+                setPickerColor(color);
 
-            let lights = getScaleColors(['#ffffff', val], 20);
-            // console.log('lights', lights);
-            let light = lights[4];
+                // console.log('color', color);
 
-            let dark = getDarken(val, 1.9);
-            dark = getSaturate(dark, 2.3);
-            let darks = getScaleColors([dark, '#000000'], 20);
-            // console.log('darks', darks);
-            dark = darks[6];
+                let lights = getScaleColors(['#ffffff', color], 20);
+                // console.log('lights', lights);
+                let light = lights[4];
 
-            // 获取前五个颜色
-            let lightColors = getScaleColors([light, val], 6);
-            // 获取后五个深颜色
-            let darkColors = getScaleColors([val, dark], 5);
+                let dark = getDarken(color, 1.9);
+                dark = getSaturate(dark, 2.3);
+                let darks = getScaleColors([dark, '#000000'], 20);
+                // console.log('darks', darks);
+                dark = darks[6];
 
-            lightColors.pop();
+                // 获取前五个颜色
+                let lightColors = getScaleColors([light, color], 6);
+                // 获取后五个深颜色
+                let darkColors = getScaleColors([color, dark], 5);
 
-            // console.log('colors', lightColors, darkColors);
-            colors = [...lightColors, ...darkColors];
+                lightColors.pop();
+
+                // console.log('colors', lightColors, darkColors);
+                colors = [...lightColors, ...darkColors];
+            }
         }
 
         setColors(colors);
         onChange && onChange(colors);
     };
 
+    // 构造semi预设rgba
     const getSemiColorRgba = (color: string, index: number) => {
         return `rgba(var(--semi-${color}-${index}), 1)`;
     };
 
+    // 获取色阶色块颜色
     const getBlockColor = (color: string) => {
-        if (colorTabKey == 'semi') {
-            color = `rgba(var(--semi-${color}), 1)`;
-        }
-
+        if (colorTabKey == 'semi') color = `rgba(var(--semi-${color}), 1)`;
         return color;
     };
 
+    // 渲染semi预设色阶选项
     const renderOptionItemWithColor = (renderProps: optionRenderProps) => {
         const { disabled, selected, label, value, focused, onMouseEnter, onClick } = renderProps;
 
@@ -143,6 +152,7 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
         );
     };
 
+    // 渲染主颜色选中项
     const renderSelectItemWithColor = (optionNode: Record<string, any>) => {
         let value = optionNode.value;
         let color = value as string;
@@ -179,7 +189,7 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
                                 : ColorPicker.colorStringToValue(pickerdColor)
                         }
                         alpha={false}
-                        onChange={(c) => setConvertCurrentColor(c.hex, 'custom')}
+                        onChange={(c) => setColor(c.hex)}
                     />
                 </TabPane>
             </Tabs>
@@ -195,7 +205,7 @@ const Index: FC<ComProps> = ({ base, onChange }) => {
                     outerTopSlot={outerTopSlotNode}
                     position="top"
                     value={selectedColor}
-                    onChange={(val) => setConvertCurrentColor(val as string, 'semi')}
+                    onSelect={(val) => setColor(val as string)}
                     emptyContent={<></>}
                     maxHeight={344}
                     style={{ width: 150 }}
