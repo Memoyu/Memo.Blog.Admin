@@ -93,7 +93,19 @@ const Index: FC = () => {
             >
                 <Nav.Header
                     className="layout-sider-header"
-                    logo={<Image preview={false} src={logo} />}
+                    logo={
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                backgroundColor: 'var(--semi-color-primary)',
+                                borderRadius: 10,
+                                padding: '6px 10px',
+                            }}
+                        >
+                            <Image preview={false} height={30} src={logo} />
+                        </div>
+                    }
                 />
                 <div className="layout-sider-nav-content">
                     {menus.map((sub: MenuItem) => (
