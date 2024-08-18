@@ -1,27 +1,18 @@
 <div align="center"  style="margin-bottom: 40px">
- <img src="https://raw.githubusercontent.com/Memoyu/Memoyu/main/logo.png" alt="memoyu" width="128" />
+ <img src="https://raw.githubusercontent.com/Memoyu/Memo.Blog/main/docs/images/logo.png" alt="memoyu" />
 </div>
-<h1 align="center">Memoyu's Blog</h1>
 <div align="center">
  <h3>基于React开发的Blog系统管理端</h3>
  <a href="https://react.dev/"><img src="https://img.shields.io/badge/web-react-blue"/></a>
  <a href="https://semi.design/zh-CN"><img src="https://img.shields.io/badge/ui-semi.design-blue"/></a>
  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-3963bc.svg"/></a>
  <a href="https://github.com/Memoyu"><img src="https://img.shields.io/badge/developer-memoyu-blue"/></a>
- <img src="https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/admin-ld.png"/>
-</div>
 
 
 
 ## 简介
 本项目为自用Blog系统的管理端，基于[React18](https://react.dev/) + [semi.design](https://semi.design/zh-CN)实现；
-
-|  |  |
-| :------------------------------: | :-------------------------------: |
-| ![dashboard](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/dashboard.png) |![articles](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/articles.png) |
-| ![article-edit](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/article-edit.png) |![open-source](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/open-source.png) |
-| ![users](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/users.png) |![permissions](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/permissions.png) |
-
+![预览](https://raw.githubusercontent.com/Memoyu/Memo.Blog.Admin/main/docs/images/admin-ld.png)
 **线上地址：**
 
 管理端：<a href="http://blog.admin.memoyu.com/" target="_blank">管理端（使用游客登录即可）</a>
