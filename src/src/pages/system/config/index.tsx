@@ -69,7 +69,7 @@ const Index: React.FC = () => {
     };
 
     const handleSaveConfigClick = () => {
-        //console.log('编辑配置', bannerConfig, colorConfig);
+        console.log('编辑配置', bannerConfig, colorConfig);
         if (
             colorConfig.primary.length < 1 ||
             colorConfig.secondary.length < 1 ||
