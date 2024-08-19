@@ -60,6 +60,7 @@ import {
     ArticleTemplateEditRequest,
     ConfigModel,
     ConfigEditRequest,
+    CommentCreateRequest,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -247,6 +248,10 @@ export const commentPage = (request: CommentPageRequest) => {
 
 export const commentGet = (id: string) => {
     return Request.get<CommentModel>('comment/get', { params: { commentId: id } });
+};
+
+export const commentCreate = (comment: CommentCreateRequest) => {
+    return Request.post<CommentModel>('comment/create', comment);
 };
 
 export const commentUpdate = (comment: CommentEditRequest) => {

@@ -263,6 +263,7 @@ export interface CommentReplyModel {
 
 export interface CommentModel {
     commentId: string;
+    parentId?: string;
     belong: CommentBelongModel;
     commentType: number;
     content: string;
@@ -275,6 +276,16 @@ export interface CommentModel {
     region: string;
     showable: boolean;
     createTime: Date;
+}
+
+export interface CommentCreateRequest {
+    visitorId: string;
+    parentId?: string;
+    replyId?: string;
+    content: string;
+    commentType: CommentType;
+    belongId: string;
+    showable: boolean;
 }
 
 export interface CommentEditRequest {

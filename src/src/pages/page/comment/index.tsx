@@ -17,22 +17,18 @@ import {
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
-import MdEditor from '@src/components/md-editor';
+
+import CommentEdit from './components/edit';
+import CommentReply from './components/reply';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
-import { useModal } from '@src/hooks/useModal';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import {
-    CommentEditRequest,
-    CommentModel,
-    CommentPageModel,
-    CommentPageRequest,
-} from '@src/common/model';
+import { CommentPageModel, CommentPageRequest } from '@src/common/model';
 
-import { commentDelete, commentGet, commentPage, commentUpdate } from '@src/utils/request';
+import { commentDelete, commentPage } from '@src/utils/request';
 
 import './index.scss';
 import { commentTypeOpts } from '@src/common/select-options';
@@ -157,6 +153,14 @@ const Index: React.FC = () => {
                 <Space>
                     <Button
                         theme="borderless"
+                        type="warning"
+                        size="small"
+                        onClick={() => handleReplyComment(comment.commentId)}
+                    >
+                        回复
+                    </Button>
+                    <Button
+                        theme="borderless"
                         type="primary"
                         size="small"
                         onClick={() => handleEditComment(comment.commentId)}
@@ -185,10 +189,13 @@ const Index: React.FC = () => {
     const [searchContents, setSearchContents] = useState<Array<string>>([]);
     const [data, loading, setData, setLoading] = useData<Array<CommentPageModel>>();
 
-    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [editForm, setEditForm] = useState<FormApi>();
-    const [editComment, setEditComment] = useState<CommentModel>();
-    const [commentContent, setCommentContent] = useState<string>('');
+    const [editVisible, setEditVisible] = useState<boolean>();
+    const [editCommentId, setEditCommentId] = useState<string>('');
+
+    const [replyVisible, setReplyVisible] = useState<boolean>();
+    const [replyCommentId, setReplyCommentId] = useState<string>('');
+
+    const [replyForm, setReplyForm] = useState<FormApi>();
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {
@@ -229,15 +236,16 @@ const Index: React.FC = () => {
         getArticleCommentPage();
     });
 
+    // 回复评论
+    const handleReplyComment = (commentId: string) => {
+        setReplyCommentId(commentId);
+        setReplyVisible(true);
+    };
+
     // 编辑评论
-    const handleEditComment = async (commentId: string) => {
-        let res = await commentGet(commentId);
-        if (!res.isSuccess || !res.data) {
-            Toast.error(res.message);
-            return;
-        }
-        setEditComment(res.data);
-        setCommentContent(res.data.content);
+    const handleEditComment = (commentId: string) => {
+        console.log('编辑评论', commentId);
+        setEditCommentId(commentId);
         setEditVisible(true);
     };
 
@@ -257,25 +265,18 @@ const Index: React.FC = () => {
         getArticleCommentPage(page);
     };
 
-    // 确认编辑
-    const handleEditModalOk = () => {
-        editForm?.validate().then(async (form) => {
-            console.log('form', form);
-
-            let comment = {
-                ...form,
-                commentId: editComment?.commentId,
-                content: commentContent,
-            } as CommentEditRequest;
-            let res = await commentUpdate(comment);
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            setEditVisible(false);
-            Toast.success('更新成功');
-            getArticleCommentPage(currentPage);
-        });
+    // 展开行显示表格
+    const expandRowRender = (record: CommentPageModel, _index: number, _expanded: boolean) => {
+        return (
+            <Table
+                showHeader={false}
+                size="small"
+                columns={columns}
+                dataSource={record.children}
+                rowKey={'commentId'}
+                pagination={false}
+            />
+        );
     };
 
     return (
@@ -336,6 +337,10 @@ const Index: React.FC = () => {
                             columns={columns}
                             dataSource={data}
                             rowKey={'commentId'}
+                            rowExpandable={(r: CommentPageModel) =>
+                                r.children && r.children.length > 0
+                            }
+                            expandedRowRender={expandRowRender}
                             pagination={{
                                 currentPage,
                                 pageSize: pageSize,
@@ -345,72 +350,21 @@ const Index: React.FC = () => {
                         />
                     </div>
 
-                    <Modal
-                        title="编辑评论"
+                    {/* 编辑评论 */}
+                    <CommentEdit
+                        commentId={editCommentId}
                         visible={editVisible}
-                        onOk={handleEditModalOk}
-                        onCancel={() => setEditVisible(false)}
-                        centered
-                        bodyStyle={{ height: 570 }}
-                        style={{ width: 1000 }}
-                        okText={'保存'}
-                    >
-                        <Form
-                            initValues={editComment}
-                            labelPosition="left"
-                            labelAlign="left"
-                            labelWidth={60}
-                            getFormApi={(formData) => setEditForm(formData)}
-                        >
-                            <Row gutter={16} type="flex" justify="space-around" align="middle">
-                                <Col span={3}>
-                                    <Form.Slot noLabel>
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'center',
-                                            }}
-                                        >
-                                            <Avatar src={editComment?.visitor.avatar} />
-                                        </div>
-                                    </Form.Slot>
-                                </Col>
-                                <Col span={10}>
-                                    <Form.Input
-                                        field="visitor.nickname"
-                                        label="昵称"
-                                        disabled={true}
-                                    />
-                                    <Form.Input
-                                        field="visitor.email"
-                                        label="邮箱"
-                                        disabled={true}
-                                    />
-                                </Col>
-                                <Col span={10}>
-                                    <div style={{ display: 'flex' }}>
-                                        <Form.Input disabled={true} field="ip" label="IP" />
-                                        <Form.Input disabled={true} field="region" noLabel={true} />
-                                    </div>
-                                    <Form.Switch
-                                        field="showable"
-                                        label={{ text: '公开' }}
-                                        aria-label="公开"
-                                    />
-                                </Col>
-                            </Row>
+                        onSuccess={() => getArticleCommentPage(currentPage)}
+                        onVisibleChange={setEditVisible}
+                    />
 
-                            <Form.Section text={'评论内容'}>
-                                <MdEditor
-                                    imgPath="articles/comments"
-                                    height={420}
-                                    content={commentContent}
-                                    onChange={setCommentContent}
-                                />
-                            </Form.Section>
-                        </Form>
-                    </Modal>
+                    {/* 回复评论 */}
+                    <CommentReply
+                        commentId={replyCommentId}
+                        visible={replyVisible}
+                        onSuccess={() => getArticleCommentPage(currentPage)}
+                        onVisibleChange={setReplyVisible}
+                    />
                 </div>
             </div>
         </Content>
