@@ -5,8 +5,14 @@ import { Button, Collapse, Space, Toast, Typography } from '@douyinfe/semi-ui';
 
 import PageBanner from './components/page/banner';
 import StyleColor from './components/style/color';
+import AdminColor from './components/admin';
 
-import { ConfigModel, BannerConfigModel, ColorConfigModel } from '@src/common/model';
+import {
+    ConfigModel,
+    BannerConfigModel,
+    ColorConfigModel,
+    AdminConfigModel,
+} from '@src/common/model';
 import { configGet, configUpdate } from '@src/utils/request';
 
 interface ConfidPanel {
@@ -16,6 +22,10 @@ interface ConfidPanel {
 }
 
 const { Title } = Typography;
+
+const admin: AdminConfigModel = {
+    visitorId: '',
+};
 
 const banner: BannerConfigModel = {
     home: {},
@@ -31,19 +41,25 @@ const color: ColorConfigModel = {
 };
 
 const Index: React.FC = () => {
-    const [config, setConfig] = useState<ConfigModel>({ banner, color });
+    const [config, setConfig] = useState<ConfigModel>({ admin, banner, color });
+    const [adminConfig, setAdminConfig] = useState<AdminConfigModel>({ ...admin });
     const [bannerConfig, setBannerConfig] = useState<BannerConfigModel>({ ...banner });
     const [colorConfig, setColorConfig] = useState<ColorConfigModel>({ ...color });
 
     const confidPanels: Array<ConfidPanel> = [
         {
+            label: '管理配置',
+            key: 'admin',
+            content: <AdminColor admin={adminConfig} onChange={setAdminConfig} />,
+        },
+        {
             label: '头图配置',
-            key: '0',
+            key: 'banner',
             content: <PageBanner banner={bannerConfig} onChange={setBannerConfig} />,
         },
         {
             label: '颜色配置',
-            key: '1',
+            key: 'color',
             content: <StyleColor color={colorConfig} onChange={setColorConfig} />,
         },
     ];
@@ -79,7 +95,7 @@ const Index: React.FC = () => {
             return;
         }
 
-        let req = { banner: bannerConfig, color: colorConfig };
+        let req = { admin: adminConfig, banner: bannerConfig, color: colorConfig };
         configUpdate(req).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './index.scss';
 import { IconAccessibility } from '@douyinfe/semi-icons-lab';
 import { format } from 'date-fns';
 import {
@@ -32,7 +33,6 @@ import {
 
 import { visitorPage, visitorDelete, visitorUpdate, visitorGet } from '@src/utils/request';
 
-import './index.scss';
 import UploadImage from '@src/components/upload-image';
 import { AvatarOriginTypeOpts } from '@src/common/select-options';
 

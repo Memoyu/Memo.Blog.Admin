@@ -711,13 +711,19 @@ export interface PermissionModel {
 //#region 配置管理
 
 export interface ConfigEditRequest {
+    admin: AdminConfigModel;
     color: ColorConfigModel;
     banner: BannerConfigModel;
 }
 
 export interface ConfigModel {
+    admin: AdminConfigModel;
     color: ColorConfigModel;
     banner: BannerConfigModel;
+}
+
+export interface AdminConfigModel {
+    visitorId: string;
 }
 
 export interface ColorConfigModel {
