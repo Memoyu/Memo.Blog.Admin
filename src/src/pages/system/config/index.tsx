@@ -24,7 +24,7 @@ interface ConfidPanel {
 const { Title } = Typography;
 
 const admin: AdminConfigModel = {
-    visitorId: '',
+    visitor: { visitorId: '' },
 };
 
 const banner: BannerConfigModel = {
@@ -50,7 +50,17 @@ const Index: React.FC = () => {
         {
             label: '管理配置',
             key: 'admin',
-            content: <AdminColor admin={adminConfig} onChange={setAdminConfig} />,
+            content: (
+                <AdminColor
+                    admin={adminConfig}
+                    onVisitorChange={(vi) =>
+                        setAdminConfig((a) => {
+                            a.visitor = vi;
+                            return a;
+                        })
+                    }
+                />
+            ),
         },
         {
             label: '头图配置',
@@ -73,6 +83,7 @@ const Index: React.FC = () => {
             if (!res.data) return;
 
             setConfig(res.data);
+            setAdminConfig({ ...res.data.admin });
             setColorConfig({ ...res.data.color });
             setBannerConfig({ ...res.data.banner });
         });
@@ -80,12 +91,13 @@ const Index: React.FC = () => {
 
     const handleResetConfigClick = () => {
         // console.log('重置', resetConfig);
+        setAdminConfig({ ...config.admin });
         setColorConfig({ ...config.color });
         setBannerConfig({ ...config.banner });
     };
 
     const handleSaveConfigClick = () => {
-        console.log('编辑配置', bannerConfig, colorConfig);
+        console.log('编辑配置', adminConfig, bannerConfig, colorConfig);
         if (
             colorConfig.primary.length < 1 ||
             colorConfig.secondary.length < 1 ||

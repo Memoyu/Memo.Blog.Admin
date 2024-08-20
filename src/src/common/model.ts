@@ -723,7 +723,13 @@ export interface ConfigModel {
 }
 
 export interface AdminConfigModel {
+    visitor: AdminVisitorModel;
+}
+
+export interface AdminVisitorModel {
     visitorId: string;
+    avatar?: string;
+    nickname?: string;
 }
 
 export interface ColorConfigModel {

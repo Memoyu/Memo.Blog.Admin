@@ -1,27 +1,30 @@
 import { FC, useEffect, useState } from 'react';
 
 import './index.scss';
-import { AdminConfigModel, VisitorPageRequest } from '@src/common/model';
-import { Avatar, Select, Tag, Toast, Typography } from '@douyinfe/semi-ui';
+import { AdminConfigModel, AdminVisitorModel, VisitorPageRequest } from '@src/common/model';
+import { Avatar, Select, Toast } from '@douyinfe/semi-ui';
 import { visitorPage } from '@src/utils/request';
 import { debounce } from 'lodash';
-import { OptionProps, optionRenderProps } from '@douyinfe/semi-ui/lib/es/select';
 
 interface ComProps {
     admin: AdminConfigModel | undefined;
-    onChange?: (admin: AdminConfigModel) => void;
+    onVisitorChange?: (admin: AdminVisitorModel) => void;
 }
 
-const Index: FC<ComProps> = ({ admin, onChange }) => {
-    const [visitor, setVisitor] = useState<string>();
+const Index: FC<ComProps> = ({ admin, onVisitorChange }) => {
+    const [visitorId, setVisitorId] = useState<string>();
     const [loading, setLoading] = useState<boolean>();
-    const [visitors, setVisitors] = useState<Array<OptionProps>>();
-
-    const [adminConfig, setAdminConfig] = useState<AdminConfigModel>();
+    const [visitors, setVisitors] = useState<Array<AdminVisitorModel>>();
 
     useEffect(() => {
-        setAdminConfig(admin);
-    }, [admin]);
+        console.log(admin?.visitor);
+        if (admin?.visitor && admin.visitor.visitorId.length > 0) {
+            let v = { ...admin.visitor };
+            console.log('回显了', v);
+            setVisitors([v]);
+            setVisitorId(v.visitorId);
+        }
+    }, [admin?.visitor]);
 
     const handleSearch = (val: string) => {
         let request = { nickname: val, page: 1, size: 20 } as VisitorPageRequest;
@@ -31,64 +34,47 @@ const Index: FC<ComProps> = ({ admin, onChange }) => {
                     Toast.error(res.message);
                     return;
                 }
-                let options = res.data.items.map((v) => {
-                    return {
-                        value: v.visitorId,
-                        label: v.nickname.length < 1 ? '未知' : v.nickname,
-                        avatar: v.avatar,
-                    };
-                });
-                setVisitors(options);
+
+                setVisitors(
+                    res.data.items.map((v) => {
+                        return {
+                            visitorId: v.visitorId,
+                            avatar: v.avatar,
+                            nickname: v.nickname,
+                        };
+                    })
+                );
             })
             .finally(() => setLoading(false));
     };
 
-    const handleSelectChange = (val: string) => {
-        let ac = adminConfig ? adminConfig : { visitorId: val };
-        setVisitor(val);
-        onChange && onChange(ac);
+    const handleSelectChange = (visitorId: any) => {
+        let visitor = visitors?.filter((v) => v.visitorId == visitorId)[0];
+        console.log('选项变更', visitorId, visitor);
+        if (!visitor) return;
+        setVisitorId(visitorId);
+        onVisitorChange && onVisitorChange(visitor);
     };
 
-    const renderOptionItemWithVisitor = (renderProps: optionRenderProps) => {
-        const { disabled, selected, label, value, avatar, focused, onMouseEnter, onClick } =
-            renderProps;
-
-        let cls =
-            'semi-select-option' +
-            (focused ? ' semi-select-option-focused' : '') +
-            (disabled ? ' semi-select-option-disabled' : '') +
-            (selected ? ' semi-select-option-selected' : '');
-
+    const renderOptionItemWithVisitor = (item: AdminVisitorModel) => {
         return (
-            <div
-                style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}
-                className={cls}
-                onClick={onClick}
-                onMouseEnter={onMouseEnter}
-            >
-                <Avatar size="small" src={avatar} />
-                <div style={{ marginLeft: 10 }}> {label}</div>
-            </div>
+            <Select.Option value={item.visitorId} showTick={true} {...item} key={item.visitorId}>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}>
+                    <Avatar size="small" src={item.avatar} />
+                    <div style={{ marginLeft: 10 }}> {item.nickname}</div>
+                </div>
+            </Select.Option>
         );
     };
 
-    const renderSelectItemWithVisitor = (optionNode: Record<string, any>) => {
+    const renderSelectedItemWithVisitor = (item: any) => {
+        console.log('选项选中', item);
         let content = (
             <div style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}>
-                <Avatar size="extra-small" src={optionNode.avatar} />
-                <div style={{ marginLeft: 10 }}> {optionNode.label}</div>
+                <Avatar size="extra-small" src={item.avatar} />
+                <div style={{ marginLeft: 10 }}> {item.nickname}</div>
             </div>
         );
-        return content;
-    };
-
-    (optionNode: Record<string, any>) => {
-        const content = (
-            <Tag avatarSrc={optionNode.avatar} avatarShape="circle" closable={true} size="large">
-                {optionNode.label}
-            </Tag>
-        );
-
         return content;
     };
 
@@ -99,16 +85,16 @@ const Index: FC<ComProps> = ({ admin, onChange }) => {
                 style={{ marginTop: 5, width: 300 }}
                 filter
                 remote
-                onChangeWithObject
-                value={visitor}
-                onSearch={debounce(handleSearch, 1000)}
-                optionList={visitors}
+                defaultValue={'9297675229724677'}
+                value={visitorId}
+                onSearch={debounce(handleSearch, 800)}
                 loading={loading}
                 emptyContent={null}
-                onChange={(s) => handleSelectChange(s as string)}
-                renderOptionItem={renderOptionItemWithVisitor}
-                renderSelectedItem={renderSelectItemWithVisitor}
-            />
+                onChange={handleSelectChange}
+                renderSelectedItem={renderSelectedItemWithVisitor}
+            >
+                {visitors?.map((item) => renderOptionItemWithVisitor(item))}
+            </Select>
         </div>
     );
 };
