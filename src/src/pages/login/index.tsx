@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconUser, IconKey } from '@douyinfe/semi-icons';
 import { Layout, Button, Card, Form, Toast, Typography } from '@douyinfe/semi-ui';
@@ -12,6 +12,7 @@ import useUserStore from '@stores/useUserStore';
 
 import './index.scss';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
+import useConfig from '@src/stores/useConfig';
 
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -32,6 +33,7 @@ const Index: React.FC = () => {
     };
 
     const navigate = useNavigate();
+    const initConfig = useConfig((state) => state.init);
     const { setUser, login, logout } = useUserStore.getState();
 
     const [loginForm, setLoginForm] = useState<FormApi<UserLogin>>();
@@ -83,6 +85,8 @@ const Index: React.FC = () => {
         let user = userRes.data;
         setUser(user);
 
+        // 初始化配置
+        initConfig();
         navigate(`/dashboard`, { replace: true });
         start();
     };

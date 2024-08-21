@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './index.scss';
 import { format } from 'date-fns';
 import { IconBadge } from '@douyinfe/semi-icons-lab';
 import {
@@ -9,10 +10,7 @@ import {
     Space,
     Form,
     Popconfirm,
-    Modal,
     Toast,
-    Row,
-    Col,
     Highlight,
 } from '@douyinfe/semi-ui';
 
@@ -20,19 +18,17 @@ import Content from '@src/components/page-content';
 
 import CommentEdit from './components/edit';
 import CommentReply from './components/reply';
+import Dot from '@src/components/dot';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
+import { commentTypeOpts } from '@src/common/select-options';
 import { CommentPageModel, CommentPageRequest } from '@src/common/model';
 
 import { commentDelete, commentPage } from '@src/utils/request';
-
-import './index.scss';
-import { commentTypeOpts } from '@src/common/select-options';
-import Dot from '@src/components/dot';
 
 const { Text } = Typography;
 
@@ -194,8 +190,6 @@ const Index: React.FC = () => {
 
     const [replyVisible, setReplyVisible] = useState<boolean>();
     const [replyCommentId, setReplyCommentId] = useState<string>('');
-
-    const [replyForm, setReplyForm] = useState<FormApi>();
 
     // 获取评论分页列表
     let getArticleCommentPage = async (page: number = 1) => {

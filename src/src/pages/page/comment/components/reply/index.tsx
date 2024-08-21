@@ -2,20 +2,27 @@ import { FC, useEffect, useState } from 'react';
 import './index.scss';
 import {
     Avatar,
-    Col,
     Form,
     Modal,
-    Row,
+    Select,
     Switch,
     TextArea,
     Toast,
     Typography,
 } from '@douyinfe/semi-ui';
+import { shallow } from 'zustand/shallow';
+import { debounce } from 'lodash';
+
 import MdEditor from '@src/components/md-editor';
 
-import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
-import { CommentCreateRequest, CommentEditRequest, CommentModel } from '@src/common/model';
-import { commentCreate, commentGet, commentUpdate } from '@src/utils/request';
+import useConfig from '@src/stores/useConfig';
+import {
+    AdminVisitorModel,
+    CommentCreateRequest,
+    CommentModel,
+    VisitorPageRequest,
+} from '@src/common/model';
+import { commentCreate, commentGet, visitorPage } from '@src/utils/request';
 
 interface ComProps {
     commentId: string;
@@ -33,10 +40,21 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
     const [commenShowable, setCommenShowable] = useState<boolean>(true);
     const [commentContent, setCommentContent] = useState<string>('');
 
+    const visitor = useConfig((state) => state.visitor, shallow);
+    const setVisitor = useConfig((state) => state.setVisitor);
+    const [loading, setLoading] = useState<boolean>();
+    const [visitors, setVisitors] = useState<Array<AdminVisitorModel>>();
+
     useEffect(() => {
         handleModalVisibleChange(visible == undefined ? false : visible);
         return () => handleModalVisibleChange(false);
     }, [visible]);
+
+    useEffect(() => {
+        if (visitor.visitorId.length > 0) {
+            setVisitors([visitor]);
+        }
+    }, [visitor]);
 
     useEffect(() => {
         if (!visible) return;
@@ -61,8 +79,14 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
             Toast.error('回复评论失败，请稍后再试');
             return;
         }
+
+        if (visitor.visitorId.length < 1 || visitor.visitorId == '0') {
+            Toast.error('请到系统配置中设置回复游客后再试');
+            return;
+        }
+
         let create: CommentCreateRequest = {
-            visitorId: '9297675229724677',
+            visitorId: visitor.visitorId,
             parentId: replyComment.parentId || replyComment.commentId,
             replyId: replyComment.commentId,
             content: commentContent,
@@ -88,6 +112,58 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
         onVisibleChange && onVisibleChange(visible);
     };
 
+    const handleSearch = (val: string) => {
+        let request = { nickname: val, page: 1, size: 20 } as VisitorPageRequest;
+        visitorPage(request)
+            .then((res) => {
+                if (!res.isSuccess || !res.data) {
+                    Toast.error(res.message);
+                    return;
+                }
+
+                setVisitors(
+                    res.data.items.map((v) => {
+                        return {
+                            visitorId: v.visitorId,
+                            avatar: v.avatar,
+                            nickname: v.nickname,
+                        };
+                    })
+                );
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const handleSelectChange = (visitorId: any) => {
+        visitors?.forEach((v) => {
+            if (v.visitorId == visitorId) {
+                setVisitor(v);
+            }
+        });
+    };
+
+    const renderOptionItemWithVisitor = (item: AdminVisitorModel) => {
+        return (
+            <Select.Option value={item.visitorId} showTick={true} {...item} key={item.visitorId}>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}>
+                    <Avatar size="small" src={item.avatar} />
+                    <div style={{ marginLeft: 10 }}> {item.nickname}</div>
+                </div>
+            </Select.Option>
+        );
+    };
+
+    const renderSelectedItemWithVisitor = (item: any) => {
+        // console.log('选项选中', item);
+        let content = (
+            <div style={{ display: 'flex', alignItems: 'center', fontSize: 15 }}>
+                <Avatar size="extra-small" src={item.avatar} />
+                <div style={{ marginLeft: 10 }}> {item.nickname}</div>
+            </div>
+        );
+        return content;
+    };
+
     return (
         <Modal
             title="回复评论"
@@ -101,16 +177,40 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
         >
             <Form labelPosition="left" labelAlign="left" labelWidth={60}>
                 <Form.Slot noLabel>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar size="small" src={replyComment?.visitor.avatar} />
-                        <Text strong style={{ marginLeft: 10 }}>
-                            {replyComment?.visitor.nickname}
-                        </Text>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Avatar size="small" src={replyComment?.visitor.avatar} />
+                            <Text strong style={{ marginLeft: 10 }}>
+                                {replyComment?.visitor.nickname}
+                            </Text>
+                        </div>
+
+                        <div
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <div>回复使用访客：</div>
+                            <Select
+                                style={{ marginTop: 5, width: 300 }}
+                                filter
+                                remote
+                                value={visitor.visitorId}
+                                onSearch={debounce(handleSearch, 800)}
+                                loading={loading}
+                                emptyContent={null}
+                                onChange={handleSelectChange}
+                                renderSelectedItem={renderSelectedItemWithVisitor}
+                            >
+                                {visitors?.map((item) => renderOptionItemWithVisitor(item))}
+                            </Select>
+                        </div>
                     </div>
                     <TextArea
                         readonly

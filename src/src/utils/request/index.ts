@@ -61,6 +61,8 @@ import {
     ConfigModel,
     ConfigEditRequest,
     CommentCreateRequest,
+    AdminConfigModel,
+    AdminVisitorModel,
 } from '@common/model';
 
 export const login = (username: string, password: string) => {
@@ -476,6 +478,10 @@ export const configUpdate = (config: ConfigEditRequest) => {
 
 export const configGet = () => {
     return Request.get<ConfigModel>('config/get');
+};
+
+export const visitorConfigGet = () => {
+    return Request.get<AdminVisitorModel>('config/admin/get');
 };
 
 //#endregion
