@@ -29,6 +29,7 @@ import { commentTypeOpts } from '@src/common/select-options';
 import { CommentPageModel, CommentPageRequest } from '@src/common/model';
 
 import { commentDelete, commentPage } from '@src/utils/request';
+import { useConfig } from '@src/stores';
 
 const { Text } = Typography;
 
@@ -177,6 +178,8 @@ const Index: React.FC = () => {
         },
     ];
 
+    const initCommentVisitor = useConfig((state) => state.init);
+
     const pageSize = 15;
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
@@ -228,6 +231,7 @@ const Index: React.FC = () => {
 
     useOnMountUnsafe(() => {
         getArticleCommentPage();
+        initCommentVisitor();
     });
 
     // 回复评论
@@ -356,7 +360,10 @@ const Index: React.FC = () => {
                     <CommentReply
                         commentId={replyCommentId}
                         visible={replyVisible}
-                        onSuccess={() => getArticleCommentPage(currentPage)}
+                        onSuccess={() => {
+                            getArticleCommentPage(currentPage);
+                            setReplyVisible(false);
+                        }}
                         onVisibleChange={setReplyVisible}
                     />
                 </div>

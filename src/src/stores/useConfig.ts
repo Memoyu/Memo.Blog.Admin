@@ -1,12 +1,13 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { persist } from 'zustand/middleware';
 import { AdminVisitorModel } from '@src/common/model';
-import { visitorConfigGet } from '@src/utils/request';
+import { visitorConfigGet, visitorConfigUpdate } from '@src/utils/request';
+import { Toast } from '@douyinfe/semi-ui';
 
 interface ConfigState {
     visitor: AdminVisitorModel;
     init: () => void;
-    setVisitor: (visitor: AdminVisitorModel) => void;
+    setVisitor: (visitor: string) => void;
 }
 
 const useConfigStore = createWithEqualityFn<ConfigState>()(
@@ -20,13 +21,19 @@ const useConfigStore = createWithEqualityFn<ConfigState>()(
                     }
                 });
             },
-            setVisitor: (visitor: AdminVisitorModel) => {
-                set({ visitor: visitor });
-                // TODO 更新配置
+            setVisitor: (visitorId: string) => {
+                visitorConfigUpdate({ visitorId }).then((res) => {
+                    if (!res.isSuccess || !res.data) {
+                        Toast.error('保存默认访客失败');
+                        return;
+                    }
+                    set({ visitor: res.data });
+                    Toast.success('保存默认访客成功');
+                });
             },
         }),
         {
-            name: 'config-store',
+            name: 'config-visitor-store',
         }
     )
 );

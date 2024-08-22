@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import './index.scss';
 import {
     Avatar,
+    Button,
     Form,
     Modal,
     Select,
@@ -40,8 +41,9 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
     const [commenShowable, setCommenShowable] = useState<boolean>(true);
     const [commentContent, setCommentContent] = useState<string>('');
 
-    const visitor = useConfig((state) => state.visitor, shallow);
-    const setVisitor = useConfig((state) => state.setVisitor);
+    const configVisitor = useConfig((state) => state.visitor, shallow);
+    const setConfigVisitor = useConfig((state) => state.setVisitor);
+    const [selectedVisitorId, setSelectedVisitorId] = useState<string>(configVisitor.visitorId);
     const [loading, setLoading] = useState<boolean>();
     const [visitors, setVisitors] = useState<Array<AdminVisitorModel>>();
 
@@ -51,12 +53,11 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
     }, [visible]);
 
     useEffect(() => {
-        if (visitor.visitorId.length > 0) {
-            setVisitors([visitor]);
-        }
-    }, [visitor]);
+        setVisitors([configVisitor]);
+    }, [configVisitor]);
 
     useEffect(() => {
+        setSelectedVisitorId(configVisitor.visitorId);
         if (!visible) return;
         commentGet(commentId).then((res) => {
             if (!res.isSuccess || !res.data) {
@@ -80,13 +81,13 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
             return;
         }
 
-        if (visitor.visitorId.length < 1 || visitor.visitorId == '0') {
+        if (selectedVisitorId.length < 1 || selectedVisitorId == '0') {
             Toast.error('请到系统配置中设置回复游客后再试');
             return;
         }
 
         let create: CommentCreateRequest = {
-            visitorId: visitor.visitorId,
+            visitorId: selectedVisitorId,
             parentId: replyComment.parentId || replyComment.commentId,
             replyId: replyComment.commentId,
             content: commentContent,
@@ -95,7 +96,7 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
             showable: commenShowable,
         };
 
-        console.log('回复评论', create);
+        // console.log('回复评论', create);
         commentCreate(create).then((res) => {
             if (!res.isSuccess) {
                 Toast.error(res.message);
@@ -135,11 +136,7 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
     };
 
     const handleSelectChange = (visitorId: any) => {
-        visitors?.forEach((v) => {
-            if (v.visitorId == visitorId) {
-                setVisitor(v);
-            }
-        });
+        setSelectedVisitorId(visitorId);
     };
 
     const renderOptionItemWithVisitor = (item: AdminVisitorModel) => {
@@ -167,7 +164,7 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
     return (
         <Modal
             title="回复评论"
-            visible={visible}
+            visible={modalVisible}
             onOk={handleReplyModalOk}
             onCancel={() => handleModalVisibleChange(false)}
             centered
@@ -194,14 +191,15 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                         >
                             <div>回复使用访客：</div>
                             <Select
-                                style={{ marginTop: 5, width: 300 }}
+                                style={{ marginRight: 10, width: 300 }}
                                 filter
                                 remote
-                                value={visitor.visitorId}
+                                value={selectedVisitorId}
                                 onSearch={debounce(handleSearch, 800)}
                                 loading={loading}
                                 emptyContent={null}
@@ -210,6 +208,12 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
                             >
                                 {visitors?.map((item) => renderOptionItemWithVisitor(item))}
                             </Select>
+                            <Button
+                                theme="borderless"
+                                onClick={() => setConfigVisitor(selectedVisitorId)}
+                            >
+                                保存默认访客
+                            </Button>
                         </div>
                     </div>
                     <TextArea

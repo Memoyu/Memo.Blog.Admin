@@ -715,13 +715,13 @@ export interface ConfigEditRequest {
     banner: BannerConfigModel;
 }
 
+export interface ConfigEditVisitorRequest {
+    visitorId: string;
+}
+
 export interface ConfigModel {
     color: ColorConfigModel;
     banner: BannerConfigModel;
-}
-
-export interface AdminConfigModel {
-    visitor: AdminVisitorModel;
 }
 
 export interface AdminVisitorModel {
