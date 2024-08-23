@@ -24,7 +24,7 @@ const useConfigStore = createWithEqualityFn<ConfigState>()(
             setVisitor: (visitorId: string) => {
                 visitorConfigUpdate({ visitorId }).then((res) => {
                     if (!res.isSuccess || !res.data) {
-                        Toast.error('保存默认访客失败');
+                        Toast.error(res.message);
                         return;
                     }
                     set({ visitor: res.data });
