@@ -550,33 +550,33 @@
   dependencies:
     tslib "^2.0.0"
 
-"@douyinfe/semi-animation-react@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-react/-/semi-animation-react-2.64.0.tgz#2ff021c3ee2cc5ada7ef3d6c466e1e43699ba372"
-  integrity sha512-Jl7PP6WGSqvi4/+IDTVtjlTmeVF+8GC0AEMaEdVa5vxxcRHL9uQHpfA+zKHW6+oyeeLnCA7pUZtPdZTCaF+Q+g==
+"@douyinfe/semi-animation-react@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-react/-/semi-animation-react-2.66.1.tgz#8c2b9f56d97d14bceaacc96e52ecb782c27fb7a4"
+  integrity sha512-3QNVmOIzLGeQY0jlfrrrdQGmhMjUjF4yizufCpIKvNUzchfOOey62zioA39w16IjV7Mi2gxWr2/QCM+3ak/Orw==
   dependencies:
-    "@douyinfe/semi-animation" "2.64.0"
-    "@douyinfe/semi-animation-styled" "2.64.0"
+    "@douyinfe/semi-animation" "2.66.1"
+    "@douyinfe/semi-animation-styled" "2.66.1"
     classnames "^2.2.6"
 
-"@douyinfe/semi-animation-styled@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-styled/-/semi-animation-styled-2.64.0.tgz#0642d796a10bafc97ca9636d90ba26c6a40ba94e"
-  integrity sha512-K7c9IkmJCkLeu9EcCOzOMYbVBLM4uoSANgoIkNm2fQcfqX42gRUOLdlxkK5aKFVTsJO9fTaTeZeVSWyTRni+MQ==
+"@douyinfe/semi-animation-styled@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation-styled/-/semi-animation-styled-2.66.1.tgz#542ab77d0cb85fa2101c52c2b9b6ec641103b58b"
+  integrity sha512-HHtAd2bdx5myiz7jKChEjXlLoTT2+Sh0Xi9M7ZCRyzGtE/tZx77s9h5srHoxyx1bbFzAffHe0e387jcdQFpZXQ==
 
-"@douyinfe/semi-animation@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation/-/semi-animation-2.64.0.tgz#1860ac01146dd4a1fefdca0869d8454bf0b5d1ef"
-  integrity sha512-rqGd+cV+zmi6DpuEuMx5mgU1dO00Pvz2PW4zE0PUeMUHod59vThcE7yCx21QyMzR1hPAUMTxSaTKYRhyIVMA5Q==
+"@douyinfe/semi-animation@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-animation/-/semi-animation-2.66.1.tgz#04edc37089fab8c69e886d4e4f25725596a583ac"
+  integrity sha512-lbl4rKb8aCvf/xL4mntBYEfd7eBTSXgqSKIQWbyFBvdRsb4NpMxue1HoQhyT5QiFWHgaMcI7OjbzlCOgfBAGKg==
   dependencies:
     bezier-easing "^2.1.0"
 
-"@douyinfe/semi-foundation@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-foundation/-/semi-foundation-2.64.0.tgz#205b6843ee04db72a58352e79e062e7a3374daa4"
-  integrity sha512-443spMoIWFN7M9FcbYUcnTk0GLUvg31bGdKMAldtfcpYKqLiVbDO0lZ43XddPOeuYlrTEsyeSwuzgyZoi0csKg==
+"@douyinfe/semi-foundation@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-foundation/-/semi-foundation-2.66.1.tgz#c5a0d15091bcc248783125c8ddc18ce318ee2cb9"
+  integrity sha512-1XmEFy6qCanJDuQIGFvfRMSs23RTUgQKNuGnZgjdMUg9i48e6CilBRyAJJ145h0hFUxFuUkA6znPjT+x4SHPuA==
   dependencies:
-    "@douyinfe/semi-animation" "2.64.0"
+    "@douyinfe/semi-animation" "2.66.1"
     "@mdx-js/mdx" "^3.0.1"
     async-validator "^3.5.0"
     classnames "^2.2.6"
@@ -590,41 +590,41 @@
     remark-gfm "^4.0.0"
     scroll-into-view-if-needed "^2.2.24"
 
-"@douyinfe/semi-icons-lab@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons-lab/-/semi-icons-lab-2.64.0.tgz#71fb9f2ee38bb9456a608d7f9d6fa81a9ded04c3"
-  integrity sha512-Mfq/K0/VdWOwWro9MeE8DH5UczEhh7wdCYWFk/rcxmhnQFGOp7QHP8YXzrkiSH2djXNSW+IwfxZA39mtOh6CsQ==
+"@douyinfe/semi-icons-lab@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons-lab/-/semi-icons-lab-2.66.1.tgz#1fe31fae75ecd5661c6a0eac6b5dc9adbe7319be"
+  integrity sha512-m5KROZXgowbPBNHQTZ4JKBtXM934BO7ABh1SSdet11IPYTZHNLgnl7WGyW2LyP1on4iIjWUqE7tBd/bqIJkX5A==
 
-"@douyinfe/semi-icons@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons/-/semi-icons-2.64.0.tgz#e0ad10579e9310e0ac5f554a6bec857a9a3f84b1"
-  integrity sha512-BtnfPV7ZaSUWq6taxfApG9K3+RfpuEyojUEnpc233JOI+sNlB1ymSpo9aPgL+5co86752t9YpFV4Q7cGOdEMOQ==
+"@douyinfe/semi-icons@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-icons/-/semi-icons-2.66.1.tgz#d2d845bb9c36e92adf81d405c7b2f4622fea1f39"
+  integrity sha512-zQtBKg8hXA3f7Gp6UFWsudFjpdCYE9rxTzM84HpTyd/rvKd3v9p6MD4rBPNbuFV2dS90eXajgsvroPz3S+ss/A==
   dependencies:
     classnames "^2.2.6"
 
-"@douyinfe/semi-illustrations@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-illustrations/-/semi-illustrations-2.64.0.tgz#d934dab4cc0623af4ebda72ab213d59fc1bea6ba"
-  integrity sha512-2M6wKfger8RJi1gjrSvDZY8PvJDzO0k1UvMFR+mkBICbD9r0oa5vYGRh9Mzp050Qew8aAo21MQrloXsYYHfJQg==
+"@douyinfe/semi-illustrations@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-illustrations/-/semi-illustrations-2.66.1.tgz#594671cb61db79beabd3ba9a1215a6e540207143"
+  integrity sha512-Oc2rRZ+t05eptkxtKXY2GkcTlJNkEfgRABuoVjOWbarbntokn+6bJi3HHKg7OuSUpjuz4PNqhGWSDcHnDjFO2A==
 
 "@douyinfe/semi-theme-default@2.61.0":
   version "2.61.0"
   resolved "https://registry.npmmirror.com/@douyinfe/semi-theme-default/-/semi-theme-default-2.61.0.tgz#a7e9bf9534721c12af1d0eeb5d5a2de615896a23"
   integrity sha512-obn/DOw4vZyKFAlWvZxHTpBLAK9FO9kygTSm2GROgvi+UDB2PPU6l20cuUCsdGUNWJRSqYlTTVZ1tNYIyFZ5Sg==
 
-"@douyinfe/semi-ui@2.64.0":
-  version "2.64.0"
-  resolved "https://registry.npmmirror.com/@douyinfe/semi-ui/-/semi-ui-2.64.0.tgz#7f83e2e0b83efdaf70fabfbd01274f3bcc6fcf35"
-  integrity sha512-0aXoTXB48c65qUeYORpLp9oa8RxTXN0AEk6s3mDg4tyA6LjOJcN2uMoquJ3be/d+cHEUbdZlcS1jQPSEtF5Bbw==
+"@douyinfe/semi-ui@2.66.1":
+  version "2.66.1"
+  resolved "https://registry.npmmirror.com/@douyinfe/semi-ui/-/semi-ui-2.66.1.tgz#37d1ce02aba78d6b0c06102b1ab9d624a5306faf"
+  integrity sha512-5w5F1Q8pdhxU/XCJFIu9VVQk7kQeHQC83RaUNIpFK6oQ0smDmtJGPOO4x1RVtDzoXgmv6cbEokJd6h4pbe7j5A==
   dependencies:
     "@dnd-kit/core" "^6.0.8"
     "@dnd-kit/sortable" "^7.0.2"
     "@dnd-kit/utilities" "^3.2.1"
-    "@douyinfe/semi-animation" "2.64.0"
-    "@douyinfe/semi-animation-react" "2.64.0"
-    "@douyinfe/semi-foundation" "2.64.0"
-    "@douyinfe/semi-icons" "2.64.0"
-    "@douyinfe/semi-illustrations" "2.64.0"
+    "@douyinfe/semi-animation" "2.66.1"
+    "@douyinfe/semi-animation-react" "2.66.1"
+    "@douyinfe/semi-foundation" "2.66.1"
+    "@douyinfe/semi-icons" "2.66.1"
+    "@douyinfe/semi-illustrations" "2.66.1"
     "@douyinfe/semi-theme-default" "2.61.0"
     async-validator "^3.5.0"
     classnames "^2.2.6"
@@ -1042,10 +1042,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@remix-run/router@1.18.0":
-  version "1.18.0"
-  resolved "https://registry.npmmirror.com/@remix-run/router/-/router-1.18.0.tgz#20b033d1f542a100c1d57cfd18ecf442d1784732"
-  integrity sha512-L3jkqmqoSVBVKHfpGZmLrex0lxR5SucGA0sUfFzGctehw+S/ggL9L/0NnC5mw6P8HUWpFZ3nQw3cRApjjWx9Sw==
+"@remix-run/router@1.19.2":
+  version "1.19.2"
+  resolved "https://registry.npmmirror.com/@remix-run/router/-/router-1.19.2.tgz#0c896535473291cb41f152c180bedd5680a3b273"
+  integrity sha512-baiMx18+IMuD1yyvOGaHM9QrVUPGGG0jC+z+IPHnRJWUAUvaKuWKyE8gjDj2rzv3sz9zOGoRSPgeBVHRhZnBlA==
 
 "@rollup/rollup-android-arm-eabi@4.19.1":
   version "4.19.1"
@@ -1245,12 +1245,12 @@
   resolved "https://registry.npmmirror.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node@^20.14.12":
-  version "20.14.12"
-  resolved "https://registry.npmmirror.com/@types/node/-/node-20.14.12.tgz#129d7c3a822cb49fc7ff661235f19cfefd422b49"
-  integrity sha512-r7wNXakLeSsGT0H1AU863vS2wa5wBOK4bWMjZz2wj+8nBx+m5PeIn0k8AloSLpRuiwdRQZwarZqHE4FNArPuJQ==
+"@types/node@^22.5.5":
+  version "22.5.5"
+  resolved "https://registry.npmmirror.com/@types/node/-/node-22.5.5.tgz#52f939dd0f65fc552a4ad0b392f3c466cc5d7a44"
+  integrity sha512-Xjs4y5UPO/CLdzpgR6GirZJx36yScjh73+2NlLlkFRSoQN8B0DpfXPdZGnvVmLRLOsqDpOfTNv7D9trgGhmOIA==
   dependencies:
-    undici-types "~5.26.4"
+    undici-types "~6.19.2"
 
 "@types/prop-types@*":
   version "15.7.12"
@@ -1368,10 +1368,10 @@
   resolved "https://registry.npmmirror.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vavt/util@^1.6.2":
-  version "1.7.0"
-  resolved "https://registry.npmmirror.com/@vavt/util/-/util-1.7.0.tgz#99efd5528e5d178876ac70c164d6668a97d0ecea"
-  integrity sha512-EAwplP/2Lm79KCFj5umtU/HKgFUi8Ec6a1clK2Za4MErkAkY8+mdOSnAFJdltceWzmnauZrEc+By+u0ZvX6u6g==
+"@vavt/util@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmmirror.com/@vavt/util/-/util-2.1.0.tgz#b8a28da361675195fd6331a1db7cbfd02f68f590"
+  integrity sha512-YIfAvArSFVXmWvoF+DEGD0FhkhVNcCtVWWkfYtj76eSrwHh/wuEEFhiEubg1XLNM3tChO8FH8xJCT/hnizjgFQ==
 
 "@vitejs/plugin-react@^4.3.1":
   version "4.3.1"
@@ -1470,10 +1470,10 @@ asynckit@^0.4.0:
   resolved "https://registry.npmmirror.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-axios@^1.7.2:
-  version "1.7.2"
-  resolved "https://registry.npmmirror.com/axios/-/axios-1.7.2.tgz#b625db8a7051fbea61c35a3cbb3a1daa7b9c7621"
-  integrity sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==
+axios@^1.7.7:
+  version "1.7.7"
+  resolved "https://registry.npmmirror.com/axios/-/axios-1.7.7.tgz#2f554296f9892a72ac8d8e4c5b79c14a91d0a47f"
+  integrity sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -1598,10 +1598,15 @@ character-reference-invalid@^2.0.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-chroma-js@^2.4.2, chroma-js@^2.6.0:
+chroma-js@^2.4.2:
   version "2.6.0"
   resolved "https://registry.npmmirror.com/chroma-js/-/chroma-js-2.6.0.tgz#578743dd359698a75067a19fa5571dec54d0b70b"
   integrity sha512-BLHvCB9s8Z1EV4ethr6xnkl/P2YRFOGqfgvuMG/MyCbZPrTA+NeiByY6XvgF0zP4/2deU2CXnWyMa3zu1LqQ3A==
+
+chroma-js@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.npmmirror.com/chroma-js/-/chroma-js-3.1.1.tgz#380103ce1f8bb119be2b18303d598b3c113cf6b1"
+  integrity sha512-CGr6w73Gi86142RWqZ1RjED/CyduYw2vMTikQZUvr2jGIihnZlMo/Kzm9rYHWDP2pJc6eebwc8CkX0iteBon+A==
 
 ciebase@^0.1.1:
   version "0.1.1"
@@ -1755,10 +1760,10 @@ date-fns@^2.29.3:
   dependencies:
     "@babel/runtime" "^7.21.0"
 
-date-fns@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.npmmirror.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
-  integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
+date-fns@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmmirror.com/date-fns/-/date-fns-4.1.0.tgz#64b3d83fff5aa80438f5b1a633c2e83b8a1c2d14"
+  integrity sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==
 
 debug@^4.0.0, debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.6"
@@ -2507,10 +2512,15 @@ markdown-it-image-figures@^2.1.1:
   resolved "https://registry.npmmirror.com/markdown-it-image-figures/-/markdown-it-image-figures-2.1.1.tgz#fd32a2d0cec60ed8c3916d74fea70d5f9b56e4c7"
   integrity sha512-mwXSQ2nPeVUzCMIE3HlLvjRioopiqyJLNph0pyx38yf9mpqFDhNGnMpAXF9/A2Xv0oiF2cVyg9xwfF0HNAz05g==
 
-markdown-it-task-lists@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.npmmirror.com/markdown-it-task-lists/-/markdown-it-task-lists-2.1.1.tgz#f68f4d2ac2bad5a2c373ba93081a1a6848417088"
-  integrity sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==
+markdown-it-sub@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/markdown-it-sub/-/markdown-it-sub-2.0.0.tgz#10f6c7bbf2faacf71ae1a64c75009c40ef9b2c94"
+  integrity sha512-iCBKgwCkfQBRg2vApy9vx1C1Tu6D8XYo8NvevI3OlwzBRmiMtsJ2sXupBgEA7PPxiDwNni3qIUkhZ6j5wofDUA==
+
+markdown-it-sup@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/markdown-it-sup/-/markdown-it-sup-2.0.0.tgz#683b9390929f3024fcd5291799c466ce3d367f44"
+  integrity sha512-5VgmdKlkBd8sgXuoDoxMpiU+BiEt3I49GItBzzw7Mxq9CxvnhE/k09HFli09zgfFDRixDQDfDxi0mgBCXtaTvA==
 
 markdown-it@^14.0.0:
   version "14.1.0"
@@ -2529,23 +2539,23 @@ markdown-table@^3.0.0:
   resolved "https://registry.npmmirror.com/markdown-table/-/markdown-table-3.0.3.tgz#e6331d30e493127e031dd385488b5bd326e4a6bd"
   integrity sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==
 
-md-editor-rt@^4.17.4:
-  version "4.17.4"
-  resolved "https://registry.npmmirror.com/md-editor-rt/-/md-editor-rt-4.17.4.tgz#f20b3489d1999f6dabb2b0c0abd7708e81d3728c"
-  integrity sha512-z7akBnBRGYkiANSLP/hTCTj/P2wSPlod40GzIXVQ621rqQCCswpFHxes73XC1eDiruZLwiJLRybc48cCFbUdSw==
+md-editor-rt@^4.20.2:
+  version "4.20.2"
+  resolved "https://registry.npmmirror.com/md-editor-rt/-/md-editor-rt-4.20.2.tgz#44b091f5115b9241e135d3b01ddc0394fb2c6ce5"
+  integrity sha512-2RuCNM7JEssN4nSsHTSVGiH7hMS8afBOFaRiCq6q1QPWIPin8BPQr3BokzEp0mUrG6/9c1Y5WTQyLgeGFs/1dQ==
   dependencies:
     "@codemirror/lang-markdown" "^6.2.5"
     "@codemirror/language-data" "^6.5.1"
     "@types/markdown-it" "^14.0.1"
-    "@vavt/util" "^1.6.2"
+    "@vavt/util" "^2.1.0"
     codemirror "^6.0.1"
     copy-to-clipboard "^3.3.3"
     lru-cache "^10.2.0"
     markdown-it "^14.0.0"
     markdown-it-image-figures "^2.1.1"
-    markdown-it-task-lists "^2.1.1"
+    markdown-it-sub "^2.0.0"
+    markdown-it-sup "^2.0.0"
     medium-zoom "^1.1.0"
-    punycode "^2.3.1"
     xss "^1.0.15"
 
 mdast-util-find-and-replace@^3.0.0:
@@ -3348,7 +3358,7 @@ punycode.js@^2.3.1:
   resolved "https://registry.npmmirror.com/punycode.js/-/punycode.js-2.3.1.tgz#6b53e56ad75588234e79f4affa90972c7dd8cdb7"
   integrity sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==
 
-punycode@^2.1.0, punycode@^2.1.1, punycode@^2.3.1:
+punycode@^2.1.0, punycode@^2.1.1:
   version "2.3.1"
   resolved "https://registry.npmmirror.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
@@ -3397,20 +3407,20 @@ react-resizable@^3.0.5:
     prop-types "15.x"
     react-draggable "^4.0.3"
 
-react-router-dom@^6.25.1:
-  version "6.25.1"
-  resolved "https://registry.npmmirror.com/react-router-dom/-/react-router-dom-6.25.1.tgz#b89f8d63fc8383ea4e89c44bf31c5843e1f7afa0"
-  integrity sha512-0tUDpbFvk35iv+N89dWNrJp+afLgd+y4VtorJZuOCXK0kkCWjEvb3vTJM++SYvMEpbVwXKf3FjeVveVEb6JpDQ==
+react-router-dom@^6.26.2:
+  version "6.26.2"
+  resolved "https://registry.npmmirror.com/react-router-dom/-/react-router-dom-6.26.2.tgz#a6e3b0cbd6bfd508e42b9342099d015a0ac59680"
+  integrity sha512-z7YkaEW0Dy35T3/QKPYB1LjMK2R1fxnHO8kWpUMTBdfVzZrWOiY9a7CtN8HqdWtDUWd5FY6Dl8HFsqVwH4uOtQ==
   dependencies:
-    "@remix-run/router" "1.18.0"
-    react-router "6.25.1"
+    "@remix-run/router" "1.19.2"
+    react-router "6.26.2"
 
-react-router@6.25.1:
-  version "6.25.1"
-  resolved "https://registry.npmmirror.com/react-router/-/react-router-6.25.1.tgz#70b4f1af79954cfcfd23f6ddf5c883e8c904203e"
-  integrity sha512-u8ELFr5Z6g02nUtpPAggP73Jigj1mRePSwhS/2nkTrlPU5yEkH1vYzWNyvSnSzeeE2DNqWdH+P8OhIh9wuXhTw==
+react-router@6.26.2:
+  version "6.26.2"
+  resolved "https://registry.npmmirror.com/react-router/-/react-router-6.26.2.tgz#2f0a68999168954431cdc29dd36cec3b6fa44a7e"
+  integrity sha512-tvN1iuT03kHgOFnLPfLJ8V95eijteveqdOSk+srqfePtQvqCExB8eHOYnlilbOcyJyKnYkr1vJvf7YqotAJu1A==
   dependencies:
-    "@remix-run/router" "1.18.0"
+    "@remix-run/router" "1.19.2"
 
 react-window@^1.8.2:
   version "1.8.10"
@@ -3764,10 +3774,10 @@ uc.micro@^2.0.0, uc.micro@^2.1.0:
   resolved "https://registry.npmmirror.com/uc.micro/-/uc.micro-2.1.0.tgz#f8d3f7d0ec4c3dea35a7e3c8efa4cb8b45c9e7ee"
   integrity sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==
 
-undici-types@~5.26.4:
-  version "5.26.5"
-  resolved "https://registry.npmmirror.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
-  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
+undici-types@~6.19.2:
+  version "6.19.8"
+  resolved "https://registry.npmmirror.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
+  integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
 
 unified@^11.0.0:
   version "11.0.5"
@@ -3863,10 +3873,10 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-use-sync-external-store@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmmirror.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
-  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
+use-sync-external-store@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.npmmirror.com/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz#c3b6390f3a30eba13200d2302dcdf1e7b57b2ef9"
+  integrity sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==
 
 utility-types@^3.10.0:
   version "3.11.0"
@@ -3973,12 +3983,12 @@ zrender@5.6.0:
   dependencies:
     tslib "2.3.0"
 
-zustand@^4.5.4:
-  version "4.5.4"
-  resolved "https://registry.npmmirror.com/zustand/-/zustand-4.5.4.tgz#63abdd81edfb190bc61e0bbae045cc4d52158a05"
-  integrity sha512-/BPMyLKJPtFEvVL0E9E9BTUM63MNyhPGlvxk1XjrfWTUlV+BR8jufjsovHzrtR6YNcBEcL7cMHovL1n9xHawEg==
+zustand@^4.5.5:
+  version "4.5.5"
+  resolved "https://registry.npmmirror.com/zustand/-/zustand-4.5.5.tgz#f8c713041543715ec81a2adda0610e1dc82d4ad1"
+  integrity sha512-+0PALYNJNgK6hldkgDq2vLrw5f6g/jCInz52n9RTpropGgeAf/ioFUCdtsjCqu4gNhW9D01rUQBROoRjdzyn2Q==
   dependencies:
-    use-sync-external-store "1.2.0"
+    use-sync-external-store "1.2.2"
 
 zwitch@^2.0.0:
   version "2.0.4"
