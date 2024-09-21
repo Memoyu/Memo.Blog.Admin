@@ -87,27 +87,19 @@ const Index: FC = () => {
     return (
         <Sider className="layout-sider">
             <Nav
+                className="layout-sider-navs"
                 selectedKeys={selectedKeys}
                 onCollapseChange={onCollapseChange}
-                style={{ maxWidth: 200, height: '100%' }}
             >
                 <Nav.Header
-                    className="layout-sider-header"
+                    className="layout-sider-navs-header"
                     logo={
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                backgroundColor: 'var(--semi-color-primary)',
-                                borderRadius: 10,
-                                padding: '6px 10px',
-                            }}
-                        >
+                        <div className="layout-sider-navs-header-logo">
                             <Image preview={false} height={30} src={logo} />
                         </div>
                     }
                 />
-                <div className="layout-sider-nav-content">
+                <div className="layout-sider-navs-content">
                     {menus.map((sub: MenuItem) => (
                         <div key={sub.itemKey}>
                             {sub.path ? (
@@ -122,7 +114,7 @@ const Index: FC = () => {
                     ))}
                 </div>
                 <Nav.Footer
-                    className="layout-sider-footer"
+                    className="layout-sider-navs-footer"
                     collapseButton={true}
                     collapseText={(isCollapsed) => <span>{isCollapsed ? '展开' : '收起'}</span>}
                 />

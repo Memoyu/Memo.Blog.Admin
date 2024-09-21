@@ -1,29 +1,63 @@
 .layout-sider {
-    .semi-navigation-list-wrapper {
-        height: calc(100% - 130px);
-        padding-top: 0px;
-        margin-top: 65px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
+    &-navs {
+        max-width: 200px;
+        height: 100%;
+        &-header {
+            padding-bottom: 10px !important;
+            &-logo {
+                display: flex;
+                align-items: center;
+                background-color: var(--semi-color-primary);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+        }
 
-    &-header {
-        padding: 15px 5px !important;
-        position: absolute;
-        top: 0;
-    }
+        &-content {
+            .nav-sub {
+                font-weight: bold;
+                padding: 10px 0;
+                font-size: 14px;
+                color: var(--semi-color-text-0);
+            }
+        }
 
-    &-nav-content {
-        .nav-sub {
-            font-weight: bold;
-            padding: 10px 0;
-            font-size: 14px;
-            color: var(--semi-color-text-0);
+        &-footer {
+            position: absolute;
+            bottom: 0;
         }
     }
+}
 
-    &-footer {
-        position: absolute;
-        bottom: 0;
+.semi-navigation-list-wrapper {
+    height: calc(100% - 170px);
+    padding-top: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+// 收起菜单栏时，隐藏滚动条
+.semi-navigation-header-list-outer-collapsed {
+    .semi-navigation-list-wrapper {
+        scrollbar-width: none; /* firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+        ::-webkit-scrollbar {
+            display: none; /* Chrome Safari */
+        }
+    }
+}
+
+.semi-navigation-header-collapsed {
+    padding-left: 0 !important;
+
+    .layout-sider {
+        &-navs {
+            &-header {
+                &-logo {
+                    width: 24px;
+                    overflow: hidden;
+                }
+            }
+        }
     }
 }
