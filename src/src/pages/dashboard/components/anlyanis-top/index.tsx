@@ -82,19 +82,21 @@ const Index: FC = () => {
                         style={{ height: 230 }}
                         footer={
                             <span>
-                                文章总数
-                                <span style={{ paddingLeft: 10 }}>{data?.summary.articles}</span>
+                                本周文章
+                                <span style={{ paddingLeft: 10 }}>
+                                    {data?.summary.weekArticles}
+                                </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
-                            <span>本周文章</span>
+                            <span>文章总数</span>
                             <Popover position="top" showArrow content={<article>汇总数据</article>}>
                                 <IconInfoCircle style={{ color: 'var(--semi-color-primary)' }} />
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">{data?.summary.weekArticles}</Item>
+                            <Item itemKey="">{data?.summary.articles}</Item>
                         </Descriptions>
 
                         <div style={{ marginTop: 15, height: 55 }}>
@@ -120,15 +122,15 @@ const Index: FC = () => {
                         loading={loading}
                         footer={
                             <span>
-                                浏览总数
+                                今日PV
                                 <span style={{ paddingLeft: 10 }}>
-                                    {data?.pageVisitor.pageVisitors}
+                                    {data?.pageVisitor.todayPageVisitors}
                                 </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
-                            <span>今日PV</span>
+                            <span>浏览总数</span>
                             <Popover
                                 position="top"
                                 showArrow
@@ -138,7 +140,7 @@ const Index: FC = () => {
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">{data?.pageVisitor.todayPageVisitors}</Item>
+                            <Item itemKey="">{data?.pageVisitor.pageVisitors}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
@@ -156,15 +158,15 @@ const Index: FC = () => {
                         loading={loading}
                         footer={
                             <span>
-                                访问总数
+                                今日UV
                                 <span style={{ paddingLeft: 10 }}>
-                                    {data?.uniqueVisitor.uniqueVisitors}
+                                    {data?.uniqueVisitor.todayUniqueVisitors}
                                 </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
-                            <span> 今日UV</span>
+                            <span>访问总数</span>
                             <Popover
                                 position="top"
                                 showArrow
@@ -174,7 +176,7 @@ const Index: FC = () => {
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">{data?.uniqueVisitor.todayUniqueVisitors}</Item>
+                            <Item itemKey="">{data?.uniqueVisitor.uniqueVisitors}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
@@ -192,13 +194,15 @@ const Index: FC = () => {
                         loading={loading}
                         footer={
                             <span>
-                                评论总数
-                                <span style={{ paddingLeft: 10 }}>{data?.comment.comments}</span>
+                                今日评论
+                                <span style={{ paddingLeft: 10 }}>
+                                    {data?.comment.todayComments}
+                                </span>
                             </span>
                         }
                     >
                         <div className="flex-between">
-                            <span>今日评论</span>
+                            <span>评论总数</span>
                             <Popover
                                 position="top"
                                 showArrow
@@ -208,7 +212,7 @@ const Index: FC = () => {
                             </Popover>
                         </div>
                         <Descriptions row size="large">
-                            <Item itemKey="">{data?.comment.todayComments}</Item>
+                            <Item itemKey="">{data?.comment.comments}</Item>
                         </Descriptions>
                         <ReactEChartsCore
                             echarts={echarts}
