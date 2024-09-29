@@ -19,7 +19,7 @@
         "@types/lodash.clonedeep": "^4.5.9",
         "@types/node": "^22.5.5",
         "axios": "^1.7.7",
-        "chroma-js": "^3.1.1",
+        "chroma-js": "^2.4.2",
         "date-fns": "^4.1.0",
         "echarts": "^5.5.1",
         "echarts-for-react": "^3.0.2",
