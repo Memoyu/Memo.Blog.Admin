@@ -195,7 +195,7 @@ const Index: FC<ComProps> = ({}) => {
         <Popover
             position="top"
             visible={notifyVisible}
-            trigger="custom"
+            trigger="click"
             onVisibleChange={setNotifyVisible}
             showArrow
             content={

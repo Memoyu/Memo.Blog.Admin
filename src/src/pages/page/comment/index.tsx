@@ -24,6 +24,7 @@ import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
 
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
+import { SearchWords } from '@douyinfe/semi-foundation/lib/es/highlight/foundation';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { commentTypeOpts } from '@src/common/select-options';
 import { CommentPageModel, CommentPageRequest } from '@src/common/model';
@@ -58,12 +59,13 @@ const Index: React.FC = () => {
             ellipsis: { showTitle: false },
             render: (_, comment: CommentPageModel) => {
                 return (
-                    <Highlight
-                        sourceString={comment.visitor?.nickname}
-                        searchWords={searchNicknames}
-                    />
+                    <Text ellipsis={{ showTooltip: true }}>
+                        <Highlight
+                            sourceString={comment.visitor?.nickname}
+                            searchWords={searchNicknames}
+                        />
+                    </Text>
                 );
-                // return <Text ellipsis={{ showTooltip: true }}>{comment.visitor.nickname}</Text>;
             },
         },
         {
@@ -83,8 +85,11 @@ const Index: React.FC = () => {
             width: 170,
             ellipsis: { showTitle: false },
             render: (text) => {
-                return <Highlight sourceString={text} searchWords={searchContents} />;
-                // return <Text ellipsis={{ showTooltip: true }}>{text}</Text>;
+                return (
+                    <Text ellipsis={{ showTooltip: true }}>
+                        <Highlight sourceString={text} searchWords={searchContents} />
+                    </Text>
+                );
             },
         },
         {
@@ -184,9 +189,9 @@ const Index: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [commentTotal, setCommentTotal] = useState(1);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [searchNicknames, setSearchNicknames] = useState<Array<string>>([]);
-    const [searchContents, setSearchContents] = useState<Array<string>>([]);
-    const [data, loading, setData, setLoading] = useData<Array<CommentPageModel>>();
+    const [searchNicknames, setSearchNicknames] = useState<SearchWords>();
+    const [searchContents, setSearchContents] = useState<SearchWords>();
+    const [data, loading, setData, setLoading] = useData<Array<CommentPageModel>>([]);
 
     const [editVisible, setEditVisible] = useState<boolean>();
     const [editCommentId, setEditCommentId] = useState<string>('');
@@ -200,8 +205,8 @@ const Index: React.FC = () => {
         setCurrentPage(page);
 
         let search = searchForm?.getValues();
-        setSearchNicknames([search?.nickname]);
-        setSearchContents([search?.content]);
+        setSearchNicknames(search?.nickname);
+        setSearchContents(search?.content);
         // console.log(search);
         let request = {
             commentType: search?.commentType,
@@ -242,7 +247,7 @@ const Index: React.FC = () => {
 
     // 编辑评论
     const handleEditComment = (commentId: string) => {
-        console.log('编辑评论', commentId);
+        // console.log('编辑评论', commentId);
         setEditCommentId(commentId);
         setEditVisible(true);
     };
@@ -264,13 +269,14 @@ const Index: React.FC = () => {
     };
 
     // 展开行显示表格
-    const expandRowRender = (record: CommentPageModel, _index: number, _expanded: boolean) => {
+    // record?: RecordType, index?: number, expanded?: boolean
+    const expandRowRender = (record?: CommentPageModel, _index?: number, _expanded?: boolean) => {
         return (
             <Table
                 showHeader={false}
                 size="small"
                 columns={columns}
-                dataSource={record.children}
+                dataSource={record?.children}
                 rowKey={'commentId'}
                 pagination={false}
             />
@@ -335,8 +341,8 @@ const Index: React.FC = () => {
                             columns={columns}
                             dataSource={data}
                             rowKey={'commentId'}
-                            rowExpandable={(r: CommentPageModel) =>
-                                r.children && r.children.length > 0
+                            rowExpandable={(r?: CommentPageModel) =>
+                                (r && r.children && r.children.length > 0) ?? false
                             }
                             expandedRowRender={expandRowRender}
                             pagination={{

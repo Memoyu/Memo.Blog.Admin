@@ -658,17 +658,12 @@ export const uniqueVisitorSactterMapOption = {
         layoutCenter: ['50%', '50%'], //设置后left/right/top/bottom等属性无效
         layoutSize: '100%',
         label: {
-            emphasis: {
-                show: false,
-            },
+            show: false,
         },
-        itemStyle: {
-            normal: {
-                areaColor: '#101f32',
+        emphasis: {
+            itemStyle: {
                 borderWidth: 1.1,
                 borderColor: '#43d0d6',
-            },
-            emphasis: {
                 areaColor: '#069',
             },
         },
@@ -680,15 +675,10 @@ export const uniqueVisitorSactterMapOption = {
             coordinateSystem: 'geo',
             symbolSize: 12,
             label: {
-                normal: {
-                    show: false,
-                },
-                emphasis: {
-                    show: false,
-                },
+                show: false,
             },
-            itemStyle: {
-                emphasis: {
+            emphasis: {
+                itemStyle: {
                     borderColor: '#fff',
                     borderWidth: 1,
                 },

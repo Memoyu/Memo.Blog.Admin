@@ -19,6 +19,8 @@ import Content from '@src/components/page-content';
 import UploadImage from '@src/components/upload-image';
 import MdEditor from '@src/components/md-editor';
 import TemplateList from './components/template-list';
+import EditCategory from '../category/components/edit';
+import EditTag from '../tag/components/edit';
 
 import { OptionProps } from '@douyinfe/semi-ui/lib/es/select';
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
@@ -35,7 +37,6 @@ import {
 
 import './index.scss';
 
-const { Section, Select, TextArea } = Form;
 const { Title, Text } = Typography;
 
 const Index: React.FC = () => {
@@ -58,6 +59,10 @@ const Index: React.FC = () => {
     const [createTemplateName, setCeateTemplateName] = useState<string>('');
     const [coverConfirmVisible, setCoverConfirmVisible] = useState<boolean>(false);
     const [templateContent, setTemplateContent] = useState<string>('');
+
+    const [addCategoryVisible, setAddCategoryVisible] = useState<boolean>(false);
+    const [addTagVisible, setAddTagVisible] = useState<boolean>(false);
+
     // 获取文章详情
     let getArticleDetail = async (id: string) => {
         let res = await articleGet(id);
@@ -241,8 +246,8 @@ const Index: React.FC = () => {
     return (
         <Content title="文章编辑" icon={<IconChangelog />}>
             <div className="edit-container">
-                <Form ref={formRef} initValues={article}>
-                    <Section text={'基本信息'}>
+                <Form labelPosition="inset" ref={formRef} initValues={article}>
+                    <Form.Section text={'基本信息'}>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <Form.Input
@@ -255,36 +260,52 @@ const Index: React.FC = () => {
                                     ]}
                                 />
                             </Col>
-                            <Col span={6}>
-                                <Select
-                                    style={{ width: '100%' }}
-                                    field="categoryId"
-                                    label="分类"
-                                    placeholder="请选文章分类"
-                                    optionList={categories}
-                                    rules={[{ required: true, message: '文章分类必填' }]}
-                                    onFocus={() => handleCategoryFocus()}
-                                />
+                            <Col span={4}>
+                                <div style={{ display: 'flex' }}>
+                                    <Form.Select
+                                        field="categoryId"
+                                        label="分类"
+                                        placeholder="请选文章分类"
+                                        optionList={categories}
+                                        rules={[{ required: true, message: '文章分类必填' }]}
+                                        onFocus={() => handleCategoryFocus()}
+                                    />
+                                    <Form.Slot
+                                        label={{ style: { display: 'none' } }}
+                                        style={{ marginLeft: 5 }}
+                                    >
+                                        <Button onClick={() => setAddCategoryVisible(true)}>
+                                            新增
+                                        </Button>
+                                    </Form.Slot>
+                                </div>
                             </Col>
-                            <Col span={6}>
-                                <Select
-                                    showClear
-                                    style={{ width: '100%' }}
-                                    maxTagCount={3}
-                                    multiple
-                                    field="tags"
-                                    label="标签"
-                                    placeholder="请选文章标签"
-                                    optionList={tags}
-                                    rules={[{ required: true, message: '文章标签必填' }]}
-                                    onFocus={() => handleTagFocus()}
-                                />
+                            <Col span={8}>
+                                <div style={{ display: 'flex' }}>
+                                    <Form.Select
+                                        showClear
+                                        maxTagCount={3}
+                                        multiple
+                                        field="tags"
+                                        label="标签"
+                                        placeholder="请选文章标签"
+                                        optionList={tags}
+                                        rules={[{ required: true, message: '文章标签必填' }]}
+                                        onFocus={() => handleTagFocus()}
+                                    />
+                                    <Form.Slot
+                                        label={{ style: { display: 'none' } }}
+                                        style={{ marginLeft: 5 }}
+                                    >
+                                        <Button onClick={() => setAddTagVisible(true)}>新增</Button>
+                                    </Form.Slot>
+                                </div>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={16}>
-                                <TextArea
-                                    style={{ height: 120 }}
+                                <Form.TextArea
+                                    //style={{ height: 120 }}
                                     field="description"
                                     label="描述"
                                     placeholder="请填文章描述"
@@ -295,9 +316,11 @@ const Index: React.FC = () => {
                                 />
                             </Col>
                             <Col span={8}>
-                                <Form.Slot label={{ text: '头图' }}>
+                                <Form.Slot label={{ style: { display: 'none' } }}>
                                     <UploadImage
                                         type="banner"
+                                        title="上传头图"
+                                        height={90}
                                         url={articleBanner}
                                         path="articles/banner"
                                         onSuccess={setArticleBanner}
@@ -306,9 +329,9 @@ const Index: React.FC = () => {
                                 </Form.Slot>
                             </Col>
                         </Row>
-                    </Section>
+                    </Form.Section>
                 </Form>
-                <Section
+                <Form.Section
                     className="content-editer"
                     text={
                         <Space spacing="medium" align="center">
@@ -351,7 +374,7 @@ const Index: React.FC = () => {
                         onChange={setArticleContent}
                         onSave={() => handleSaveArticle()}
                     />
-                </Section>
+                </Form.Section>
                 <Space style={{ margin: 20, width: '100%' }}>
                     <Button
                         type="primary"
@@ -410,6 +433,18 @@ const Index: React.FC = () => {
             >
                 文章内容不为空，确定要覆盖吗？
             </Modal>
+
+            <EditCategory
+                title={'新增分类'}
+                visible={addCategoryVisible}
+                onChangeVisible={setAddCategoryVisible}
+            />
+
+            <EditTag
+                title={'新增标签'}
+                visible={addTagVisible}
+                onChangeVisible={setAddTagVisible}
+            />
         </Content>
     );
 };

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, useRef } from 'react';
-import { Image, Avatar, Toast } from '@douyinfe/semi-ui';
+import { Image, Avatar, Toast, Typography } from '@douyinfe/semi-ui';
 import { Upload } from '@douyinfe/semi-ui';
 import { IconPlus, IconCamera } from '@douyinfe/semi-icons';
 import { getFileExt } from '@src/utils/file';
@@ -15,6 +15,8 @@ import {
 import { QiniuUploadModel } from '@src/common/model';
 
 import './index.scss';
+
+const { Text } = Typography;
 
 interface Iprops {
     width?: number | string;
@@ -80,8 +82,8 @@ const Index: FC<Iprops> = ({
         if (type != 'avatar') {
             return (
                 <>
-                    <IconPlus size="extra-large" style={{ margin: 4 }} />
-                    {title}
+                    <IconPlus size="large" style={{ margin: 4 }} />
+                    <Text> {title}</Text>
                 </>
             );
         } else {

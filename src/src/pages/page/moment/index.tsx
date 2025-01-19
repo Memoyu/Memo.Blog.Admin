@@ -348,6 +348,7 @@ const Index: React.FC = () => {
                                 <MdEditor
                                     imgPath="articles/comments"
                                     height={490}
+                                    previewTheme={'github'}
                                     content={content}
                                     onChange={setContent}
                                     onSave={() => handleSaveMoment(false)}

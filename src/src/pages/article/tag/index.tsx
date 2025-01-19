@@ -1,25 +1,19 @@
 import React, { useState } from 'react';
 import { IconTag } from '@douyinfe/semi-icons-lab';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import { Button, Table, Popconfirm, Space, Modal, Form, Toast, Tag } from '@douyinfe/semi-ui';
+import { Button, Table, Popconfirm, Space, Form, Toast, Tag } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
+import EditTag from './components/edit';
 
 import { useOnMountUnsafe } from '@src/hooks/useOnMountUnsafe';
 import { useData } from '@src/hooks/useData';
-import { useModal } from '@src/hooks/useModal';
 
 import { TagModel } from '@src/common/model';
 import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 
-import {
-    articleTagList,
-    articleTagCreate,
-    articleTagDelete,
-    articleTagUpdate,
-    articleTagGet,
-} from '@src/utils/request';
+import { articleTagList, articleTagDelete, articleTagGet } from '@src/utils/request';
 
 import './index.scss';
 import RelatedArticles from '../components/related-articles';
@@ -73,7 +67,7 @@ const Index: React.FC = () => {
                         size="small"
                         onClick={() => {
                             handleEditTag(tag.tagId);
-                            setEditModalTitle('编辑标签');
+                            setEditTitle('编辑标签');
                         }}
                     >
                         编辑
@@ -93,11 +87,10 @@ const Index: React.FC = () => {
     ];
 
     const [data, loading, setData, setLoading] = useData<Array<TagModel>>();
-    const [editModalTitle, setEditModalTitle] = useState<string>();
-    const [_key, _setKey, editVisible, setEditVisible, _setAddModal] = useModal();
-    const [editForm, setEditForm] = useState<FormApi>();
+    const [editTitle, setEditTitle] = useState<string>('');
+    const [editVisible, setEditVisible] = useState<boolean>(false);
     const [searchForm, setSearchForm] = useState<FormApi>();
-    const [editTag, setEditTag] = useState<TagModel | null>();
+    const [editTag, setEditTag] = useState<TagModel>();
 
     // 获取标签
     let getTagList = async () => {
@@ -120,32 +113,9 @@ const Index: React.FC = () => {
         getTagList();
     });
 
-    // 确认编辑/新增标签
-    const handleEditModalOk = () => {
-        editForm?.validate().then(async ({ name }) => {
-            var msg = '';
-            var res;
-            if (editTag) {
-                res = await articleTagUpdate(editTag.tagId, name);
-                msg = '更新成功';
-            } else {
-                res = await articleTagCreate(name, '#dd3344');
-                msg = '添加成功';
-            }
-
-            if (!res.isSuccess) {
-                Toast.error(res.message);
-                return;
-            }
-            setEditVisible(false);
-            Toast.success(msg);
-            getTagList();
-        });
-    };
-
     // 编辑/新增标签
     const handleEditTag = async (tagId?: string) => {
-        let tag = null;
+        let tag;
         if (tagId) {
             let res = await articleTagGet(tagId);
             if (!res.isSuccess) {
@@ -203,7 +173,7 @@ const Index: React.FC = () => {
                                     style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditTag();
-                                        setEditModalTitle('新增标签');
+                                        setEditTitle('新增标签');
                                     }}
                                 >
                                     新增
@@ -222,27 +192,14 @@ const Index: React.FC = () => {
                         />
                     </div>
                 </div>
-                <Modal
-                    title={editModalTitle}
+
+                <EditTag
+                    title={editTitle}
                     visible={editVisible}
-                    onOk={handleEditModalOk}
-                    onCancel={() => setEditVisible(false)}
-                    centered
-                    bodyStyle={{ height: 100 }}
-                    okText={'保存'}
-                >
-                    <Form initValues={editTag} getFormApi={(formData) => setEditForm(formData)}>
-                        <Form.Input
-                            field="name"
-                            placeholder="分类名称不超10个字符"
-                            label="分类名称"
-                            rules={[
-                                { required: true, message: '分类名称必填' },
-                                { max: 10, message: '长度不能超10个字符' },
-                            ]}
-                        />
-                    </Form>
-                </Modal>
+                    tag={editTag}
+                    onChangeVisible={setEditVisible}
+                    onOk={() => getTagList()}
+                />
             </div>
         </Content>
     );

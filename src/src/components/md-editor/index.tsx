@@ -17,6 +17,7 @@ import { debounce } from '@src/utils/md';
 interface Iprops {
     imgPath: string;
     height?: number;
+    previewTheme?: 'default' | 'github' | 'vuepress' | 'mk-cute' | 'smart-blue' | 'cyanosis';
     content?: string;
     onChange?: (content: string) => void;
     onSave?: () => void;
@@ -56,7 +57,14 @@ const onHtmlChanged = debounce(() => {
     }
 });
 
-const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange, onSave }) => {
+const Index: FC<Iprops> = ({
+    imgPath,
+    height = 500,
+    previewTheme = 'smart-blue',
+    content,
+    onChange,
+    onSave,
+}) => {
     const toolbars: Array<any> = [
         'bold',
         'underline',
@@ -131,7 +139,7 @@ const Index: FC<Iprops> = ({ imgPath, height = 500, content, onChange, onSave })
             <MdEditor
                 style={{ height: height }}
                 theme={theme}
-                previewTheme="github"
+                previewTheme={previewTheme}
                 codeTheme="vs"
                 modelValue={mdContent}
                 toolbars={toolbars}

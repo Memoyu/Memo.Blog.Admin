@@ -228,6 +228,7 @@ const Index: FC<ComProps> = ({ commentId, visible, onSuccess, onVisibleChange })
                     <MdEditor
                         imgPath="articles/comments"
                         height={330}
+                        previewTheme={'github'}
                         content={commentContent}
                         onChange={setCommentContent}
                     />
