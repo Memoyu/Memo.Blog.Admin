@@ -669,6 +669,7 @@ export const uniqueVisitorSactterMapOption = {
             },
             itemStyle: {
                 areaColor: '#069',
+                borderWidth: 2,
             },
         },
     },
