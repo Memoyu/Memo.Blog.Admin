@@ -30,16 +30,6 @@ const Index: React.FC = () => {
             title: '名称',
             align: 'center',
             dataIndex: 'name',
-            render: (text, tag: TagModel) => (
-                <Tag
-                    style={{ color: tag.color, borderColor: tag.color }}
-                    type="ghost"
-                    // shape="circle"
-                    size="large"
-                >
-                    {text}
-                </Tag>
-            ),
         },
         {
             title: '关联文章',
