@@ -14,6 +14,7 @@ export interface TokenModel {
     refreshToken: string; // 刷新token
     userId: string; // 用户Id
     username: string; // 用户名
+    expiredAt: Date; // token过期时间
 }
 
 export interface QiniuUploadTokenModel {
