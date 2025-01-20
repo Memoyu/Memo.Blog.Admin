@@ -27,8 +27,8 @@ export class Request {
         this.instance.interceptors.request.use(
             function (config) {
                 const token = useUserStore.getState().token;
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`; //携带权限参数
+                if (token && token.accessToken) {
+                    config.headers.Authorization = `Bearer ${token.accessToken}`; //携带权限参数
                 }
                 // 在发送请求之前做些什么
                 return config;

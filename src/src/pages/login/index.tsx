@@ -75,7 +75,7 @@ const Index: React.FC = () => {
             return;
         }
         let token = loginRes.data;
-        login(token.accessToken);
+        login(token);
 
         let userRes = await userGet();
         if (!userRes.isSuccess || userRes.data == undefined) {

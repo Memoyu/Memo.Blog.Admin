@@ -570,6 +570,12 @@ export interface UserModel {
     createTime: Date;
 }
 
+export interface UserTokenStoreModel {
+    accessToken: string; // 访问token
+    refreshToken: string; // 刷新token
+    expiredAt: number; // token过期时间
+}
+
 export interface UserStoreModel {
     userId: string;
     username: string;

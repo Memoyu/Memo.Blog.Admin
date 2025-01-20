@@ -79,6 +79,11 @@ const Index: React.FC = () => {
             },
         },
         {
+            title: '邮箱',
+            align: 'center',
+            dataIndex: 'email',
+        },
+        {
             title: '访客归属',
             align: 'center',
             dataIndex: 'region',
