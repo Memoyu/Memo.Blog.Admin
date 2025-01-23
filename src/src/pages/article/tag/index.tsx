@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconTag } from '@douyinfe/semi-icons-lab';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import { Button, Table, Popconfirm, Space, Form, Toast, Tag } from '@douyinfe/semi-ui';
+import { Button, Table, Popconfirm, Space, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 import EditTag from './components/edit';
