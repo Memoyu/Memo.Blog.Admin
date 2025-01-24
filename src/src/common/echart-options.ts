@@ -620,15 +620,6 @@ export const uniqueVisitorSactterMapOption = {
     title: {
         text: '访客地图',
     },
-    legend: {
-        data: ['访问人数'], //与series的name属性对应
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        textStyle: {
-            color: '#fff',
-        },
-    },
     tooltip: {
         trigger: 'item',
         formatter: function (params: any) {
@@ -641,9 +632,6 @@ export const uniqueVisitorSactterMapOption = {
         calculable: true,
         inRange: {
             color: ['#50a3ba', '#eac736', '#d94e5d'],
-        },
-        textStyle: {
-            color: '#fff',
         },
     },
     geo: {
