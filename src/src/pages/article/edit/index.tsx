@@ -13,6 +13,7 @@ import {
     Toast,
     Popconfirm,
     Modal,
+    Tooltip,
 } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
@@ -36,6 +37,7 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
+import { set } from 'date-fns';
 
 const { Title, Text } = Typography;
 
@@ -62,6 +64,9 @@ const Index: React.FC = () => {
 
     const [addCategoryVisible, setAddCategoryVisible] = useState<boolean>(false);
     const [addTagVisible, setAddTagVisible] = useState<boolean>(false);
+
+    const [manualBannerVisible, setManualBannerVisible] = useState<boolean>(false);
+    const [manualBanner, setManualBanner] = useState<string>('');
 
     // 获取文章详情
     let getArticleDetail = async (id: string) => {
@@ -232,6 +237,20 @@ const Index: React.FC = () => {
         });
     };
 
+    const handleApplyBannerLink = () => {
+        try {
+            new URL(manualBanner);
+
+            setManualBannerVisible(false);
+            // console.log('manualBanner', manualBanner);
+            let formApi = formRef.current?.formApi;
+            formApi?.setValue('banner', [{ url: manualBanner }]);
+            setArticleBanner(manualBanner);
+        } catch (err) {
+            Toast.error('请输入正确的url！');
+        }
+    };
+
     useOnMountUnsafe(() => {
         getCategories();
         getTags();
@@ -303,7 +322,7 @@ const Index: React.FC = () => {
                             </Col>
                         </Row>
                         <Row gutter={16}>
-                            <Col span={16}>
+                            <Col span={12}>
                                 <Form.TextArea
                                     //style={{ height: 120 }}
                                     field="description"
@@ -316,17 +335,55 @@ const Index: React.FC = () => {
                                 />
                             </Col>
                             <Col span={8}>
-                                <Form.Slot label={{ style: { display: 'none' } }}>
-                                    <UploadImage
-                                        type="banner"
-                                        title="上传头图"
-                                        height={90}
-                                        url={articleBanner}
-                                        path="articles/banner"
-                                        onSuccess={setArticleBanner}
-                                        onRemove={() => setArticleBanner('')}
-                                    />
-                                </Form.Slot>
+                                <div style={{ display: 'flex', alignItems: 'end' }}>
+                                    <Form.Slot label={{ style: { display: 'none' } }}>
+                                        <UploadImage
+                                            type="banner"
+                                            title="上传头图"
+                                            height={90}
+                                            url={articleBanner}
+                                            path="articles/banner"
+                                            onSuccess={setArticleBanner}
+                                            onRemove={() => setArticleBanner('')}
+                                        />
+                                    </Form.Slot>
+                                    <Form.Slot
+                                        label={{ style: { display: 'none' } }}
+                                        style={{ marginLeft: 5 }}
+                                    >
+                                        <Tooltip
+                                            visible={manualBannerVisible}
+                                            onVisibleChange={setManualBannerVisible}
+                                            position="top"
+                                            content={
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                    }}
+                                                >
+                                                    <Input
+                                                        value={manualBanner}
+                                                        placeholder={'链接'}
+                                                        size="small"
+                                                        onEnterPress={handleApplyBannerLink}
+                                                        onChange={setManualBanner}
+                                                    />
+                                                    <Button
+                                                        style={{ marginLeft: 10 }}
+                                                        onClick={handleApplyBannerLink}
+                                                        size="small"
+                                                    >
+                                                        确认
+                                                    </Button>
+                                                </div>
+                                            }
+                                            trigger="click"
+                                        >
+                                            <Button theme="borderless">自定义链接</Button>
+                                        </Tooltip>
+                                    </Form.Slot>
+                                </div>
                             </Col>
                         </Row>
                     </Form.Section>
