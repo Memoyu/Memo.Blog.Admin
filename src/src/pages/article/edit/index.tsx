@@ -37,7 +37,6 @@ import {
 } from '@src/utils/request';
 
 import './index.scss';
-import { set } from 'date-fns';
 
 const { Title, Text } = Typography;
 
