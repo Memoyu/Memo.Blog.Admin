@@ -312,6 +312,10 @@ export const openSourceUpdate = (project: OpenSourceEditRequest) => {
     return Request.put<string>('opensource/update', project);
 };
 
+export const openSourceSync = () => {
+    return Request.put<string>('opensource/synchronous');
+};
+
 export const openSourceDelete = (id: string) => {
     return Request.delete('opensource/delete', { params: { projectId: id } });
 };

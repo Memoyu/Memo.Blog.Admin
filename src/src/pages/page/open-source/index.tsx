@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { IconToken } from '@douyinfe/semi-icons-lab';
-import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
+import { IconPlusCircleStroked, IconRefresh } from '@douyinfe/semi-icons';
 import { Button, Table, Space, Typography, Popconfirm, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
@@ -15,7 +15,7 @@ import { ColumnProps } from '@douyinfe/semi-ui/lib/es/table';
 import { FormApi } from '@douyinfe/semi-ui/lib/es/form';
 import { OpenSourceModel, OpenSourceListRequest } from '@src/common/model';
 
-import { openSourceDelete, openSourceList } from '@src/utils/request';
+import { openSourceDelete, openSourceList, openSourceSync } from '@src/utils/request';
 
 import './index.scss';
 
@@ -172,6 +172,16 @@ const Index: React.FC = () => {
         setEditProjectId(projectId);
     };
 
+    const handleSyncOpenSource = async () => {
+        let res = await openSourceSync();
+        if (!res.isSuccess) {
+            Toast.error(res.message);
+            return;
+        }
+
+        Toast.success('同步成功');
+    };
+
     // 删除开源项目
     const handleDeleteProject = async (data: OpenSourceModel) => {
         let res = await openSourceDelete(data.projectId);
@@ -216,13 +226,21 @@ const Index: React.FC = () => {
 
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditOpenSource();
                                         setEditModalTitle('新增项目');
                                     }}
                                 >
                                     新增
+                                </Button>
+
+                                <Button
+                                    icon={<IconRefresh size="small" />}
+                                    onClick={() => {
+                                        handleSyncOpenSource();
+                                    }}
+                                >
+                                    同步
                                 </Button>
                             </Space>
                         </Form>

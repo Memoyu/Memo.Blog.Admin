@@ -595,7 +595,6 @@ const Index: React.FC = () => {
 
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditUser();
                                         setEditModalTitle('新增用户');

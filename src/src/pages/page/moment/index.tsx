@@ -298,7 +298,6 @@ const Index: React.FC = () => {
                                 <Button htmlType="reset">重置</Button>
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditMoment();
                                         setEditModalTitle('新增动态');

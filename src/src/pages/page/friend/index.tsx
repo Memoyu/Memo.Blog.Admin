@@ -257,7 +257,6 @@ const Index: React.FC = () => {
 
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditFriend();
                                         setEditModalTitle('新增友链');
