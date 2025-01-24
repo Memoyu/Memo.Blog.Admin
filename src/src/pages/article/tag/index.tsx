@@ -24,7 +24,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'tagId',
-            width: '10%',
+            width: 165,
         },
         {
             title: '名称',

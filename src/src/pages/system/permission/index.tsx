@@ -22,6 +22,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'permissionId',
+            width: 165,
         },
         {
             title: '模块',

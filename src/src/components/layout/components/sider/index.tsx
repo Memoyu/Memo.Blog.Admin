@@ -95,7 +95,7 @@ const Index: FC = () => {
                     className="layout-sider-navs-header"
                     logo={
                         <div className="layout-sider-navs-header-logo">
-                            <Image preview={false} height={30} src={logo} />
+                            <Image preview={false} height={24} src={logo} />
                         </div>
                     }
                 />

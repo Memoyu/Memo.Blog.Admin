@@ -25,6 +25,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'roleId',
+            width: 165,
         },
         {
             title: '角色名',

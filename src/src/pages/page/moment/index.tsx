@@ -44,7 +44,7 @@ const Index: React.FC = () => {
         {
             title: 'ID',
             align: 'center',
-            width: 160,
+            width: 165,
             dataIndex: 'momentId',
         },
         {

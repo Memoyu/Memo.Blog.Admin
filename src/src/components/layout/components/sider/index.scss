@@ -1,6 +1,6 @@
 .layout-sider {
     &-navs {
-        max-width: 200px;
+        max-width: 170px;
         height: 100%;
         &-header {
             padding-bottom: 10px !important;
@@ -30,7 +30,7 @@
 }
 
 .semi-navigation-list-wrapper {
-    height: calc(100% - 170px);
+    height: calc(100% - 120px);
     padding-top: 0px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -54,10 +54,19 @@
         &-navs {
             &-header {
                 &-logo {
-                    width: 24px;
+                    width: 19px;
                     overflow: hidden;
                 }
             }
         }
     }
+}
+
+.semi-navigation-header {
+    padding-top: 13px !important;
+}
+
+.semi-navigation-item {
+    margin-bottom: 5px !important;
+    padding: 6px 12px !important;
 }

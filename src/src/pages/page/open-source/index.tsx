@@ -28,7 +28,7 @@ const Index: React.FC = () => {
             align: 'center',
             dataIndex: 'projectId',
             ellipsis: true,
-            width: 100,
+            width: 165,
         },
         {
             title: '简介图',

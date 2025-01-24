@@ -45,7 +45,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'friendId',
-            width: 160,
+            width: 165,
         },
         {
             title: '头像',
