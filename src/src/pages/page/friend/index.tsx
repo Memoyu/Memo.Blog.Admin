@@ -45,7 +45,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'friendId',
-            width: 160,
+            width: 165,
         },
         {
             title: '头像',
@@ -257,7 +257,6 @@ const Index: React.FC = () => {
 
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditFriend();
                                         setEditModalTitle('新增友链');

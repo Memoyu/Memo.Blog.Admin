@@ -25,13 +25,13 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'visitId',
-            width: 160,
+            width: 165,
         },
         {
             title: '访客标识',
             align: 'center',
             dataIndex: 'visitorId',
-            width: 160,
+            width: 165,
         },
         {
             title: '访问行为',

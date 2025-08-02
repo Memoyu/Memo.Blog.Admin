@@ -620,15 +620,6 @@ export const uniqueVisitorSactterMapOption = {
     title: {
         text: '访客地图',
     },
-    legend: {
-        data: ['访问人数'], //与series的name属性对应
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        textStyle: {
-            color: '#fff',
-        },
-    },
     tooltip: {
         trigger: 'item',
         formatter: function (params: any) {
@@ -642,9 +633,6 @@ export const uniqueVisitorSactterMapOption = {
         inRange: {
             color: ['#50a3ba', '#eac736', '#d94e5d'],
         },
-        textStyle: {
-            color: '#fff',
-        },
     },
     geo: {
         map: 'china',
@@ -657,14 +645,19 @@ export const uniqueVisitorSactterMapOption = {
         bottom: 0,
         layoutCenter: ['50%', '50%'], //设置后left/right/top/bottom等属性无效
         layoutSize: '100%',
-        label: {
-            show: false,
+
+        itemStyle: {
+            areaColor: '#101f32',
+            borderWidth: 1.1,
+            borderColor: '#43d0d6',
         },
         emphasis: {
+            label: {
+                show: false,
+            },
             itemStyle: {
-                borderWidth: 1.1,
-                borderColor: '#43d0d6',
                 areaColor: '#069',
+                borderWidth: 2,
             },
         },
     },
@@ -674,10 +667,10 @@ export const uniqueVisitorSactterMapOption = {
             type: 'scatter',
             coordinateSystem: 'geo',
             symbolSize: 12,
-            label: {
-                show: false,
-            },
             emphasis: {
+                label: {
+                    show: false,
+                },
                 itemStyle: {
                     borderColor: '#fff',
                     borderWidth: 1,

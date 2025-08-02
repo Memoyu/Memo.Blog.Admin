@@ -18,9 +18,15 @@ const PublicRoute = (props: PathRouteProps) => {
 const PrivateRoute = (props: PathRouteProps) => {
     const location = useLocation();
     const logged = useUserStore((state) => state.logged);
+    const token = useUserStore((state) => state.token);
+    var date = new Date();
+    let nowTime = date.setMinutes(date.getMinutes() + 5);
+    let tokenExpired = token?.expiredAt ?? nowTime;
+    // console.log('当前时间戳', new Date().getTime(), tokenExpired);
+
     const { pathname } = location;
 
-    return logged ? (
+    return logged && nowTime < tokenExpired ? (
         pathname === '/' ? (
             <Navigate to={{ pathname: `/dashboard` }} replace />
         ) : (

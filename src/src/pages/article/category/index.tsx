@@ -24,7 +24,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'categoryId',
-            width: '10%',
+            width: 165,
         },
         {
             title: '名称',
@@ -168,7 +168,6 @@ const Index: React.FC = () => {
 
                                 <Button
                                     icon={<IconPlusCircleStroked size="small" />}
-                                    style={{ marginRight: 10 }}
                                     onClick={() => {
                                         handleEditCategory();
                                         setEditTitle('新增分类');

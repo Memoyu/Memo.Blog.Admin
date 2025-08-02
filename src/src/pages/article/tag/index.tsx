@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconTag } from '@douyinfe/semi-icons-lab';
 import { IconPlusCircleStroked } from '@douyinfe/semi-icons';
-import { Button, Table, Popconfirm, Space, Form, Toast, Tag } from '@douyinfe/semi-ui';
+import { Button, Table, Popconfirm, Space, Form, Toast } from '@douyinfe/semi-ui';
 
 import Content from '@src/components/page-content';
 import EditTag from './components/edit';
@@ -24,22 +24,12 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'tagId',
-            width: '10%',
+            width: 165,
         },
         {
             title: '名称',
             align: 'center',
             dataIndex: 'name',
-            render: (text, tag: TagModel) => (
-                <Tag
-                    style={{ color: tag.color, borderColor: tag.color }}
-                    type="ghost"
-                    // shape="circle"
-                    size="large"
-                >
-                    {text}
-                </Tag>
-            ),
         },
         {
             title: '关联文章',

@@ -17,7 +17,7 @@ export const useConnectionStore = create<SignalRConnection>((_set, get) => ({
     connect: new signalR.HubConnectionBuilder()
         .withUrl(baseURL + NOTIFICATION_HUB_ENDPOINT, {
             accessTokenFactory: () => {
-                const token = useUserStore.getState().token;
+                const token = useUserStore.getState().token?.accessToken ?? '';
                 return token;
             },
         })

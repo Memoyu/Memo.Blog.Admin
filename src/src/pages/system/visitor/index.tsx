@@ -44,7 +44,7 @@ const Index: React.FC = () => {
             title: 'ID',
             align: 'center',
             dataIndex: 'visitorId',
-            width: 160,
+            width: 165,
         },
         {
             title: '头像',
@@ -77,6 +77,11 @@ const Index: React.FC = () => {
                     </Text>
                 );
             },
+        },
+        {
+            title: '邮箱',
+            align: 'center',
+            dataIndex: 'email',
         },
         {
             title: '访客归属',

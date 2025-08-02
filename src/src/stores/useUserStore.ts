@@ -1,16 +1,16 @@
 import { createWithEqualityFn } from 'zustand/traditional';
 import { persist } from 'zustand/middleware';
-import { UserModel, UserStoreModel } from '@src/common/model';
+import { UserModel, TokenModel, UserTokenStoreModel, UserStoreModel } from '@src/common/model';
 import { userGet } from '@src/utils/request';
 
 interface UserState {
     userInfo?: UserStoreModel; //用户信息
-    token: string;
+    token?: UserTokenStoreModel;
     logged: boolean;
     showUserModal: boolean;
     setUser: (user: UserModel) => void;
     toggleUserShow: (state: boolean) => void;
-    login: (token: string) => void;
+    login: (token: TokenModel) => void;
     logout: () => void;
 }
 
@@ -18,7 +18,7 @@ const useUserStore = createWithEqualityFn<UserState>()(
     persist(
         (set) => ({
             userInfo: undefined,
-            token: '',
+            token: undefined,
             logged: false,
             showUserModal: false,
             setUser: (user: UserModel) => {
@@ -52,12 +52,19 @@ const useUserStore = createWithEqualityFn<UserState>()(
 
                 set({ showUserModal: state });
             },
-            login: (token: string) => {
-                set({ token: token, logged: true });
+            login: (token: TokenModel) => {
+                set({
+                    token: {
+                        accessToken: token.accessToken,
+                        refreshToken: token.refreshToken,
+                        expiredAt: token.expiredAt,
+                    },
+                    logged: true,
+                });
             },
             logout: () => {
-                set({ token: '', logged: false });
-                set({ userInfo: undefined, token: '', logged: false });
+                // set({ token: {}, logged: false });
+                set({ userInfo: undefined, token: undefined, logged: false });
             },
         }),
         {
